@@ -2,7 +2,7 @@ defmodule DelExampleWeb.InstanceController do
   use DelExampleWeb, :controller
 
   alias DelExample.DoubleEntryLedgerWeb
-  alias DelExample.DoubleEntryLedgerWeb.Instance
+  alias DoubleEntryLedger.Instance
 
   def index(conn, _params) do
     instances = DoubleEntryLedgerWeb.list_instances()

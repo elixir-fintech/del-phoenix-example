@@ -4,9 +4,9 @@ defmodule DelExample.DoubleEntryLedgerWeb do
   """
 
   import Ecto.Query, warn: false
-  alias DelExample.Repo
 
-  alias DelExample.DoubleEntryLedgerWeb.Instance
+  alias DoubleEntryLedger.Instance
+  alias DoubleEntryLedger.InstanceStore
 
   @doc """
   Returns the list of instances.

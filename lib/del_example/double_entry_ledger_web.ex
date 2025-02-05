@@ -18,7 +18,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
 
   """
   def list_instances do
-    InstanceStore.list_instances()
+    InstanceStore.list_all()
   end
 
   @doc """
@@ -60,7 +60,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def update_instance(%Instance{} = instance, attrs), do: InstanceStore.update(instance, attrs)
+  def update_instance(%Instance{id: id}, attrs), do: InstanceStore.update(id, attrs)
 
   @doc """
   Deletes a Instance.
@@ -74,7 +74,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def delete_instance(%Instance{} = instance), do: InstanceStore.delete(instance)
+  def delete_instance(%Instance{id: id}), do: InstanceStore.delete(id)
 
   @doc """
   Returns a data structure for tracking instance changes.

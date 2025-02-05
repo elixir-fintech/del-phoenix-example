@@ -18,6 +18,8 @@ defmodule DelExampleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    resources "/instances", InstanceController
   end
 
   # Other scopes may use custom stacks.

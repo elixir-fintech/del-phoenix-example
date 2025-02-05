@@ -18,7 +18,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
 
   """
   def list_instances do
-    raise "TODO"
+    InstanceStore.list_instances()
   end
 
   @doc """
@@ -32,7 +32,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       %Instance{}
 
   """
-  def get_instance!(id), do: raise "TODO"
+  def get_instance!(id), do: InstanceStore.get_by_id(id)
 
   @doc """
   Creates a instance.
@@ -46,9 +46,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def create_instance(attrs \\ %{}) do
-    raise "TODO"
-  end
+  def create_instance(attrs \\ %{}), do: InstanceStore.create(attrs)
 
   @doc """
   Updates a instance.
@@ -62,9 +60,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def update_instance(%Instance{} = instance, attrs) do
-    raise "TODO"
-  end
+  def update_instance(%Instance{} = instance, attrs), do: InstanceStore.update(instance, attrs)
 
   @doc """
   Deletes a Instance.
@@ -78,9 +74,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def delete_instance(%Instance{} = instance) do
-    raise "TODO"
-  end
+  def delete_instance(%Instance{} = instance), do: InstanceStore.delete(instance)
 
   @doc """
   Returns a data structure for tracking instance changes.
@@ -91,7 +85,5 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       %Todo{...}
 
   """
-  def change_instance(%Instance{} = instance, _attrs \\ %{}) do
-    raise "TODO"
-  end
+  def change_instance(%Instance{} = instance, attrs \\ %{}), do: Instance.changeset(instance, attrs)
 end

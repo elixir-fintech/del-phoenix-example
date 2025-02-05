@@ -1,0 +1,14 @@
+<.header>
+  Instance {@instance.id}
+  <:subtitle>This is a instance record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/instances/#{@instance}/edit"}>
+      <.button>Edit instance</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+</.list>
+
+<.back navigate={~p"/instances"}>Back to instances</.back>

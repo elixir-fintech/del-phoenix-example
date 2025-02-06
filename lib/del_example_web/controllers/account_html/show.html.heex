@@ -1,0 +1,14 @@
+<.header>
+  Account {@account.id}
+  <:subtitle>This is a account record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/accounts/#{@account}/edit"}>
+      <.button>Edit account</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+</.list>
+
+<.back navigate={~p"/accounts"}>Back to accounts</.back>

@@ -17,4 +17,18 @@ defmodule DelExample.DoubleEntryLedgerWebFixtures do
 
     instance
   end
+
+  @doc """
+  Generate a account.
+  """
+  def account_fixture(attrs \\ %{}) do
+    {:ok, account} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> DelExample.DoubleEntryLedgerWeb.create_account()
+
+    account
+  end
 end

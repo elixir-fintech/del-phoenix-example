@@ -54,4 +54,56 @@ defmodule DelExample.DoubleEntryLedgerWebTest do
       assert %Ecto.Changeset{} = DoubleEntryLedgerWeb.change_instance(instance)
     end
   end
+
+  describe "accounts" do
+    alias DelExample.DoubleEntryLedgerWeb.Account
+
+    import DelExample.DoubleEntryLedgerWebFixtures
+
+    @invalid_attrs %{}
+
+    test "list_accounts/0 returns all accounts" do
+      account = account_fixture()
+      assert DoubleEntryLedgerWeb.list_accounts() == [account]
+    end
+
+    test "get_account!/1 returns the account with given id" do
+      account = account_fixture()
+      assert DoubleEntryLedgerWeb.get_account!(account.id) == account
+    end
+
+    test "create_account/1 with valid data creates a account" do
+      valid_attrs = %{}
+
+      assert {:ok, %Account{} = account} = DoubleEntryLedgerWeb.create_account(valid_attrs)
+    end
+
+    test "create_account/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = DoubleEntryLedgerWeb.create_account(@invalid_attrs)
+    end
+
+    test "update_account/2 with valid data updates the account" do
+      account = account_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %Account{} = account} = DoubleEntryLedgerWeb.update_account(account, update_attrs)
+    end
+
+    test "update_account/2 with invalid data returns error changeset" do
+      account = account_fixture()
+      assert {:error, %Ecto.Changeset{}} = DoubleEntryLedgerWeb.update_account(account, @invalid_attrs)
+      assert account == DoubleEntryLedgerWeb.get_account!(account.id)
+    end
+
+    test "delete_account/1 deletes the account" do
+      account = account_fixture()
+      assert {:ok, %Account{}} = DoubleEntryLedgerWeb.delete_account(account)
+      assert_raise Ecto.NoResultsError, fn -> DoubleEntryLedgerWeb.get_account!(account.id) end
+    end
+
+    test "change_account/1 returns a account changeset" do
+      account = account_fixture()
+      assert %Ecto.Changeset{} = DoubleEntryLedgerWeb.change_account(account)
+    end
+  end
 end

@@ -1,21 +1,26 @@
 <.header>
   Listing Accounts
   <:actions>
-    <.link href={~p"/accounts/new"}>
+    <.link href={~p"/instances/#{@instance_id}/accounts/new"}>
       <.button>New Account</.button>
     </.link>
   </:actions>
 </.header>
 
-<.table id="accounts" rows={@accounts} row_click={&JS.navigate(~p"/accounts/#{&1}")}>
+<.table id="accounts" rows={@accounts} row_click={&JS.navigate(~p"/instances/#{@instance_id}/accounts/#{&1}")}>
+  <:col :let={account} label="ID">{account.id}</:col>
+  <:col :let={account} label="Name">{account.name}</:col>
+  <:col :let={account} label="Type">{account.type}</:col>
+  <:col :let={account} label="Currency">{account.currency}</:col>
+
   <:action :let={account}>
     <div class="sr-only">
-      <.link navigate={~p"/accounts/#{account}"}>Show</.link>
+      <.link navigate={~p"/instances/#{@instance_id}/accounts/#{account}"}>Show</.link>
     </div>
-    <.link navigate={~p"/accounts/#{account}/edit"}>Edit</.link>
+    <.link navigate={~p"/instances/#{@instance_id}/accounts/#{account}/edit"}>Edit</.link>
   </:action>
   <:action :let={account}>
-    <.link href={~p"/accounts/#{account}"} method="delete" data-confirm="Are you sure?">
+    <.link href={~p"/instances/#{@instance_id}/accounts/#{account}"} method="delete" data-confirm="Are you sure?">
       Delete
     </.link>
   </:action>

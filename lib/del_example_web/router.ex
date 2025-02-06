@@ -19,7 +19,9 @@ defmodule DelExampleWeb.Router do
 
     get "/", PageController, :home
 
-    resources "/instances", InstanceController
+    resources "/instances", InstanceController do
+      resources "/accounts", AccountController
+    end
   end
 
   # Other scopes may use custom stacks.

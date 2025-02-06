@@ -3,6 +3,10 @@
     Oops, something went wrong! Please check the errors below.
   </.error>
 
+  <.input field={f[:name]} label="Name" />
+  <.input type="select" field={f[:currency]} label="Currency" options={DoubleEntryLedger.Currency.currency_atoms()} />
+  <.input type="select" field={f[:type]} label="Type" options={DoubleEntryLedger.Types.account_types()} />
+
   <:actions>
     <.button>Save Account</.button>
   </:actions>

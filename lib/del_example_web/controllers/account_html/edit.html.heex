@@ -3,6 +3,6 @@
   <:subtitle>Use this form to manage account records in your database.</:subtitle>
 </.header>
 
-<.account_form changeset={@changeset} action={~p"/accounts/#{@account}"} />
+<.account_form changeset={@changeset} action={~p"/instances/#{@instance_id}/accounts/#{@account}"} />
 
-<.back navigate={~p"/accounts"}>Back to accounts</.back>
+<.back navigate={~p"/instances/#{@instance_id}/accounts"}>Back to accounts</.back>

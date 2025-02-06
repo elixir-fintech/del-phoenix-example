@@ -99,9 +99,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       [%Account{}, ...]
 
   """
-  def list_accounts do
-    raise "TODO"
-  end
+  def list_accounts(instance_id), do: AccountStore.get_all_accounts_by_instance_id(instance_id)
 
   @doc """
   Gets a single account.
@@ -114,7 +112,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       %Account{}
 
   """
-  def get_account!(id), do: raise "TODO"
+  def get_account!(id), do: AccountStore.get_by_id(id)
 
   @doc """
   Creates a account.
@@ -128,9 +126,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def create_account(attrs \\ %{}) do
-    raise "TODO"
-  end
+  def create_account(attrs \\ %{}), do: AccountStore.create(attrs)
 
   @doc """
   Updates a account.
@@ -144,9 +140,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def update_account(%Account{} = account, attrs) do
-    raise "TODO"
-  end
+  def update_account(%Account{id: id}, attrs), do: AccountStore.update(id, attrs)
 
   @doc """
   Deletes a Account.
@@ -160,9 +154,7 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       {:error, ...}
 
   """
-  def delete_account(%Account{} = account) do
-    raise "TODO"
-  end
+  def delete_account(%Account{id: id}), do: AccountStore.delete(id)
 
   @doc """
   Returns a data structure for tracking account changes.
@@ -173,7 +165,5 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       %Todo{...}
 
   """
-  def change_account(%Account{} = account, _attrs \\ %{}) do
-    raise "TODO"
-  end
+  def change_account(%Account{} = account, attrs \\ %{}), do: Account.changeset(account, attrs)
 end

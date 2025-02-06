@@ -8,26 +8,11 @@
 </.header>
 
 <.table id="instances" rows={@instances} row_click={&JS.navigate(~p"/instances/#{&1}")}>
-  <:col :let={instance}>
-    <th>ID</th>
-    <td><%= instance.id %></td>
-  </:col>
-  <:col :let={instance}>
-    <th>Name</th>
-    <td><%= instance.name %></td>
-  </:col>
-  <:col :let={instance}>
-    <th>Description</th>
-    <td><%= instance.description %></td>
-  </:col>
-  <:col :let={instance}>
-    <th>Inserted At</th>
-    <td><%= instance.inserted_at %></td>
-  </:col>
-  <:col :let={instance}>
-    <th>Updated At</th>
-    <td><%= instance.updated_at %></td>
-  </:col>
+  <:col :let={instance} label="ID">{instance.id}</:col>
+  <:col :let={instance} label="Name">{instance.name}</:col>
+  <:col :let={instance} label="Description">{instance.description}</:col>
+  <:col :let={instance} label="Inserted At">{instance.inserted_at}</:col>
+  <:col :let={instance} label="Updated At">{instance.updated_at}</:col>
   <:action :let={instance}>
     <div class="sr-only">
       <.link navigate={~p"/instances/#{instance}"}>Show</.link>

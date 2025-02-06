@@ -1,14 +1,21 @@
 <.header>
   Account {@account.id}
   <:subtitle>This is a account record from your database.</:subtitle>
+
   <:actions>
-    <.link href={~p"/accounts/#{@account}/edit"}>
+    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/edit"}>
       <.button>Edit account</.button>
     </.link>
   </:actions>
 </.header>
 
 <.list>
+  <:item title="ID">{@account.id}</:item>
+  <:item title="Name">{@account.name}</:item>
+  <:item title="Type">{@account.type}</:item>
+  <:item title="Currency">{@account.currency}</:item>
+  <:item title="Inserted At">{@account.inserted_at}</:item>
+  <:item title="Updated At">{@account.updated_at}</:item>
 </.list>
 
-<.back navigate={~p"/accounts"}>Back to accounts</.back>
+<.back navigate={~p"/instances/#{@instance_id}/accounts"}>Back to accounts</.back>

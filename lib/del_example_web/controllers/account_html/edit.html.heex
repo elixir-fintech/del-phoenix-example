@@ -2,7 +2,9 @@
   Edit Account {@account.id}
   <:subtitle>Use this form to manage account records in your database.</:subtitle>
 </.header>
-
-<.account_form changeset={@changeset} action={~p"/instances/#{@instance_id}/accounts/#{@account}"} />
-
+<.list>
+  <:item title="Type">{@account.type}</:item>
+  <:item title="Currency">{@account.currency}</:item>
+</.list>
+<.account_update_form changeset={@changeset} action={~p"/instances/#{@instance_id}/accounts/#{@account}"} account={@account} />
 <.back navigate={~p"/instances/#{@instance_id}/accounts"}>Back to accounts</.back>

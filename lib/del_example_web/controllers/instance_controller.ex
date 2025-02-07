@@ -53,10 +53,10 @@ defmodule DelExampleWeb.InstanceController do
 
   def delete(conn, %{"id" => id}) do
     instance = DoubleEntryLedgerWeb.get_instance!(id)
-    {:ok, _instance} = DoubleEntryLedgerWeb.delete_instance(instance)
-
-    conn
-    |> put_flash(:info, "Instance deleted successfully.")
+    case DoubleEntryLedgerWeb.delete_instance(instance) do
+      {:ok, %{id: id} } -> put_flash(conn, :info, "Instance #{id} deleted successfully.")
+      {:error, changeset} -> put_flash(conn, :error, inspect(changeset.errors))
+    end
     |> redirect(to: ~p"/instances")
   end
 end

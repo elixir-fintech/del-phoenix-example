@@ -673,4 +673,30 @@ defmodule DelExampleWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  attr :back_navigate, :any, required: true
+  attr :next_navigate, :any, required: true
+  slot :back, required: true
+  slot :next, required: true
+
+  def page_nav(assigns) do
+    ~H"""
+    <div class="mt-16 flex justify-between items-center">
+      <.link
+        navigate={@back_navigate}
+        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+      >
+        <.icon name="hero-arrow-left-solid" class="mr-1 h-3 w-3" />
+        <%= render_slot(@back) %>
+      </.link>
+      <.link
+        navigate={@next_navigate}
+        class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+      >
+        <%= render_slot(@next) %>
+        <.icon name="hero-arrow-right-solid" class="ml-1 h-3 w-3" />
+      </.link>
+    </div>
+    """
+  end
 end

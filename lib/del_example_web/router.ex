@@ -17,7 +17,7 @@ defmodule DelExampleWeb.Router do
   scope "/", DelExampleWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", InstanceController, :index
 
     resources "/instances", InstanceController do
       resources "/accounts", AccountController

@@ -29,4 +29,7 @@
   </:item>
 </.list>
 
-<.back navigate={~p"/instances"}>Back to instances</.back>
+<.page_nav back_navigate={~p"/instances"} next_navigate={~p"/instances/#{@instance}/accounts"}>
+  <:back>Back to instances</:back>
+  <:next>List Accounts</:next>
+</.page_nav>

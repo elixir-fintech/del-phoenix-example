@@ -1,0 +1,21 @@
+<.simple_form :let={f} for={@changeset} action={@action} >
+  <.error :if={@changeset.action}>
+    Oops, something went wrong! Please check the errors below.
+  </.error>
+    <% options = Enum.map(@accounts, fn [name, type, id] -> ["#{name}: #{type} ": id] end) |> List.flatten() %>
+    <.input type="select" field={f[:action]} label="Action" options={DoubleEntryLedger.Event.actions()} />
+    <.input field={f[:source]} label="Source" />
+    <.input field={f[:source_idempk]} label="Idempotent Id" />
+    <.inputs_for :let={td} field={f[:transaction_data]} >
+      <.input type="select" field={td[:status]} label="status" options={DoubleEntryLedger.Transaction.states()} />
+      <.inputs_for :let={entry} field={td[:entries]}>
+        <.input type="select" field={entry[:account_id]} label="Account Id" options={options} />
+        <.input field={entry[:amount]} label="Amount" />
+        <.input type="select" field={entry[:currency]} label="Currency" options={DoubleEntryLedger.Currency.currency_atoms}/>
+      </.inputs_for>
+    </.inputs_for>
+
+  <:actions>
+    <.button>Process Event</.button>
+  </:actions>
+</.simple_form>

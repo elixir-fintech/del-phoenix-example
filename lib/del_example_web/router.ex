@@ -21,6 +21,7 @@ defmodule DelExampleWeb.Router do
 
     resources "/instances", InstanceController do
       resources "/accounts", AccountController
+      resources "/events", EventController, only: [:new, :create]
     end
   end
 

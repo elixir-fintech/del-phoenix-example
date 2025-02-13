@@ -1,5 +1,10 @@
 # DelExample
 
+THIS IS WORK IN PROGRESS
+
+You need the [Double Entry Ledger](https://github.com/elixir-fintech/double_entry_ledger) to be installed on the same directory level
+and follow the steps in the repositories `README.md` to move the migration files over and create the tables in the DB.
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies

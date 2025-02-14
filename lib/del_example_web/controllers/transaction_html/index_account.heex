@@ -1,0 +1,20 @@
+<.header>
+  Listing Transactions
+</.header>
+
+<.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/instances/#{@instance_id}/transactions/#{extract_trx(&1)}")}>
+  <:col :let={{transaction,_,_}} label="ID">{transaction.id}</:col>
+  <:col :let={{transaction,_,_}} label="status">{transaction.status}</:col>
+  <:col :let={{transaction,_,_}} label="Inserted at">{transaction.inserted_at}</:col>
+  <:col :let={{_,account,_}} label="Acc Name">{account.name}</:col>
+  <:col :let={{_,_,entry}} label="Currency">{"#{entry.value.currency}"}</:col>
+  <:col :let={{_,_,entry}} label="Amount">{"#{entry.value.amount}"}</:col>
+  <:col :let={{_,_,entry}} label="type">{"#{entry.type}"}</:col>
+  <:action :let={{transaction,_,_}}>
+    <div class="sr-only">
+      <.link navigate={~p"/instances/#{@instance_id}/transactions/#{transaction}"}>Show</.link>
+    </div>
+  </:action>
+</.table>
+
+<.back navigate={~p"/instances/#{@instance_id}/accounts/#{@account_id}"}>Back to Account</.back>

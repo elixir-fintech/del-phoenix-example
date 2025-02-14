@@ -1,0 +1,16 @@
+<.header>
+  Listing Transactions
+</.header>
+
+<.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/instances/#{@instance_id}/transactions/#{&1}")}>
+  <:col :let={transaction} label="ID">{transaction.id}</:col>
+  <:col :let={transaction} label="status">{"#{transaction.status}"}</:col>
+  <:col :let={transaction} label="Inserted at">{"#{transaction.inserted_at}"}</:col>
+  <:action :let={transaction}>
+    <div class="sr-only">
+      <.link navigate={~p"/instances/#{@instance_id}/transactions/#{transaction}"}>Show</.link>
+    </div>
+  </:action>
+</.table>
+
+<.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>

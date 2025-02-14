@@ -106,4 +106,56 @@ defmodule DelExample.DoubleEntryLedgerWebTest do
       assert %Ecto.Changeset{} = DoubleEntryLedgerWeb.change_account(account)
     end
   end
+
+  describe "transactions" do
+    alias DelExample.DoubleEntryLedgerWeb.Transaction
+
+    import DelExample.DoubleEntryLedgerWebFixtures
+
+    @invalid_attrs %{}
+
+    test "list_transactions/0 returns all transactions" do
+      transaction = transaction_fixture()
+      assert DoubleEntryLedgerWeb.list_transactions() == [transaction]
+    end
+
+    test "get_transaction!/1 returns the transaction with given id" do
+      transaction = transaction_fixture()
+      assert DoubleEntryLedgerWeb.get_transaction!(transaction.id) == transaction
+    end
+
+    test "create_transaction/1 with valid data creates a transaction" do
+      valid_attrs = %{}
+
+      assert {:ok, %Transaction{} = transaction} = DoubleEntryLedgerWeb.create_transaction(valid_attrs)
+    end
+
+    test "create_transaction/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = DoubleEntryLedgerWeb.create_transaction(@invalid_attrs)
+    end
+
+    test "update_transaction/2 with valid data updates the transaction" do
+      transaction = transaction_fixture()
+      update_attrs = %{}
+
+      assert {:ok, %Transaction{} = transaction} = DoubleEntryLedgerWeb.update_transaction(transaction, update_attrs)
+    end
+
+    test "update_transaction/2 with invalid data returns error changeset" do
+      transaction = transaction_fixture()
+      assert {:error, %Ecto.Changeset{}} = DoubleEntryLedgerWeb.update_transaction(transaction, @invalid_attrs)
+      assert transaction == DoubleEntryLedgerWeb.get_transaction!(transaction.id)
+    end
+
+    test "delete_transaction/1 deletes the transaction" do
+      transaction = transaction_fixture()
+      assert {:ok, %Transaction{}} = DoubleEntryLedgerWeb.delete_transaction(transaction)
+      assert_raise Ecto.NoResultsError, fn -> DoubleEntryLedgerWeb.get_transaction!(transaction.id) end
+    end
+
+    test "change_transaction/1 returns a transaction changeset" do
+      transaction = transaction_fixture()
+      assert %Ecto.Changeset{} = DoubleEntryLedgerWeb.change_transaction(transaction)
+    end
+  end
 end

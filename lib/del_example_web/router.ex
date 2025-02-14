@@ -20,8 +20,11 @@ defmodule DelExampleWeb.Router do
     get "/", InstanceController, :index
 
     resources "/instances", InstanceController do
-      resources "/accounts", AccountController
+      resources "/accounts", AccountController do
+        resources "/transactions", TransactionController, only: [:index, :show]
+      end
       resources "/events", EventController, only: [:new, :create]
+      resources "/transactions", TransactionController, only: [:index, :show]
     end
   end
 

@@ -5,8 +5,8 @@
     <.link href={~p"/instances/#{@instance}/edit"}>
       <.button>Edit instance</.button>
     </.link>
-    <.link href={~p"/instances/#{@instance}/accounts/new"}>
-      <.button>Add Account</.button>
+    <.link href={~p"/instances/#{@instance}/events/new"}>
+      <.button>Add Event</.button>
     </.link>
     <.link href={~p"/instances/#{@instance}/transactions"}>
       <.button>List Trx</.button>
@@ -32,7 +32,37 @@
   </:item>
 </.list>
 
-<.page_nav back_navigate={~p"/instances"} next_navigate={~p"/instances/#{@instance}/accounts"}>
-  <:back>Back to instances</:back>
-  <:next>List Accounts</:next>
-</.page_nav>
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
+  Associated Accounts
+  <:actions>
+    <.link href={~p"/instances/#{@instance}/accounts/new"}>
+      <.button>New Account</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="accounts" rows={@accounts} row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1}")}>
+  <:col :let={account} label="ID">{account.id}</:col>
+  <:col :let={account} label="Name">{account.name}</:col>
+  <:col :let={account} label="Type">{account.type}</:col>
+  <:col :let={account} label="Currency">{account.currency}</:col>
+  <:col :let={account} label="Available">{account.available}</:col>
+  <:col :let={account} label="Posted">{account.posted}</:col>
+  <:col :let={account} label="Pending">{account.pending}</:col>
+
+  <:action :let={account}>
+    <div class="sr-only">
+      <.link navigate={~p"/instances/#{@instance}/accounts/#{account}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={account}>
+    <.link href={~p"/instances/#{@instance}/accounts/#{account}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+ 
+<.back navigate={~p"/instances/"}>Back to instances</.back>

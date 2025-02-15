@@ -6,6 +6,12 @@
 </.header>
 
 <.list>
+  <:item title="ID">{@transaction.id}</:item>
+  <:item title="Status">{@transaction.status}</:item>
+  <:item title="Instance id">{@transaction.instance_id}</:item>
+  <:item title="Posted at">{@transaction.posted_at}</:item>
+  <:item title="Inserted At">{@transaction.inserted_at}</:item>
+  <:item title="Updated At">{@transaction.updated_at}</:item>
 </.list>
 
-<.back navigate={~p"/transactions"}>Back to transactions</.back>
+<.back navigate={~p"/instances/#{@transaction.instance_id}/transactions"}>Back to transactions</.back>

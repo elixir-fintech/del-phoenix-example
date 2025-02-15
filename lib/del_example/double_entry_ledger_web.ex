@@ -206,5 +206,5 @@ defmodule DelExample.DoubleEntryLedgerWeb do
       %Transaction{}
 
   """
-  def get_transaction!(id), do: raise "TODO"
+  def get_transaction!(id), do: TransactionStore.get_by_id(id)
 end

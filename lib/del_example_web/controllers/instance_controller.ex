@@ -28,7 +28,11 @@ defmodule DelExampleWeb.InstanceController do
 
   def show(conn, %{"id" => id}) do
     instance = DoubleEntryLedgerWeb.get_instance!(id)
-    render(conn, :show, instance: instance)
+    list = case DoubleEntryLedgerWeb.list_accounts(id) do
+      {:ok, accounts} -> accounts
+      {:error, _} -> []
+    end
+    render(conn, :show, instance: instance, accounts: list)
   end
 
   def edit(conn, %{"id" => id}) do

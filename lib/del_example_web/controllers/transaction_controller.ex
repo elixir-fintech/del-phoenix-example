@@ -5,8 +5,9 @@ defmodule DelExampleWeb.TransactionController do
 
 
   def index(conn, %{"instance_id" => instance_id, "account_id" => account_id}) do
+    account = DoubleEntryLedgerWeb.get_account!(account_id)
     transactions = DoubleEntryLedgerWeb.list_transactions(instance_id, account_id)
-    render(conn, :index_account, transactions: transactions, instance_id: instance_id, account_id: account_id)
+    render(conn, :index_account, transactions: transactions, instance_id: instance_id, account: account)
   end
 
   def index(conn, %{"instance_id" => instance_id}) do

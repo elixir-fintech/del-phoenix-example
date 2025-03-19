@@ -6,6 +6,7 @@
     <.input type="select" field={f[:action]} label="Action" options={DoubleEntryLedger.Event.actions()} />
     <.input field={f[:source]} label="Source" />
     <.input field={f[:source_idempk]} label="Idempotent Id" />
+    <.input field={f[:update_idempk]} label="Update Idempotent Id" />
     <.inputs_for :let={td} field={f[:transaction_data]} >
       <.input type="select" field={td[:status]} label="status" options={DoubleEntryLedger.Transaction.states()} />
       <.inputs_for :let={entry} field={td[:entries]}>

@@ -207,4 +207,10 @@ defmodule DelExample.DoubleEntryLedgerWeb do
 
   """
   def get_transaction!(id), do: TransactionStore.get_by_id(id)
+
+  alias DoubleEntryLedger.EventStore
+
+  def list_events(instance_id) do
+    EventStore.list_all_for_instance(instance_id, 1, 1000)
+  end
 end

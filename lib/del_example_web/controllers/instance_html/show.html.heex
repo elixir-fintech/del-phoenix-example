@@ -3,13 +3,16 @@
   <:subtitle>This is a instance record from your database.</:subtitle>
   <:actions>
     <.link href={~p"/instances/#{@instance}/edit"}>
-      <.button>Edit instance</.button>
+      <.button>Edit</.button>
     </.link>
     <.link href={~p"/instances/#{@instance}/events/new"}>
-      <.button>Add Event</.button>
+      <.button>+ Event</.button>
     </.link>
     <.link href={~p"/instances/#{@instance}/transactions"}>
-      <.button>List Trx</.button>
+      <span>Trx</span>
+    </.link>
+    <.link href={~p"/instances/#{@instance}/events"}>
+      <span>Events</span>
     </.link>
   </:actions>
 </.header>
@@ -38,7 +41,7 @@
   Associated Accounts
   <:actions>
     <.link href={~p"/instances/#{@instance}/accounts/new"}>
-      <.button>New Account</.button>
+      <.button>+ Account</.button>
     </.link>
   </:actions>
 </.header>

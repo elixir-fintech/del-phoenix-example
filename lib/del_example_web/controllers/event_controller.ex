@@ -2,8 +2,9 @@ defmodule DelExampleWeb.EventController do
   use DelExampleWeb, :controller
 
   alias Ecto.Changeset
-  alias DoubleEntryLedger.Event.EventMap
+  alias DelExample.DoubleEntryLedgerWeb
   alias DoubleEntryLedger.EventWorker
+  alias DoubleEntryLedger.Event.EventMap
   alias DoubleEntryLedger.Event.TransactionData
   alias DoubleEntryLedger.Event.EntryData
   alias DoubleEntryLedger.AccountStore
@@ -40,6 +41,11 @@ defmodule DelExampleWeb.EventController do
         put_flash(conn, :error, "Error processing event. #{inspect(changeset)}")
         |> render(:new, changeset: changeset, instance_id: instance_id, accounts: accounts(instance_id))
     end
+  end
+
+  def index(conn, %{"instance_id" => instance_id}) do
+    events = DoubleEntryLedgerWeb.list_events(instance_id)
+    render(conn, :index, events: events, instance_id: instance_id)
   end
 
   defp event_map_changeset() do

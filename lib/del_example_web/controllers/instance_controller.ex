@@ -1,21 +1,22 @@
 defmodule DelExampleWeb.InstanceController do
   use DelExampleWeb, :controller
 
+  import DelExample.DoubleEntryLedgerWeb.Instance
   alias DelExample.DoubleEntryLedgerWeb
   alias DoubleEntryLedger.Instance
 
   def index(conn, _params) do
-    instances = DoubleEntryLedgerWeb.list_instances()
+    instances = list_instances()
     render(conn, :index, instances: instances)
   end
 
   def new(conn, _params) do
-    changeset = DoubleEntryLedgerWeb.change_instance(%Instance{})
+    changeset = change_instance(%Instance{})
     render(conn, :new, changeset: changeset)
   end
 
   def create(conn, %{"instance" => instance_params}) do
-    case DoubleEntryLedgerWeb.create_instance(instance_params) do
+    case create_instance(instance_params) do
       {:ok, instance} ->
         conn
         |> put_flash(:info, "Instance created successfully.")
@@ -27,7 +28,7 @@ defmodule DelExampleWeb.InstanceController do
   end
 
   def show(conn, %{"id" => id}) do
-    instance = DoubleEntryLedgerWeb.get_instance!(id)
+    instance = get_instance!(id)
     list = case DoubleEntryLedgerWeb.list_accounts(id) do
       {:ok, accounts} -> accounts
       {:error, _} -> []
@@ -36,15 +37,15 @@ defmodule DelExampleWeb.InstanceController do
   end
 
   def edit(conn, %{"id" => id}) do
-    instance = DoubleEntryLedgerWeb.get_instance!(id)
-    changeset = DoubleEntryLedgerWeb.change_instance(instance)
+    instance = get_instance!(id)
+    changeset = change_instance(instance)
     render(conn, :edit, instance: instance, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "instance" => instance_params}) do
-    instance = DoubleEntryLedgerWeb.get_instance!(id)
+    instance = get_instance!(id)
 
-    case DoubleEntryLedgerWeb.update_instance(instance, instance_params) do
+    case update_instance(instance, instance_params) do
       {:ok, instance} ->
         conn
         |> put_flash(:info, "Instance updated successfully.")
@@ -56,8 +57,8 @@ defmodule DelExampleWeb.InstanceController do
   end
 
   def delete(conn, %{"id" => id}) do
-    instance = DoubleEntryLedgerWeb.get_instance!(id)
-    case DoubleEntryLedgerWeb.delete_instance(instance) do
+    instance = get_instance!(id)
+    case delete_instance(instance) do
       {:ok, %{id: id} } -> put_flash(conn, :info, "Instance #{id} deleted successfully.")
       {:error, changeset} -> put_flash(conn, :error, inspect(changeset.errors))
     end

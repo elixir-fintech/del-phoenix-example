@@ -84,4 +84,9 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
 
   """
   def change_account(%Account{} = account, attrs \\ %{}), do: Account.changeset(account, attrs)
+
+  def get_accounts_for_dropdown(instance_id) do
+    {:ok, accounts} = list_accounts(instance_id)
+    Enum.map(accounts, fn account -> [account.name, Atom.to_string(account.type), account.id] end)
+  end
 end

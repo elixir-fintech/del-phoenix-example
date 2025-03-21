@@ -1,12 +1,13 @@
 defmodule DelExampleWeb.TransactionController do
   use DelExampleWeb, :controller
 
+  import DelExample.DoubleEntryLedgerWeb.Account, only: [get_account!: 1]
   alias DelExample.DoubleEntryLedgerWeb
 
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, %{"instance_id" => instance_id, "account_id" => account_id}) do
-    account = DoubleEntryLedgerWeb.get_account!(account_id)
+    account = get_account!(account_id)
     transactions = DoubleEntryLedgerWeb.list_transactions(instance_id, account_id)
     render(conn, :index_account, transactions: transactions, instance_id: instance_id, account: account)
   end

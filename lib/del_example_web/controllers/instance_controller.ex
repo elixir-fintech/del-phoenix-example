@@ -2,7 +2,7 @@ defmodule DelExampleWeb.InstanceController do
   use DelExampleWeb, :controller
 
   import DelExample.DoubleEntryLedgerWeb.Instance
-  alias DelExample.DoubleEntryLedgerWeb
+  import DelExample.DoubleEntryLedgerWeb.Account, only: [list_accounts: 1]
   alias DoubleEntryLedger.Instance
 
   def index(conn, _params) do
@@ -29,7 +29,7 @@ defmodule DelExampleWeb.InstanceController do
 
   def show(conn, %{"id" => id}) do
     instance = get_instance!(id)
-    list = case DoubleEntryLedgerWeb.list_accounts(id) do
+    list = case list_accounts(id) do
       {:ok, accounts} -> accounts
       {:error, _} -> []
     end

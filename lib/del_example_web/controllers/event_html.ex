@@ -3,5 +3,4 @@ defmodule DelExampleWeb.EventHTML do
 
   embed_templates "event_html/*"
 
-  def event_form(assigns)
 end

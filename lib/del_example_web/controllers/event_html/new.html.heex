@@ -1,8 +1,0 @@
-<.header>
-  New Event to Process
-  <:subtitle>Use this form to create events that will be immediately processed</:subtitle>
-</.header>
-
-<.event_form changeset={@changeset} action={~p"/instances/#{@instance_id}/events"} accounts={@accounts} />
-
-<.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>

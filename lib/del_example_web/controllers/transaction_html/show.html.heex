@@ -9,9 +9,23 @@
   <:item title="ID">{@transaction.id}</:item>
   <:item title="Status">{@transaction.status}</:item>
   <:item title="Instance id">{@transaction.instance_id}</:item>
-  <:item title="Posted at">{@transaction.posted_at}</:item>
-  <:item title="Inserted At">{@transaction.inserted_at}</:item>
-  <:item title="Updated At">{@transaction.updated_at}</:item>
+  <:item title="Posted at">{format_datetime(@transaction.posted_at)}</:item>
+  <:item title="Inserted At">{format_datetime(@transaction.inserted_at)}</:item>
+  <:item title="Updated At">{format_datetime(@transaction.updated_at)}</:item>
 </.list>
+
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
+  Entries
+</.header>
+
+<.table id="balance_history" rows={@transaction.entries} >
+  <:col :let={e} label="Account ID">{e.account.name}</:col>
+  <:col :let={e} label="Value">{e.value}</:col>
+  <:col :let={e} label="Type">{e.type}</:col>
+  <:col :let={e} label="Inserted At">{format_datetime(e.inserted_at)}</:col>
+  <:col :let={e} label="Updated At">{format_datetime(e.updated_at)}</:col>
+</.table>
 
 <.back navigate={~p"/instances/#{@transaction.instance_id}/transactions"}>Back to transactions</.back>

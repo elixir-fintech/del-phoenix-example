@@ -13,7 +13,7 @@
 
 <.table id="events" rows={@events} >
   <:col :let={event} label="ID">{event.id}</:col>
-  <:col :let={event} label="status">{"#{event.status}"}</:col>
+  <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
   <:col :let={event} label="source">{"#{event.source}"}</:col>
   <:col :let={event} label="source_data">{"#{Jason.encode!(event.source_data)}"}</:col>
   <:col :let={event} label="source_idempk">{"#{event.source_idempk}"}</:col>

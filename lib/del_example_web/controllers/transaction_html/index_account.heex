@@ -5,14 +5,15 @@
 <.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/instances/#{@instance_id}/transactions/#{extract_trx(&1)}")}>
   <:col :let={{transaction,_,_,_}} label="ID">{transaction.id}</:col>
   <:col :let={{transaction,_,_,_}} label="status">{transaction.status}</:col>
-  <:col :let={{transaction,_,_,_}} label="Inserted at">{transaction.inserted_at}</:col>
+  <:col :let={{transaction,_,_,_}} label="Inserted at">{format_datetime(transaction.inserted_at)}</:col>
+  <:col :let={{transaction,_,_,_}} label="Posted at">{format_datetime(transaction.posted_at)}</:col>
   <:col :let={{_,account,_,_}} label="Acc Name">{account.name}</:col>
   <:col :let={{_,_,entry,_}} label="Currency">{entry.value.currency}</:col>
-  <:col :let={{_,_,entry,_}} label="Amount">{entry.value.amount}</:col>
+  <:col :let={{_,_,entry,_}} label="Amount">{entry.value}</:col>
   <:col :let={{_,_,entry,_}} label="type">{entry.type}</:col>
-  <:col :let={{_,_,_,balance_history}} label="available">{balance_history.available}</:col>
-  <:col :let={{_,_,_,balance_history}} label="posted">{balance_history.posted}</:col>
-  <:col :let={{_,_,_,balance_history}} label="pending">{balance_history.pending}</:col>
+  <:col :let={{_,_,_,balance_history}} label="available">{to_money(balance_history.available, @account.currency)}</:col>
+  <:col :let={{_,_,_,balance_history}} label="posted">{balance_format(balance_history.posted, @account.currency)}</:col>
+  <:col :let={{_,_,_,balance_history}} label="pending">{balance_format(balance_history.pending, @account.currency)}</:col>
 
   <:action :let={{transaction,_,_,_}}>
     <div class="sr-only">

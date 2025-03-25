@@ -18,11 +18,25 @@
   <:item title="Description">{@account.description}</:item>
   <:item title="Type">{@account.type}</:item>
   <:item title="Currency">{@account.currency}</:item>
-  <:item title="Available">{@account.available}</:item>
-  <:item title="Posted">{@account.posted}</:item>
-  <:item title="Pending">{@account.pending}</:item>
+  <:item title="Available" class="font-bold">{@account.available}</:item>
   <:item title="Inserted At">{@account.inserted_at}</:item>
   <:item title="Updated At">{@account.updated_at}</:item>
 </.list>
 
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
+  Balance History
+</.header>
+
+<.table id="balance_history" rows={@balance_history} >
+  <:col :let={bhe} label="Available">{bhe.available}</:col>
+  <:col :let={bhe} label="Date">{bhe.inserted_at}</:col>
+  <:col :let={bhe} label="Posted">{bhe.posted}</:col>
+  <:col :let={bhe} label="Pending">{bhe.pending}</:col>
+  <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
+  <:col :let={bhe} label="Trx ID">{bhe.transaction_id}</:col>
+</.table>
+
 <.back navigate={~p"/instances/#{@instance_id}/accounts"}>Back to accounts</.back>
+

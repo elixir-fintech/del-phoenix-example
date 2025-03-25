@@ -89,4 +89,9 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
     {:ok, accounts} = list_accounts(instance_id)
     Enum.map(accounts, fn account -> [account.name, Atom.to_string(account.type), account.id] end)
   end
+
+  def get_balance_history(account_id) do
+    {:ok, balance} = AccountStore.get_balance_history(account_id)
+    balance
+  end
 end

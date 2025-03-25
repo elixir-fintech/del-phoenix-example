@@ -14,13 +14,11 @@
 <.table id="events" rows={@events} >
   <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
-  <:col :let={event} label="source">{"#{event.source}"}</:col>
-  <:col :let={event} label="source_data">{"#{Jason.encode!(event.source_data)}"}</:col>
-  <:col :let={event} label="source_idempk">{"#{event.source_idempk}"}</:col>
-  <:col :let={event} label="update_idempk">{"#{event.update_idempk}"}</:col>
-  <:col :let={event} label="action">{"#{event.action}"}</:col>
-  <:col :let={event} label="transaction_data">{"#{Jason.encode!(event.transaction_data)}"}</:col>
-  <:col :let={event} label="Inserted at">{"#{event.inserted_at}"}</:col>
+  <:col :let={event} label="source">{event_source_format(event)}</:col>
+  <:col :let={event} label="action">{event.action}</:col>
+  <:col :let={event} label="transaction_data">{Jason.encode!(event.transaction_data)}</:col>
+  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+  <:col :let={event} label="Processed at">{format_datetime(event.processed_at)}</:col>
 </.table>
 
 <.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>

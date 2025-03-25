@@ -2,9 +2,13 @@ defmodule DelExampleWeb.ViewHelpers do
   @moduledoc """
   View helpers for the application.
   """
+  def format_datetime(nil), do: ""
+
   def format_datetime(datetime) do
     Calendar.strftime(datetime, "%c")
   end
+
+
 
   def status_color(status) do
     case status do
@@ -30,7 +34,12 @@ defmodule DelExampleWeb.ViewHelpers do
       ", ")
   end
 
-  def format_money(value) do
-    "#{value.amount/100} #{value.currency}"
+  def event_source_format(event) do
+    [
+      "src:\u00A0#{event.source}",
+      "source_idempk:\u00A0#{event.source_idempk}",
+      "update_idempk:\u00A0#{event.update_idempk}"
+    ]
+    |> Enum.join(", ")
   end
 end

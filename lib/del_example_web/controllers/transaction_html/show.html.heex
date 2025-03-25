@@ -28,4 +28,20 @@
   <:col :let={e} label="Updated At">{format_datetime(e.updated_at)}</:col>
 </.table>
 
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
+  Events
+</.header>
+
+<.table id="events" rows={@events} >
+  <:col :let={event} label="Event ID">{event.id}</:col>
+  <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
+  <:col :let={event} label="source">{event_source_format(event)}</:col>
+  <:col :let={event} label="action">{"#{event.action}"}</:col>
+  <:col :let={event} label="transaction_data">{"#{Jason.encode!(event.transaction_data)}"}</:col>
+  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+  <:col :let={event} label="Processed at">{format_datetime(event.processed_at)}</:col>
+</.table>
+
 <.back navigate={~p"/instances/#{@transaction.instance_id}/transactions"}>Back to transactions</.back>

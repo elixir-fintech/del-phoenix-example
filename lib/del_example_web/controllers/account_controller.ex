@@ -32,7 +32,8 @@ defmodule DelExampleWeb.AccountController do
 
   def show(conn, %{"id" => id, "instance_id" => instance_id}) do
     account = get_account!(id)
-    render(conn, :show, account: account, instance_id: instance_id)
+    balance_history = get_balance_history(account.id)
+    render(conn, :show, account: account, instance_id: instance_id, balance_history: balance_history)
   end
 
   def edit(conn, %{"id" => id, "instance_id" => instance_id}) do

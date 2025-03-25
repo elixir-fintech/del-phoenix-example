@@ -17,10 +17,10 @@
   <:item title="Name">{@account.name}</:item>
   <:item title="Description">{@account.description}</:item>
   <:item title="Type">{@account.type}</:item>
-  <:item title="Currency">{@account.currency}</:item>
-  <:item title="Available" class="font-bold">{@account.available}</:item>
-  <:item title="Inserted At">{@account.inserted_at}</:item>
-  <:item title="Updated At">{@account.updated_at}</:item>
+  <:item title="Status">{@account.currency}</:item>
+  <:item title="Available" class="font-bold">{to_money(@account.available, @account.currency)}</:item>
+  <:item title="Inserted At">{format_datetime(@account.inserted_at)}</:item>
+  <:item title="Updated At">{format_datetime(@account.updated_at)}</:item>
 </.list>
 
 <div class="h-1 bg-slate-200 my-5"></div>
@@ -30,10 +30,10 @@
 </.header>
 
 <.table id="balance_history" rows={@balance_history} >
-  <:col :let={bhe} label="Available">{bhe.available}</:col>
-  <:col :let={bhe} label="Date">{bhe.inserted_at}</:col>
-  <:col :let={bhe} label="Posted">{bhe.posted}</:col>
-  <:col :let={bhe} label="Pending">{bhe.pending}</:col>
+  <:col :let={bhe} label="Available">{to_money(bhe.available, @account.currency)}</:col>
+  <:col :let={bhe} label="Inserted at">{format_datetime(bhe.inserted_at)}</:col>
+  <:col :let={bhe} label="Posted">{balance_format(bhe.posted, @account.currency)}</:col>
+  <:col :let={bhe} label="Pending">{balance_format(bhe.pending, @account.currency)}</:col>
   <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
   <:col :let={bhe} label="Trx ID">{bhe.transaction_id}</:col>
 </.table>

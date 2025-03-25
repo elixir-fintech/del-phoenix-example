@@ -5,7 +5,9 @@
 <.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/instances/#{@instance_id}/transactions/#{&1}")}>
   <:col :let={transaction} label="ID">{transaction.id}</:col>
   <:col :let={transaction} label="status">{"#{transaction.status}"}</:col>
-  <:col :let={transaction} label="Inserted at">{"#{transaction.inserted_at}"}</:col>
+  <:col :let={transaction} label="Posted at">{format_datetime(transaction.posted_at)}</:col>
+  <:col :let={transaction} label="Inserted at">{format_datetime(transaction.inserted_at)}</:col>
+  <:col :let={transaction} label="Updated at">{format_datetime(transaction.updated_at)}</:col>
   <:action :let={transaction}>
     <div class="sr-only">
       <.link navigate={~p"/instances/#{@instance_id}/transactions/#{transaction}"}>Show</.link>

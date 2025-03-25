@@ -3,6 +3,7 @@ defmodule DelExampleWeb.TransactionController do
 
   import DelExample.DoubleEntryLedgerWeb.Transaction
   import DelExample.DoubleEntryLedgerWeb.Account, only: [get_account!: 1]
+  import DelExample.DoubleEntryLedgerWeb.Event, only: [list_events_for_transaction: 1]
 
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -20,6 +21,7 @@ defmodule DelExampleWeb.TransactionController do
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     transaction = get_transaction!(id)
-    render(conn, :show, transaction: transaction)
+    events = list_events_for_transaction(id)
+    render(conn, :show, transaction: transaction, events: events)
   end
 end

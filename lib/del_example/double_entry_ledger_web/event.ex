@@ -14,6 +14,10 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     EventStore.list_all_for_instance(instance_id, 1, 1000)
   end
 
+  def list_events_for_transaction(transaction_id) do
+    EventStore.list_all_for_transaction(transaction_id)
+  end
+
   def create_event(event_params) do
     case EventMap.create(event_params) do
       {:ok, event_map} -> case EventWorker.process_new_event(event_map) do

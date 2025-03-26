@@ -1,5 +1,6 @@
 defmodule DelExampleWeb.InstanceHTML do
   use DelExampleWeb, :html
+  import DelExampleWeb.ViewHelpers
 
   embed_templates "instance_html/*"
 

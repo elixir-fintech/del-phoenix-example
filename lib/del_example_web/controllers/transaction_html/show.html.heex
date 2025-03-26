@@ -1,5 +1,8 @@
 <.header>
-  Transaction {@transaction.id}
+  <div class="flex items-center">
+    <span class="bg-slate-800 text-white p-1 mr-3">Transaction: </span>
+    <span>{@transaction.id}</span>
+  </div>
   <:subtitle>This is a transaction record from your database.</:subtitle>
   <:actions>
   </:actions>
@@ -8,7 +11,10 @@
 <.list>
   <:item title="ID">{@transaction.id}</:item>
   <:item title="Status">{@transaction.status}</:item>
-  <:item title="Instance id">{@transaction.instance_id}</:item>
+  <:item title="Instance id">
+    <.link href={~p"/instances/#{@transaction.instance_id}"} class="underline">
+      {@transaction.instance_id}
+    </.link></:item>
   <:item title="Posted at">{format_datetime(@transaction.posted_at)}</:item>
   <:item title="Inserted At">{format_datetime(@transaction.inserted_at)}</:item>
   <:item title="Updated At">{format_datetime(@transaction.updated_at)}</:item>
@@ -21,7 +27,11 @@
 </.header>
 
 <.table id="balance_history" rows={@transaction.entries} >
-  <:col :let={e} label="Account ID">{e.account.name}</:col>
+  <:col :let={e} label="Account Name">{e.account.name}</:col>
+  <:col :let={e} label="Account ID">
+    <.link href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account_id}"} class="underline">
+      {e.account.id}
+    </.link></:col>
   <:col :let={e} label="Value">{e.value}</:col>
   <:col :let={e} label="Type">{e.type}</:col>
   <:col :let={e} label="Inserted At">{format_datetime(e.inserted_at)}</:col>

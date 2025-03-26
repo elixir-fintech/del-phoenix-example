@@ -1,11 +1,19 @@
 <.header>
-  Listing Events for instance #{@instance_id}
-  <:actions>
-    <.link href={~p"/instances/#{@instance_id}/events/new"}>
-      <.button>+ Event</.button>
+  <div class="flex items-center">
+    <span class="bg-blue-500 text-white p-1 mr-3">Listing Events:</span>
+    <span class="bg-green-500 text-white p-1 mr-3">{@instance.id}</span>
+  </div>
+  <:subtitle>Listing Events for instance ID 
+    <.link href={~p"/instances/#{@instance.id}"} class="underline">
+      {@instance.id}
     </.link>
-    <.link href={~p"/instances/#{@instance_id}/transactions"}>
-      <span>Trx</span>
+  </:subtitle>
+  <:actions>
+    <.link href={~p"/instances/#{@instance.id}/events/new"}>
+      <.button class="bg-slate-400 hover:bg-blue-500 mr-1">+ Event</.button>
+    </.link>
+    <.link href={~p"/instances/#{@instance.id}/transactions"} class="mr-1 underline">
+      Trx
     </.link>
   </:actions>
   
@@ -13,7 +21,9 @@
 
 <.table id="events" rows={@events} >
   <:col :let={event} label="ID">{event.id}</:col>
-  <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
+  <:col :let={event} label="status">
+    <span class={status_color(event.status)}>{event.status}</span>
+  </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{event.action}</:col>
   <:col :let={event} label="transaction_data">{Jason.encode!(event.transaction_data)}</:col>
@@ -21,4 +31,4 @@
   <:col :let={event} label="Processed at">{format_datetime(event.processed_at)}</:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>
+<.back navigate={~p"/instances/#{@instance.id}"}>Back to instance</.back>

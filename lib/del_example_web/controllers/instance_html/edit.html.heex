@@ -1,6 +1,9 @@
 <.header>
-  Edit Instance {@instance.id}
-  <:subtitle>Use this form to manage instance records in your database.</:subtitle>
+  <div class="flex items-center">
+    <span class="bg-green-500 text-white p-1 mr-3">Edit Instance:</span>
+    <span>{@instance.name}</span>
+  </div>
+  <:subtitle>ID: {@instance.id}</:subtitle>
 </.header>
 
 <.instance_form changeset={@changeset} action={~p"/instances/#{@instance}"} />

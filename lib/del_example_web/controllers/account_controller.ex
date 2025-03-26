@@ -4,14 +4,6 @@ defmodule DelExampleWeb.AccountController do
   import DelExample.DoubleEntryLedgerWeb.Account
   alias DoubleEntryLedger.Account
 
-  def index(conn, %{"instance_id" => instance_id}) do
-    list = case list_accounts(instance_id) do
-      {:ok, accounts} -> accounts
-      {:error, _} -> []
-    end
-    render(conn, :index, accounts: list, instance_id: instance_id)
-  end
-
   def new(conn, %{"instance_id" => instance_id}) do
     changeset = change_account(%Account{})
     render(conn, :new, changeset: changeset, instance_id: instance_id)
@@ -58,7 +50,11 @@ defmodule DelExampleWeb.AccountController do
 
   def delete(conn, %{"id" => id, "instance_id" => instance_id}) do
     account = get_account!(id)
-    {:ok, _account} = delete_account(account)
+    case delete_account(account) do
+      {:ok, %{id: id} } -> put_flash(conn, :info, "Account #{id} deleted successfully.")
+      {:error, changeset} -> put_flash(conn, :error, inspect(changeset.errors))
+    end
+    |> redirect(to: ~p"/instances/#{instance_id}")
 
     conn
     |> put_flash(:info, "Account deleted successfully.")

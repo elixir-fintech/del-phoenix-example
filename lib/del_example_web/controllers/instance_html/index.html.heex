@@ -1,27 +1,31 @@
 <.header>
-  Listing Instances
+  <div class="flex items-center">
+    <span class="bg-green-500 text-white p-1 mr-3">Listing Instances</span>
+  </div>
   <:actions>
     <.link href={~p"/instances/new"}>
-      <.button>+ Instance</.button>
+      <.button class="bg-slate-400 hover:bg-green-500">+ Instance</.button>
     </.link>
   </:actions>
 </.header>
 
 <.table id="instances" rows={@instances} row_click={&JS.navigate(~p"/instances/#{&1}")}>
-  <:col :let={instance} label="ID">{instance.id}</:col>
   <:col :let={instance} label="Name">{instance.name}</:col>
+  <:col :let={instance} label="ID">{instance.id}</:col>
   <:col :let={instance} label="Description">{instance.description}</:col>
-  <:col :let={instance} label="Inserted At">{instance.inserted_at}</:col>
-  <:col :let={instance} label="Updated At">{instance.updated_at}</:col>
+  <:col :let={instance} label="Inserted At">{format_datetime(instance.inserted_at)}</:col>
+  <:col :let={instance} label="Updated At">{format_datetime(instance.updated_at)}</:col>
   <:action :let={instance}>
     <div class="sr-only">
       <.link navigate={~p"/instances/#{instance}"}>Show</.link>
     </div>
-    <.link navigate={~p"/instances/#{instance}/edit"}>Edit</.link>
+    <.link navigate={~p"/instances/#{instance}/edit"}>
+      <.icon name="hero-pencil-solid"/>
+    </.link>
   </:action>
   <:action :let={instance}>
     <.link href={~p"/instances/#{instance}"} method="delete" data-confirm="Are you sure?">
-      Delete
+      <.icon name="hero-trash-solid"/>
     </.link>
   </:action>
 </.table>

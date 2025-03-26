@@ -1,6 +1,9 @@
 <.header>
-  Edit Account {@account.id}
-  <:subtitle>Use this form to manage account records in your database.</:subtitle>
+  <div class="flex items-center">
+    <span class="bg-red-500 text-white p-1 mr-3">Edit Account:</span>
+    <span>{@account.name}</span>
+  </div>
+  <:subtitle>ID: {@account.id}</:subtitle>
 </.header>
 <.list>
   <:item title="Type">{@account.type}</:item>

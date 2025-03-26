@@ -1,13 +1,18 @@
 <.header>
-  Account {@account.id}
-  <:subtitle>This is a account record from your database.</:subtitle>
+  <div class="flex items-center">
+    <span class="bg-red-500 text-white p-1 mr-3">Account:</span>
+    <span>{@account.name}</span>
+  </div>
+  <:subtitle>ID: {@account.id}</:subtitle>
 
   <:actions>
-    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/edit"}>
-      <.button>Edit</.button>
+    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/edit"} class="mr-1">
+      <.button class="bg-slate-300 hover:bg-red-500">
+        <.icon name="hero-pencil-solid"/>
+      </.button>
     </.link>
-    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/transactions"}>
-      <span>Trx</span>
+    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/transactions"} class="underline">
+      Trx
     </.link>
   </:actions>
 </.header>
@@ -19,6 +24,9 @@
   <:item title="Type">{@account.type}</:item>
   <:item title="Status">{@account.currency}</:item>
   <:item title="Available" class="font-bold">{to_money(@account.available, @account.currency)}</:item>
+  <:item title="Instance ID">
+    <.link href={~p"/instances/#{@instance_id}"} class="underline">{@account.instance_id}</.link>
+  </:item>
   <:item title="Inserted At">{format_datetime(@account.inserted_at)}</:item>
   <:item title="Updated At">{format_datetime(@account.updated_at)}</:item>
 </.list>
@@ -35,8 +43,13 @@
   <:col :let={bhe} label="Posted">{balance_format(bhe.posted, @account.currency)}</:col>
   <:col :let={bhe} label="Pending">{balance_format(bhe.pending, @account.currency)}</:col>
   <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
-  <:col :let={bhe} label="Trx ID">{bhe.transaction_id}</:col>
+  <:col :let={bhe} label="Trx ID">
+    <.link 
+      href={~p"/instances/#{@instance_id}/transactions/#{bhe.transaction_id}"}
+      class="underline"
+    >{bhe.transaction_id}</.link>
+  </:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@instance_id}/accounts"}>Back to accounts</.back>
+<.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>
 

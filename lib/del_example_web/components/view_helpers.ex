@@ -2,13 +2,12 @@ defmodule DelExampleWeb.ViewHelpers do
   @moduledoc """
   View helpers for the application.
   """
+
   def format_datetime(nil), do: ""
 
   def format_datetime(datetime) do
     Calendar.strftime(datetime, "%c")
   end
-
-
 
   def status_color(status) do
     case status do
@@ -16,12 +15,13 @@ defmodule DelExampleWeb.ViewHelpers do
       :processed -> "text-green-600 font-bold"
       :pending -> "text-yellow-600"
       :failed -> "text-red-600 font-bold"
+      :archived -> "text-red-600 font-bold"
       _ -> "text-gray-600"
     end
   end
 
   def to_money(value, currency) do
-    Money.new(value, currency)
+    DoubleEntryLedger.Currency.to_money(value, currency)
   end
 
   def balance_format(balance, currency) do

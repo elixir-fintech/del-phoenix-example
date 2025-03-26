@@ -4,12 +4,14 @@ defmodule DelExampleWeb.EventNewLive do
 
   import DelExample.DoubleEntryLedgerWeb.Event
   import DelExample.DoubleEntryLedgerWeb.Account, only: [get_accounts_for_dropdown: 1]
+  import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
   alias DoubleEntryLedger.Event.EntryData
   alias DoubleEntryLedger.Event.TransactionData
   alias DoubleEntryLedger.Event.EventMap
 
   @impl true
   def mount(%{"instance_id" => instance_id}, _session, socket) do
+    instance = get_instance!(instance_id)
     changeset = EventMap.changeset(
       %EventMap{
         action: :create,
@@ -17,7 +19,7 @@ defmodule DelExampleWeb.EventNewLive do
         transaction_data: %TransactionData{status: :posted, entries: []}},
         %{}
       )
-    {:ok, assign(socket, instance_id: instance_id, accounts: get_accounts_for_dropdown(instance_id), changeset: changeset)}
+    {:ok, assign(socket, instance: instance, accounts: get_accounts_for_dropdown(instance_id), changeset: changeset)}
   end
 
   @impl true

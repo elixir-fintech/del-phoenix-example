@@ -1,5 +1,9 @@
 <.header>
-  New Event to Process
+  <div class="flex items-center">
+    <span class="bg-blue-500 text-white p-1 mr-3">New Event for: </span>
+    <span>{@instance.name}</span>
+  </div>
+  
   <:subtitle>Use this form to create events that will be immediately processed</:subtitle>
 </.header>
 <!-- filepath: /home/chris/Projects/ME/del_example_web/live/event_new_live.html.heex -->
@@ -26,8 +30,8 @@
   </div>
 
   <:actions>
-    <.button>Process Event</.button>
+    <.button class="bg-slate-400 hover:bg-blue-500">Process Event</.button>
   </:actions>
 </.simple_form>
 
-<.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>
+<.back navigate={~p"/instances/#{@instance.id}"}>Back to instance</.back>

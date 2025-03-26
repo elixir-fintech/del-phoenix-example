@@ -1,17 +1,22 @@
 <.header>
-  Instance {@instance.id}
-  <:subtitle>This is a instance record from your database.</:subtitle>
+  <div class="flex items-center">
+    <span class="bg-green-500 text-white p-1 mr-3">Instance:</span>
+    <span>{@instance.name}</span>
+  </div>
+  <:subtitle>ID: {@instance.id}</:subtitle>
   <:actions>
-    <.link href={~p"/instances/#{@instance}/edit"}>
-      <.button>Edit</.button>
+    <.link href={~p"/instances/#{@instance}/edit"} class="mr-1">
+      <.button class="bg-slate-300 hover:bg-green-500">
+        <.icon name="hero-pencil-solid"/>
+      </.button>
     </.link>
-    <.link href={~p"/instances/#{@instance}/events/new"}>
-      <.button>+ Event</.button>
+    <.link href={~p"/instances/#{@instance}/events/new"} class="mr-1">
+      <.button class="bg-slate-400 hover:bg-blue-500">+ Event</.button>
     </.link>
-    <.link href={~p"/instances/#{@instance}/transactions"}>
+    <.link href={~p"/instances/#{@instance}/transactions"} class="mr-1 underline">
       <span>Trx</span>
     </.link>
-    <.link href={~p"/instances/#{@instance}/events"}>
+    <.link href={~p"/instances/#{@instance}/events"} class="underline">
       <span>Events</span>
     </.link>
   </:actions>
@@ -41,29 +46,31 @@
   Associated Accounts
   <:actions>
     <.link href={~p"/instances/#{@instance}/accounts/new"}>
-      <.button>+ Account</.button>
+      <.button class="bg-slate-400 hover:bg-red-500">+ Account</.button>
     </.link>
   </:actions>
 </.header>
 
 <.table id="accounts" rows={@accounts} row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1}")}>
-  <:col :let={account} label="ID">{account.id}</:col>
   <:col :let={account} label="Name">{account.name}</:col>
+  <:col :let={account} label="ID">{account.id}</:col>
   <:col :let={account} label="Type">{account.type}</:col>
   <:col :let={account} label="Currency">{account.currency}</:col>
-  <:col :let={account} label="Available">{account.available}</:col>
-  <:col :let={account} label="Posted">{account.posted}</:col>
-  <:col :let={account} label="Pending">{account.pending}</:col>
+  <:col :let={account} label="Available">{to_money(account.available, account.currency)}</:col>
+  <:col :let={account} label="Posted">{balance_format(account.posted, account.currency)}</:col>
+  <:col :let={account} label="Pending">{balance_format(account.pending, account.currency)}</:col>
 
   <:action :let={account}>
     <div class="sr-only">
       <.link navigate={~p"/instances/#{@instance}/accounts/#{account}"}>Show</.link>
     </div>
-    <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}>Edit</.link>
+    <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}>
+      <.icon name="hero-pencil-solid"/>
+    </.link>
   </:action>
   <:action :let={account}>
     <.link href={~p"/instances/#{@instance}/accounts/#{account}"} method="delete" data-confirm="Are you sure?">
-      Delete
+      <.icon name="hero-trash-solid"/>
     </.link>
   </:action>
 </.table>

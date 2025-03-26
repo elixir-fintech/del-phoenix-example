@@ -1,6 +1,7 @@
 <.header>
-  New Instance
-  <:subtitle>Use this form to manage instance records in your database.</:subtitle>
+  <div class="flex items-center">
+    <span class="bg-green-500 text-white p-1 mr-3">New Instance</span>
+  </div>
 </.header>
 
 <.instance_form changeset={@changeset} action={~p"/instances"} />

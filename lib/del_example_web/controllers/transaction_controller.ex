@@ -4,6 +4,7 @@ defmodule DelExampleWeb.TransactionController do
   import DelExample.DoubleEntryLedgerWeb.Transaction
   import DelExample.DoubleEntryLedgerWeb.Account, only: [get_account!: 1]
   import DelExample.DoubleEntryLedgerWeb.Event, only: [list_events_for_transaction: 1]
+  import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
 
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -14,8 +15,9 @@ defmodule DelExampleWeb.TransactionController do
   end
 
   def index(conn, %{"instance_id" => instance_id}) do
-    transactions = list_transactions(instance_id)
-    render(conn, :index, transactions: transactions, instance_id: instance_id)
+    instance = get_instance!(instance_id)
+    transactions = list_transactions(instance.id)
+    render(conn, :index, transactions: transactions, instance: instance)
   end
 
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()

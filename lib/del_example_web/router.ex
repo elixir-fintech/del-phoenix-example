@@ -25,7 +25,7 @@ defmodule DelExampleWeb.Router do
       resources "/accounts", AccountController, except: [:index] do
         resources "/transactions", TransactionController, only: [:index, :show]
       end
-      resources "/events", EventController, only: [:index]
+      resources "/events", EventController, only: [:index, :show]
       resources "/transactions", TransactionController, only: [:index, :show]
     end
   end

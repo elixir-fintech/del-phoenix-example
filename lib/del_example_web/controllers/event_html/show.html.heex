@@ -1,0 +1,30 @@
+<.header>
+  <div class="flex items-center">
+    <span class="bg-blue-500 text-white p-1 mr-3">Event:</span>
+    <span class="mr-3">{@event.id}</span>
+  </div>
+  <:subtitle>ID: {@event.id}</:subtitle>
+</.header>
+
+<.list>
+  <:item title="ID">{@event.id}</:item>
+  <:item title="Action">{@event.action}</:item>
+  <:item title="Source">{@event.source}</:item>
+  <:item title="Source idempotent key">{@event.source_idempk}</:item>
+  <:item title="Update idempotent key">{@event.update_idempk}</:item>
+  <:item title="Transaction data">{Jason.encode!(@event.transaction_data)}</:item>
+  <:item title="Status"><span class={status_color(@event.status)}>{@event.status}</span></:item>
+  <:item title="Processed at">{@event.processed_at}</:item>
+  <:item title="Transaction ID">
+    <.link href={~p"/instances/#{@event.instance_id}/transactions/#{@event.processed_transaction_id}"} class="underline">
+      {@event.processed_transaction_id}
+    </.link>
+  </:item>
+  <:item title="Instance ID">
+    <.link href={~p"/instances/#{@event.instance_id}"} class="underline">
+      {@event.instance_id}
+    </.link>
+  </:item>
+  <:item title="Created at">{@event.inserted_at}</:item>
+  <:item title="Updated at">{@event.updated_at}</:item>
+</.list>

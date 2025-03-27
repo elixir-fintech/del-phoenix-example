@@ -26,7 +26,7 @@
   Entries
 </.header>
 
-<.table id="balance_history" rows={@transaction.entries} >
+<.table id="entries" rows={@transaction.entries} >
   <:col :let={e} label="Account Name">{e.account.name}</:col>
   <:col :let={e} label="Account ID">
     <.link href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account_id}"} class="underline">
@@ -44,7 +44,7 @@
   Events
 </.header>
 
-<.table id="events" rows={@events} >
+<.table id="events" rows={@events} row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}>
   <:col :let={event} label="Event ID">{event.id}</:col>
   <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>

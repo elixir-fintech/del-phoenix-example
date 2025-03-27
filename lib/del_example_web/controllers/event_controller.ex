@@ -11,7 +11,8 @@ defmodule DelExampleWeb.EventController do
   end
 
   def show(conn, %{"id" => id}) do
-    event = get_event!(id)
-    render(conn, :show, event: event)
+    %{processed_transaction_id: trx_id} = event = get_event!(id)
+    events = Enum.filter(list_events_for_transaction(trx_id), fn e -> e.id != id end)
+    render(conn, :show, event: event, events: events)
   end
 end

@@ -13,8 +13,9 @@
   <:item title="Source idempotent key">{@event.source_idempk}</:item>
   <:item title="Update idempotent key">{@event.update_idempk}</:item>
   <:item title="Transaction data">{Jason.encode!(@event.transaction_data)}</:item>
+  <:item title="Source Data">{Jason.encode!(@event.source_data)}</:item>
   <:item title="Status"><span class={status_color(@event.status)}>{@event.status}</span></:item>
-  <:item title="Processed at">{@event.processed_at}</:item>
+  <:item title="Tries">{@event.tries}</:item>
   <:item title="Transaction ID">
     <.link href={~p"/instances/#{@event.instance_id}/transactions/#{@event.processed_transaction_id}"} class="underline">
       {@event.processed_transaction_id}
@@ -25,6 +26,24 @@
       {@event.instance_id}
     </.link>
   </:item>
+  <:item title="Processed at">{@event.processed_at}</:item>
+  <:item title="Errors" class="text-red-500">{Jason.encode!(@event.errors)}</:item>
   <:item title="Created at">{@event.inserted_at}</:item>
   <:item title="Updated at">{@event.updated_at}</:item>
 </.list>
+
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
+  Related Events
+</.header>
+
+<.table id="events" rows={@events} row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}>
+  <:col :let={event} label="Event ID">{event.id}</:col>
+  <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
+  <:col :let={event} label="source">{event_source_format(event)}</:col>
+  <:col :let={event} label="action">{"#{event.action}"}</:col>
+  <:col :let={event} label="transaction_data">{"#{Jason.encode!(event.transaction_data)}"}</:col>
+  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+  <:col :let={event} label="Processed at">{format_datetime(event.processed_at)}</:col>
+</.table>

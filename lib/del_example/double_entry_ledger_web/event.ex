@@ -18,7 +18,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     EventStore.list_all_for_transaction(transaction_id)
   end
 
-  def get_event!(id) do
+  def get_event(id) do
     EventStore.get_by_id(id)
   end
 

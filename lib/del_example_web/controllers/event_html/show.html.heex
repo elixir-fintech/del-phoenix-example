@@ -12,24 +12,36 @@
   <:item title="Source">{@event.source}</:item>
   <:item title="Source idempotent key">{@event.source_idempk}</:item>
   <:item title="Update idempotent key">{@event.update_idempk}</:item>
-  <:item title="Transaction data">{Jason.encode!(@event.transaction_data)}</:item>
-  <:item title="Source Data">{Jason.encode!(@event.source_data)}</:item>
+  <:item title="Transaction data">
+    <pre class="text-sm">{Jason.encode!(@event.transaction_data, pretty: true)}</pre>
+  </:item>
+  <:item title="Source Data">
+    <pre class="text-sm">{Jason.encode!(@event.source_data, pretty: true)}</pre>
+  </:item>
   <:item title="Status"><span class={status_color(@event.status)}>{@event.status}</span></:item>
   <:item title="Tries">{@event.tries}</:item>
   <:item title="Transaction ID">
+    <%= if @event.processed_transaction_id do %>
     <.link href={~p"/instances/#{@event.instance_id}/transactions/#{@event.processed_transaction_id}"} class="underline">
       {@event.processed_transaction_id}
     </.link>
+    <%end %>
   </:item>
   <:item title="Instance ID">
     <.link href={~p"/instances/#{@event.instance_id}"} class="underline">
       {@event.instance_id}
     </.link>
   </:item>
-  <:item title="Processed at">{@event.processed_at}</:item>
-  <:item title="Errors" class="text-red-500">{Jason.encode!(@event.errors)}</:item>
-  <:item title="Created at">{@event.inserted_at}</:item>
-  <:item title="Updated at">{@event.updated_at}</:item>
+  <:item title="Processed at">{format_datetime(@event.processed_at)}</:item>
+  <:item title="Errors">
+    <%= if @event.errors == [] do %>
+      <span class="text-green-500">No errors</span>
+    <% else %>
+      <pre class="text-xs overflow-auto max-h-96 text-red-500">{Jason.encode!(@event.errors, pretty: true)}</pre>
+    <% end %>
+  </:item>
+  <:item title="Created at">{format_datetime(@event.inserted_at)}</:item>
+  <:item title="Updated at">{format_datetime(@event.updated_at)}</:item>
 </.list>
 
 <div class="h-1 bg-slate-200 my-5"></div>
@@ -43,7 +55,10 @@
   <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.action}"}</:col>
-  <:col :let={event} label="transaction_data">{"#{Jason.encode!(event.transaction_data)}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">{format_datetime(event.processed_at)}</:col>
+  <:col :let={event} label="transaction_data">
+    <pre class="text-xs">{Jason.encode!(event.transaction_data, pretty: true)}</pre>
+  </:col>
 </.table>
+<.back navigate={~p"/instances/#{@event.instance_id}/events"}>Back to events</.back>

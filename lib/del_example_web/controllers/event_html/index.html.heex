@@ -21,14 +21,24 @@
 
 <.table id="events" rows={@events} row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}>
   <:col :let={event} label="ID">{event.id}</:col>
-  <:col :let={event} label="status">
+  <:col :let={event} label="Status | Transaction ID">
     <span class={status_color(event.status)}>{event.status}</span>
+    <span>
+     <%= if event.processed_transaction_id do %>
+      | 
+    <.link href={~p"/instances/#{event.instance_id}/transactions/#{event.processed_transaction_id}"} class="underline">
+      {event.processed_transaction_id}
+    </.link>
+    <%end %>
+    </span>
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{event.action}</:col>
-  <:col :let={event} label="transaction_data">{Jason.encode!(event.transaction_data)}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">{format_datetime(event.processed_at)}</:col>
+  <:col :let={event} label="transaction_data">
+    <pre class="text-xs">{Jason.encode!(event.transaction_data, pretty: true)}</pre>
+  </:col>
 </.table>
 
 <.back navigate={~p"/instances/#{@instance.id}"}>Back to instance</.back>

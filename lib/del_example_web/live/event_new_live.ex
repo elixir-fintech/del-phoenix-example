@@ -46,13 +46,13 @@ defmodule DelExampleWeb.EventNewLive do
 
   @impl true
   def handle_event("save", %{"event_map" => params}, socket) do
-    params = Map.put(params, "instance_id", socket.assigns.instance_id)
+    params = Map.put(params, "instance_id", socket.assigns.instance.id)
     case create_event(params) do
       {:ok, message} ->
         {:noreply,
          socket
          |> put_flash(:info, message)
-         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance_id}")}
+         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.id}")}
 
       {:error, message, changeset} ->
         {:noreply,

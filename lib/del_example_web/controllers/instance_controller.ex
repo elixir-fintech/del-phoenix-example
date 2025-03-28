@@ -33,7 +33,7 @@ defmodule DelExampleWeb.InstanceController do
       {:ok, accounts} -> accounts
       {:error, _} -> []
     end
-    render(conn, :show, instance: instance, accounts: list)
+    render(conn, :show, instance: instance, accounts: list, validated: inspect(validate_instance(instance)))
   end
 
   def edit(conn, %{"id" => id}) do

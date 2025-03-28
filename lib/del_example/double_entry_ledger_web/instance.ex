@@ -88,6 +88,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Instance do
   def change_instance(%Instance{} = instance, attrs \\ %{}), do: Instance.changeset(instance, attrs)
 
   def validate_instance(%Instance{} = instance) do
-    Instance.validate_account_balances(instance)
+    {:ok, sums} = InstanceStore.sum_accounts_debits_and_credits_by_currency(instance.id)
+    sums
   end
 end

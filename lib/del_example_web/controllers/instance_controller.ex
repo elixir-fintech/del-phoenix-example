@@ -33,7 +33,11 @@ defmodule DelExampleWeb.InstanceController do
       {:ok, accounts} -> accounts
       {:error, _} -> []
     end
-    render(conn, :show, instance: instance, accounts: list, validated: inspect(validate_instance(instance)))
+
+    sums = Map.new(validate_instance(instance), fn %{currency: currency} = item ->
+      {currency, Map.drop(item, [:currency])}
+    end)
+    render(conn, :show, instance: instance, accounts: list, sums: sums)
   end
 
   def edit(conn, %{"id" => id}) do

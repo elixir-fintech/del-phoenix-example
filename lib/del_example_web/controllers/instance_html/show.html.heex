@@ -33,21 +33,12 @@
     {@instance.description}
   </:item>
   <:item title="Inserted At">
-    {@instance.inserted_at}
+    {format_datetime(@instance.inserted_at)}
   </:item>
   <:item title="Updated At">
-    {@instance.updated_at}
+    {format_datetime(@instance.updated_at)}
   </:item>
 </.list>
-<div class="h-1 bg-slate-200 my-5"></div>
-
-<.header>
-  Validation
-</.header>
-
-<div>
-  {@validated}
-</div>
 
 <div class="h-1 bg-slate-200 my-5"></div>
 
@@ -80,5 +71,15 @@
     </.link>
   </:action>
 </.table>
+
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
+  Debit/Credit Sums per Currency
+</.header>
+
+<div>
+  <pre class="text-xs">{Jason.encode!(@sums, pretty: true)}</pre>
+</div>
  
 <.back navigate={~p"/instances/"}>Back to instances</.back>

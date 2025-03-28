@@ -11,17 +11,16 @@
   <.error :if={@changeset.action}>
     Oops, something went wrong! Please check the errors below.
   </.error>
-    <% options = Enum.map(@accounts, fn [name, type, id] -> ["#{name}: #{type} ": id] end) |> List.flatten() %>
-    <.input type="select" field={f[:action]} label="Action" options={DoubleEntryLedger.Event.actions()} />
+    <.input type="select" field={f[:action]} label="Action" options={@options[:actions]} />
     <.input field={f[:source]} label="Source" />
     <.input field={f[:source_idempk]} label="Idempotent Id" />
     <.input field={f[:update_idempk]} label="Update Idempotent Id" />
     <.inputs_for :let={td} field={f[:transaction_data]} >
-      <.input type="select" field={td[:status]} label="status" options={DoubleEntryLedger.Transaction.states()} />
+      <.input type="select" field={td[:status]} label="status" options={@options[:states]} />
       <.inputs_for :let={entry} field={td[:entries]}>
-        <.input type="select" field={entry[:account_id]} label="Account Id" options={options} />
+        <.input type="select" phx-change="account_changed" field={entry[:account_id]} label="Account Id" options={@options[:accounts]} />
         <.input field={entry[:amount]} label="Amount" />
-        <.input type="select" field={entry[:currency]} label="Currency" options={DoubleEntryLedger.Currency.currency_atoms}/>
+        <.input type="select" field={entry[:currency]} label="Currency" options={@options[:currencies]}/>
       </.inputs_for>
     </.inputs_for>
 

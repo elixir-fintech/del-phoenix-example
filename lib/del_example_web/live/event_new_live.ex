@@ -58,22 +58,10 @@ defmodule DelExampleWeb.EventNewLive do
     entries = get_in(params, ["transaction_data", "entries"])
     stored_transaction_data = Ecto.Changeset.get_field(socket.assigns.changeset, :transaction_data)
 
-  if entries && is_map(entries) do
-    entries_with_indices = Enum.map(entries, fn {idx_str, entry} ->
-      {String.to_integer(idx_str), entry}
-    end)
+    if entries && is_map(entries) do
 
-    new_entries =
-      Enum.with_index(stored_transaction_data.entries)
-      |> Enum.map(fn {entry, idx} ->
-      # Find if this entry was in the form data
-        case Enum.find(entries_with_indices, fn {form_idx, _} -> form_idx == idx end) do
-          {_, form_entry} -> update_entry(form_entry, entry, socket.assigns.accounts)
-          nil -> entry
-        end
-      end)
+      new_entries = create_new_entries(entries, stored_transaction_data.entries, socket.assigns.accounts)
 
-      # Create a new changeset with the updated params
       changeset =
         socket.assigns.changeset
         |> Ecto.Changeset.change(%{transaction_data: %{stored_transaction_data | entries: new_entries}})
@@ -100,6 +88,21 @@ defmodule DelExampleWeb.EventNewLive do
          |> assign(changeset: changeset)
          |> put_flash(:error, message)}
     end
+  end
+
+  defp create_new_entries(param_entries, entries, accounts) do
+    entries_with_indices = Enum.map(param_entries, fn {idx_str, entry} ->
+      {String.to_integer(idx_str), entry}
+    end)
+
+    Enum.with_index(entries)
+    |> Enum.map(fn {entry, idx} ->
+      f_entry = Enum.find(entries_with_indices, fn {form_idx, _} -> form_idx == idx end)
+      case f_entry do
+        {_, form_entry} -> update_entry(form_entry, entry, accounts)
+        nil -> entry
+      end
+    end)
   end
 
   defp update_entry(form_entry, entry, accounts) do

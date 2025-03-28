@@ -47,9 +47,11 @@ defmodule DelExampleWeb.EventNewLive do
 
   @impl true
   def handle_event("validate", %{"event_map" => params}, socket) do
+    params = Map.put(params, "instance_id", socket.assigns.instance.id)
     changeset =
-      socket.assigns.changeset
+      %EventMap{}
       |> EventMap.changeset(params)
+
     {:noreply, assign(socket, changeset: changeset)}
   end
 

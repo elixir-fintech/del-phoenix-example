@@ -86,4 +86,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Instance do
 
   """
   def change_instance(%Instance{} = instance, attrs \\ %{}), do: Instance.changeset(instance, attrs)
+
+  def validate_instance(%Instance{} = instance) do
+    Instance.validate_account_balances(instance)
+  end
 end

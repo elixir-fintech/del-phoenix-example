@@ -29,14 +29,17 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
           {:ok, "Event processed successfully."}
 
         {:error, %Changeset{} = event_changeset} ->
-          {:error, "ERROR processing event. #{inspect(event_changeset)}", event_map_changeset_from_event_changeset(event_params, event_changeset)}
+          errors = get_all_changeset_errors(event_changeset)
+          {:error, "ERROR processing event. #{Jason.encode!(errors)}", EventMap.changeset(%EventMap{}, event_params)}
 
         {:error, error} ->
           {:error, "Error processing event. #{inspect(error)}", event_map_changeset()}
       end
 
       {:error, %Changeset{} = changeset} ->
-        {:error, "Error processing event. #{inspect(changeset)}", changeset}
+        errors = get_all_changeset_errors(changeset)
+
+        {:error, "Error creating event. #{Jason.encode!(errors)}" , changeset}
     end
   end
 
@@ -49,22 +52,10 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     |> EventMap.changeset(%{})
   end
 
-  # this moves the top level errors from the event_changeset to the event_map_changeset
-  # so they are displayed in the form. Event though this is for event_map, an abstraction for events,
-  # ultimately we are creating events and we want to show the errors in the form.
-  defp event_map_changeset_from_event_changeset(event_params, event_changeset) do
-    EventMap.changeset(%EventMap{}, event_params)
-    |> move_errors(event_changeset)
-    |> Map.put(:action, :create)
-  end
-
-  defp move_errors(target_changeset, source_changeset) do
-    # Traverse errors to get a map of field => list of error messages.
-    errors = Ecto.Changeset.traverse_errors(source_changeset, fn {msg, opts} -> {msg, opts} end)
-
-    Enum.reduce(errors, target_changeset, fn {field, messages}, acc ->
-      Enum.reduce(messages, acc, fn {msg, opts}, acc2 ->
-        Ecto.Changeset.add_error(acc2, field, msg, opts)
+  def get_all_changeset_errors(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+      Enum.reduce(opts, msg, fn {key, value}, acc ->
+        String.replace(acc, "%{#{key}}", to_string(value))
       end)
     end)
   end

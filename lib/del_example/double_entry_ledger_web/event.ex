@@ -28,9 +28,9 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
         {:ok, _transaction, _event} ->
           {:ok, "Event processed successfully."}
 
-        {:error, %Changeset{} = event_changeset} ->
-          errors = get_all_changeset_errors(event_changeset)
-          {:error, "ERROR processing event. #{Jason.encode!(errors)}", EventMap.changeset(%EventMap{}, event_params)}
+        {:error, %Changeset{} = event_map_changeset} ->
+          errors = get_all_changeset_errors(event_map_changeset)
+          {:error, "ERROR processing event. #{Jason.encode!(errors)}", event_map_changeset}
 
         {:error, error} ->
           {:error, "Error processing event. #{inspect(error)}", event_map_changeset()}

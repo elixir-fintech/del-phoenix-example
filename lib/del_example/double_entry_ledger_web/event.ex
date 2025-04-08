@@ -4,11 +4,11 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   """
 
   alias Ecto.Changeset
+  alias DoubleEntryLedger.Event
   alias DoubleEntryLedger.Event.EventMap
   alias DoubleEntryLedger.Event.TransactionData
   alias DoubleEntryLedger.Event.EntryData
   alias DoubleEntryLedger.EventStore
-  alias DoubleEntryLedger.EventWorker
 
   def list_events(instance_id) do
     EventStore.list_all_for_instance(instance_id, 1, 1000)
@@ -23,23 +23,19 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   end
 
   def create_event(event_params) do
-    case EventMap.create(event_params) do
-      {:ok, event_map} -> case EventWorker.process_new_event(event_map) do
-        {:ok, _transaction, _event} ->
-          {:ok, "Event processed successfully."}
+    case EventStore.process_from_event_params(event_params) do
+      {:ok, %{id: trx_id}, %{id: event_id, action: action}} ->
+        {:ok, "#{action} event with ID #{event_id}) processed transaction with ID #{trx_id}"}
 
-        {:error, %Changeset{} = event_map_changeset} ->
-          errors = get_all_changeset_errors(event_map_changeset)
-          {:error, "ERROR processing event. #{Jason.encode!(errors)}", event_map_changeset}
+      {:error, %Changeset{} = event_map_changeset} ->
+        errors = get_all_changeset_errors(event_map_changeset)
+        {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}", event_map_changeset}
 
-        {:error, error} ->
-          {:error, "Error processing event. #{inspect(error)}", event_map_changeset()}
-      end
+      {:error, %Event{id: id, errors: errors}} ->
+        {:error, "Error processing saved event with ID #{id}: #{inspect(errors)}", event_map_changeset()}
 
-      {:error, %Changeset{} = changeset} ->
-        errors = get_all_changeset_errors(changeset)
-
-        {:error, "Error creating event. #{Jason.encode!(errors)}" , changeset}
+      {:error, error} ->
+        {:error, "Unexpected error processing event: #{inspect(error)}", event_map_changeset()}
     end
   end
 

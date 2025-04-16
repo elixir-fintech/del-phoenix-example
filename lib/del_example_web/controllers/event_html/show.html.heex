@@ -19,7 +19,7 @@
     <pre class="text-sm">{Jason.encode!(@event.source_data, pretty: true)}</pre>
   </:item>
   <:item title="Status"><span class={status_color(@event.status)}>{@event.status}</span></:item>
-  <:item title="Tries">{@event.tries}</:item>
+  <:item title="OCC Retry">{@event.occ_retry_count}</:item>
   <:item title="Transaction ID">
     <%= if @event.processed_transaction_id do %>
     <.link href={~p"/instances/#{@event.instance_id}/transactions/#{@event.processed_transaction_id}"} class="underline">

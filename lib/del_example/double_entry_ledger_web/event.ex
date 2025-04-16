@@ -22,10 +22,12 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     EventStore.get_by_id(id)
   end
 
+  @spec create_event(map()) ::
+          {:ok, String.t()} | {:error, String.t(), Changeset.t()}
   def create_event(event_params) do
     case EventStore.process_from_event_params(event_params) do
-      {:ok, %{id: trx_id}, %{id: event_id, action: action}} ->
-        {:ok, "#{action} event with ID #{event_id}) processed transaction with ID #{trx_id}"}
+      {:ok, trx, event} ->
+        {:ok, "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
       {:error, %Changeset{} = event_map_changeset} ->
         errors = get_all_changeset_errors(event_map_changeset)
@@ -39,6 +41,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     end
   end
 
+  @spec event_map_changeset() :: Ecto.Changeset.t()
   def event_map_changeset() do
     %EventMap{
       transaction_data: %TransactionData{

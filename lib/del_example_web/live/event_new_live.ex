@@ -9,6 +9,11 @@ defmodule DelExampleWeb.EventNewLive do
   alias DoubleEntryLedger.Event.TransactionData
   alias DoubleEntryLedger.Event.EventMap
 
+  @currency_dropdown_options Money.Currency.all()
+    |> Enum.map(fn {k, v} -> ["#{v.name} : (#{v.symbol}) : #{v.exponent}": k] end)
+    |> List.flatten()
+    |> Enum.sort()
+
   @impl true
   def mount(%{"instance_id" => instance_id}, _session, socket) do
     instance = get_instance!(instance_id)
@@ -24,7 +29,8 @@ defmodule DelExampleWeb.EventNewLive do
       accounts: Enum.map(accounts, fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end) |> List.flatten(),
       actions: DoubleEntryLedger.Event.actions(),
       states: DoubleEntryLedger.Transaction.states(),
-      currencies: DoubleEntryLedger.Currency.currency_atoms
+      #currencies: DoubleEntryLedger.Currency.currency_atoms
+      currencies: @currency_dropdown_options
     }
 
     {:ok, assign(socket, instance: instance, accounts: accounts, options: options, changeset: changeset)}

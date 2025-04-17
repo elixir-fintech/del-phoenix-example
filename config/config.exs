@@ -6,7 +6,6 @@
 
 # General application configuration
 import Config
-
 config :del_example,
   ecto_repos: [DelExample.Repo],
   generators: [timestamp_type: :utc_datetime]
@@ -60,6 +59,14 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# Add custom currencies to the Money library
+config :money,
+  custom_currencies: [
+    BTC: %{name: "Bitcoin", symbol: "₿", exponent: 8},
+    ETH: %{name: "Ethereum", symbol: "Ξ", exponent: 18},
+    GCS: %{name: "Galactic Credit Standard", symbol: "gcs", exponent: 0}
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

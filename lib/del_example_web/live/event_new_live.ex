@@ -29,7 +29,6 @@ defmodule DelExampleWeb.EventNewLive do
       accounts: Enum.map(accounts, fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end) |> List.flatten(),
       actions: DoubleEntryLedger.Event.actions(),
       states: DoubleEntryLedger.Transaction.states(),
-      #currencies: DoubleEntryLedger.Currency.currency_atoms
       currencies: @currency_dropdown_options
     }
 

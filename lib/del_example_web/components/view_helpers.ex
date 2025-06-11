@@ -31,7 +31,8 @@ defmodule DelExampleWeb.ViewHelpers do
         "d:\u00A0#{to_money(balance.debit, currency)}",
         "c:\u00A0#{to_money(balance.credit, currency)}"
       ],
-      ", ")
+      ", "
+    )
   end
 
   def event_source_format(event) do

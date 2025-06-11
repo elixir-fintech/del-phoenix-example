@@ -3,7 +3,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Instance do
   The DoubleEntryLedgerWeb context.
   """
 
-  #import Ecto.Query, warn: false
+  # import Ecto.Query, warn: false
 
   alias DoubleEntryLedger.Instance
   alias DoubleEntryLedger.InstanceStore
@@ -85,7 +85,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Instance do
       %Todo{...}
 
   """
-  def change_instance(%Instance{} = instance, attrs \\ %{}), do: Instance.changeset(instance, attrs)
+  def change_instance(%Instance{} = instance, attrs \\ %{}),
+    do: Instance.changeset(instance, attrs)
 
   def validate_instance(%Instance{} = instance) do
     {:ok, sums} = InstanceStore.sum_accounts_debits_and_credits_by_currency(instance.id)

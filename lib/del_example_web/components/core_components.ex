@@ -688,13 +688,13 @@ defmodule DelExampleWeb.CoreComponents do
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
         <.icon name="hero-arrow-left-solid" class="mr-1 h-3 w-3" />
-        <%= render_slot(@back) %>
+        {render_slot(@back)}
       </.link>
       <.link
         navigate={@next_navigate}
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
-        <%= render_slot(@next) %>
+        {render_slot(@next)}
         <.icon name="hero-arrow-right-solid" class="ml-1 h-3 w-3" />
       </.link>
     </div>

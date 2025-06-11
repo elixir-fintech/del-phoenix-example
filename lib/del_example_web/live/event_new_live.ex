@@ -1,5 +1,5 @@
 defmodule DelExampleWeb.EventNewLive do
-      alias DoubleEntryLedger.Event.EventMap
+  alias DoubleEntryLedger.Event.EventMap
   use DelExampleWeb, :live_view
 
   import DelExample.DoubleEntryLedgerWeb.Event
@@ -10,29 +10,43 @@ defmodule DelExampleWeb.EventNewLive do
   alias DoubleEntryLedger.Event.EventMap
 
   @currency_dropdown_options Money.Currency.all()
-    |> Enum.map(fn {k, v} -> ["#{v.name} : (#{v.symbol}) : #{v.exponent}": k] end)
-    |> List.flatten()
-    |> Enum.sort()
+                             |> Enum.map(fn {k, v} ->
+                               ["#{v.name} : (#{v.symbol}) : #{v.exponent}": k]
+                             end)
+                             |> List.flatten()
+                             |> Enum.sort()
 
   @impl true
   def mount(%{"instance_id" => instance_id}, _session, socket) do
     instance = get_instance!(instance_id)
-    changeset = EventMap.changeset(
-      %EventMap{
-        action: :create,
-        instance_id: instance_id,
-        transaction_data: %TransactionData{status: :posted, entries: []}},
+
+    changeset =
+      EventMap.changeset(
+        %EventMap{
+          action: :create,
+          instance_id: instance_id,
+          transaction_data: %TransactionData{status: :posted, entries: []}
+        },
         %{}
       )
+
     {:ok, accounts} = list_accounts(instance_id)
+
     options = %{
-      accounts: Enum.map(accounts, fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end) |> List.flatten(),
+      accounts:
+        Enum.map(accounts, fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end) |> List.flatten(),
       actions: DoubleEntryLedger.Event.actions(),
       states: DoubleEntryLedger.Transaction.states(),
       currencies: @currency_dropdown_options
     }
 
-    {:ok, assign(socket, instance: instance, accounts: accounts, options: options, changeset: changeset)}
+    {:ok,
+     assign(socket,
+       instance: instance,
+       accounts: accounts,
+       options: options,
+       changeset: changeset
+     )}
   end
 
   @impl true
@@ -53,6 +67,7 @@ defmodule DelExampleWeb.EventNewLive do
   @impl true
   def handle_event("validate", %{"event_map" => params}, socket) do
     params = Map.put(params, "instance_id", socket.assigns.instance.id)
+
     changeset =
       %EventMap{}
       |> EventMap.changeset(params)
@@ -63,15 +78,19 @@ defmodule DelExampleWeb.EventNewLive do
   @impl true
   def handle_event("account_changed", %{"event_map" => params}, socket) do
     entries = get_in(params, ["transaction_data", "entries"])
-    stored_transaction_data = Ecto.Changeset.get_field(socket.assigns.changeset, :transaction_data)
+
+    stored_transaction_data =
+      Ecto.Changeset.get_field(socket.assigns.changeset, :transaction_data)
 
     if entries && is_map(entries) do
-
-      new_entries = create_new_entries(entries, stored_transaction_data.entries, socket.assigns.accounts)
+      new_entries =
+        create_new_entries(entries, stored_transaction_data.entries, socket.assigns.accounts)
 
       changeset =
         socket.assigns.changeset
-        |> Ecto.Changeset.change(%{transaction_data: %{stored_transaction_data | entries: new_entries}})
+        |> Ecto.Changeset.change(%{
+          transaction_data: %{stored_transaction_data | entries: new_entries}
+        })
 
       {:noreply, assign(socket, changeset: changeset)}
     else
@@ -82,6 +101,7 @@ defmodule DelExampleWeb.EventNewLive do
   @impl true
   def handle_event("save", %{"event_map" => params}, socket) do
     params = Map.put(params, "instance_id", socket.assigns.instance.id)
+
     case create_event_no_save_on_error(params) do
       {:ok, message} ->
         {:noreply,
@@ -98,13 +118,15 @@ defmodule DelExampleWeb.EventNewLive do
   end
 
   defp create_new_entries(param_entries, entries, accounts) do
-    entries_with_indices = Enum.map(param_entries, fn {idx_str, entry} ->
-      {String.to_integer(idx_str), entry}
-    end)
+    entries_with_indices =
+      Enum.map(param_entries, fn {idx_str, entry} ->
+        {String.to_integer(idx_str), entry}
+      end)
 
     Enum.with_index(entries)
     |> Enum.map(fn {entry, idx} ->
       f_entry = Enum.find(entries_with_indices, fn {form_idx, _} -> form_idx == idx end)
+
       case f_entry do
         {_, form_entry} -> update_entry(form_entry, entry, accounts)
         nil -> entry

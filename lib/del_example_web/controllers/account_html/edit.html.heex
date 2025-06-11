@@ -9,5 +9,9 @@
   <:item title="Type">{@account.type}</:item>
   <:item title="Currency">{@account.currency}</:item>
 </.list>
-<.account_update_form changeset={@changeset} action={~p"/instances/#{@instance_id}/accounts/#{@account}"} account={@account} />
+<.account_update_form
+  changeset={@changeset}
+  action={~p"/instances/#{@instance_id}/accounts/#{@account}"}
+  account={@account}
+/>
 <.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>

@@ -6,6 +6,7 @@
 
 # General application configuration
 import Config
+
 config :del_example,
   ecto_repos: [DelExample.Repo],
   generators: [timestamp_type: :utc_datetime]

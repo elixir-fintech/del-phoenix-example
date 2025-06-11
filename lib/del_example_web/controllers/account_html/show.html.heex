@@ -8,10 +8,13 @@
   <:actions>
     <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/edit"} class="mr-1">
       <.button class="bg-slate-300 hover:bg-red-500">
-        <.icon name="hero-pencil-solid"/>
+        <.icon name="hero-pencil-solid" />
       </.button>
     </.link>
-    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/transactions"} class="underline">
+    <.link
+      href={~p"/instances/#{@instance_id}/accounts/#{@account}/transactions"}
+      class="underline"
+    >
       Trx
     </.link>
   </:actions>
@@ -23,7 +26,9 @@
   <:item title="Description">{@account.description}</:item>
   <:item title="Type">{@account.type}</:item>
   <:item title="Status">{@account.currency}</:item>
-  <:item title="Available" class="font-bold">{to_money(@account.available, @account.currency)}</:item>
+  <:item title="Available" class="font-bold">
+    {to_money(@account.available, @account.currency)}
+  </:item>
   <:item title="Instance ID">
     <.link href={~p"/instances/#{@instance_id}"} class="underline">{@account.instance_id}</.link>
   </:item>
@@ -37,19 +42,20 @@
   Balance History
 </.header>
 
-<.table id="balance_history" rows={@balance_history} >
+<.table id="balance_history" rows={@balance_history}>
   <:col :let={bhe} label="Available">{to_money(bhe.available, @account.currency)}</:col>
   <:col :let={bhe} label="Inserted at">{format_datetime(bhe.inserted_at)}</:col>
   <:col :let={bhe} label="Posted">{balance_format(bhe.posted, @account.currency)}</:col>
   <:col :let={bhe} label="Pending">{balance_format(bhe.pending, @account.currency)}</:col>
   <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
   <:col :let={bhe} label="Trx ID">
-    <.link 
+    <.link
       href={~p"/instances/#{@instance_id}/transactions/#{bhe.transaction_id}"}
       class="underline"
-    >{bhe.transaction_id}</.link>
+    >
+      {bhe.transaction_id}
+    </.link>
   </:col>
 </.table>
 
 <.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>
-

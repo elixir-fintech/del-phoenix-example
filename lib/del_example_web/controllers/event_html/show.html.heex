@@ -18,15 +18,22 @@
   <:item title="Source Data">
     <pre class="text-sm">{Jason.encode!(@event.source_data, pretty: true)}</pre>
   </:item>
-  <:item title="Status"><span class={status_color(@event.event_queue_item.status)}>{@event.event_queue_item.status}</span></:item>
+  <:item title="Status">
+    <span class={status_color(@event.event_queue_item.status)}>
+      {@event.event_queue_item.status}
+    </span>
+  </:item>
   <:item title="OCC Retry">{@event.event_queue_item.occ_retry_count}</:item>
   <:item title="Transaction ID">
-     <%= if @event.transactions != [] do %>
-     <%= for transaction <- @event.transactions do %>
-    <.link href={~p"/instances/#{@event.instance_id}/transactions/#{transaction.id}"} class="underline">
-      {transaction.id}
-    </.link>
-    <% end %>
+    <%= if @event.transactions != [] do %>
+      <%= for transaction <- @event.transactions do %>
+        <.link
+          href={~p"/instances/#{@event.instance_id}/transactions/#{transaction.id}"}
+          class="underline"
+        >
+          {transaction.id}
+        </.link>
+      <% end %>
     <% else %>
       <span class="text-gray-500">No transactions</span>
     <% end %>
@@ -36,7 +43,9 @@
       {@event.instance_id}
     </.link>
   </:item>
-  <:item title="Processed at">{format_datetime(@event.event_queue_item.processing_completed_at)}</:item>
+  <:item title="Processed at">
+    {format_datetime(@event.event_queue_item.processing_completed_at)}
+  </:item>
   <:item title="Errors">
     <%= if @event.event_queue_item.errors == [] do %>
       <span class="text-green-500">No errors</span>
@@ -54,9 +63,15 @@
   Related Events
 </.header>
 
-<.table id="events" rows={@events} row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}>
+<.table
+  id="events"
+  rows={@events}
+  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+>
   <:col :let={event} label="Event ID">{event.id}</:col>
-  <:col :let={event} label="status"><span class={status_color(event.status)}>{event.status}</span></:col>
+  <:col :let={event} label="status">
+    <span class={status_color(event.status)}>{event.status}</span>
+  </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>

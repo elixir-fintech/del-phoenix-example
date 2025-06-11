@@ -11,6 +11,7 @@ defmodule DelExampleWeb.AccountController do
 
   def create(conn, %{"account" => account_params, "instance_id" => instance_id}) do
     account_params = Map.put(account_params, "instance_id", instance_id)
+
     case create_account(account_params) do
       {:ok, account} ->
         conn
@@ -25,7 +26,12 @@ defmodule DelExampleWeb.AccountController do
   def show(conn, %{"id" => id, "instance_id" => instance_id}) do
     account = get_account!(id)
     balance_history = get_balance_history(account.id)
-    render(conn, :show, account: account, instance_id: instance_id, balance_history: balance_history)
+
+    render(conn, :show,
+      account: account,
+      instance_id: instance_id,
+      balance_history: balance_history
+    )
   end
 
   def edit(conn, %{"id" => id, "instance_id" => instance_id}) do
@@ -50,8 +56,9 @@ defmodule DelExampleWeb.AccountController do
 
   def delete(conn, %{"id" => id, "instance_id" => instance_id}) do
     account = get_account!(id)
+
     case delete_account(account) do
-      {:ok, %{id: id} } -> put_flash(conn, :info, "Account #{id} deleted successfully.")
+      {:ok, %{id: id}} -> put_flash(conn, :info, "Account #{id} deleted successfully.")
       {:error, changeset} -> put_flash(conn, :error, inspect(changeset.errors))
     end
     |> redirect(to: ~p"/instances/#{instance_id}")

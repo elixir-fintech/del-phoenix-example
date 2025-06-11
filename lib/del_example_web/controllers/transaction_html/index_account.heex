@@ -3,27 +3,42 @@
     <span class="bg-slate-800 text-white p-1 mr-3">Listing Transactions: </span>
     <span class="bg-red-500 text-white p-1">{@account.name}</span>
   </div>
-  <:subtitle>Listing Transactions for account ID 
+  <:subtitle>
+    Listing Transactions for account ID
     <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}"} class="underline">
       {@account.id}
     </.link>
   </:subtitle>
 </.header>
 
-<.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/instances/#{@instance_id}/transactions/#{extract_trx(&1)}")}>
-  <:col :let={{transaction,_,_,_}} label="ID">{transaction.id}</:col>
-  <:col :let={{transaction,_,_,_}} label="status">
+<.table
+  id="transactions"
+  rows={@transactions}
+  row_click={&JS.navigate(~p"/instances/#{@instance_id}/transactions/#{extract_trx(&1)}")}
+>
+  <:col :let={{transaction, _, _, _}} label="ID">{transaction.id}</:col>
+  <:col :let={{transaction, _, _, _}} label="status">
     <span class={status_color(transaction.status)}>{transaction.status}</span>
   </:col>
-  <:col :let={{transaction,_,_,_}} label="Inserted at">{format_datetime(transaction.inserted_at)}</:col>
-  <:col :let={{transaction,_,_,_}} label="Posted at">{format_datetime(transaction.posted_at)}</:col>
-  <:col :let={{_,account,_,_}} label="Acc Name">{account.name}</:col>
-  <:col :let={{_,_,entry,_}} label="Currency">{entry.value.currency}</:col>
-  <:col :let={{_,_,entry,_}} label="Amount">{entry.value}</:col>
-  <:col :let={{_,_,entry,_}} label="type">{entry.type}</:col>
-  <:col :let={{_,_,_,balance_history}} label="available">{to_money(balance_history.available, @account.currency)}</:col>
-  <:col :let={{_,_,_,balance_history}} label="posted">{balance_format(balance_history.posted, @account.currency)}</:col>
-  <:col :let={{_,_,_,balance_history}} label="pending">{balance_format(balance_history.pending, @account.currency)}</:col>
+  <:col :let={{transaction, _, _, _}} label="Inserted at">
+    {format_datetime(transaction.inserted_at)}
+  </:col>
+  <:col :let={{transaction, _, _, _}} label="Posted at">
+    {format_datetime(transaction.posted_at)}
+  </:col>
+  <:col :let={{_, account, _, _}} label="Acc Name">{account.name}</:col>
+  <:col :let={{_, _, entry, _}} label="Currency">{entry.value.currency}</:col>
+  <:col :let={{_, _, entry, _}} label="Amount">{entry.value}</:col>
+  <:col :let={{_, _, entry, _}} label="type">{entry.type}</:col>
+  <:col :let={{_, _, _, balance_history}} label="available">
+    {to_money(balance_history.available, @account.currency)}
+  </:col>
+  <:col :let={{_, _, _, balance_history}} label="posted">
+    {balance_format(balance_history.posted, @account.currency)}
+  </:col>
+  <:col :let={{_, _, _, balance_history}} label="pending">
+    {balance_format(balance_history.pending, @account.currency)}
+  </:col>
 </.table>
 
 <.back navigate={~p"/instances/#{@instance_id}/accounts/#{@account}"}>Back to Account</.back>

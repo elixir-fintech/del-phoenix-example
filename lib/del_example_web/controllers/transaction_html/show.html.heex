@@ -4,8 +4,7 @@
     <span>{@transaction.id}</span>
   </div>
   <:subtitle>This is a transaction record from your database.</:subtitle>
-  <:actions>
-  </:actions>
+  <:actions></:actions>
 </.header>
 
 <.list>
@@ -14,7 +13,8 @@
   <:item title="Instance id">
     <.link href={~p"/instances/#{@transaction.instance_id}"} class="underline">
       {@transaction.instance_id}
-    </.link></:item>
+    </.link>
+  </:item>
   <:item title="Posted at">{format_datetime(@transaction.posted_at)}</:item>
   <:item title="Inserted At">{format_datetime(@transaction.inserted_at)}</:item>
   <:item title="Updated At">{format_datetime(@transaction.updated_at)}</:item>
@@ -26,12 +26,16 @@
   Entries
 </.header>
 
-<.table id="entries" rows={@transaction.entries} >
+<.table id="entries" rows={@transaction.entries}>
   <:col :let={e} label="Account Name">{e.account.name}</:col>
   <:col :let={e} label="Account ID">
-    <.link href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account_id}"} class="underline">
+    <.link
+      href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account_id}"}
+      class="underline"
+    >
       {e.account.id}
-    </.link></:col>
+    </.link>
+  </:col>
   <:col :let={e} label="Value">{e.value}</:col>
   <:col :let={e} label="Type">{e.type}</:col>
   <:col :let={e} label="Inserted At">{format_datetime(e.inserted_at)}</:col>
@@ -44,14 +48,26 @@
   Events
 </.header>
 
-<.table id="events" rows={@events} row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}>
+<.table
+  id="events"
+  rows={@events}
+  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+>
   <:col :let={event} label="Event ID">{event.id}</:col>
-  <:col :let={event} label="status"><span class={status_color(event.event_queue_item.status)}>{event.event_queue_item.status}</span></:col>
+  <:col :let={event} label="status">
+    <span class={status_color(event.event_queue_item.status)}>
+      {event.event_queue_item.status}
+    </span>
+  </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.action}"}</:col>
   <:col :let={event} label="transaction_data">{"#{Jason.encode!(event.transaction_data)}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-  <:col :let={event} label="Processed at">{format_datetime(event.event_queue_item.processing_completed_at)}</:col>
+  <:col :let={event} label="Processed at">
+    {format_datetime(event.event_queue_item.processing_completed_at)}
+  </:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@transaction.instance_id}/transactions"}>Back to transactions</.back>
+<.back navigate={~p"/instances/#{@transaction.instance_id}/transactions"}>
+  Back to transactions
+</.back>

@@ -20,12 +20,12 @@
       <.link navigate={~p"/instances/#{instance}"}>Show</.link>
     </div>
     <.link navigate={~p"/instances/#{instance}/edit"}>
-      <.icon name="hero-pencil-solid"/>
+      <.icon name="hero-pencil-solid" />
     </.link>
   </:action>
   <:action :let={instance}>
     <.link href={~p"/instances/#{instance}"} method="delete" data-confirm="Are you sure?">
-      <.icon name="hero-trash-solid"/>
+      <.icon name="hero-trash-solid" />
     </.link>
   </:action>
 </.table>

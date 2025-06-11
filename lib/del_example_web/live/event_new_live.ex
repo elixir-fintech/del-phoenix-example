@@ -82,7 +82,7 @@ defmodule DelExampleWeb.EventNewLive do
   @impl true
   def handle_event("save", %{"event_map" => params}, socket) do
     params = Map.put(params, "instance_id", socket.assigns.instance.id)
-    case create_event(params) do
+    case create_event_no_save_on_error(params) do
       {:ok, message} ->
         {:noreply,
          socket

@@ -41,6 +41,22 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     end
   end
 
+  @spec create_event_no_save_on_error(map()) ::
+          {:ok, String.t()} | {:error, String.t(), Changeset.t()}
+  def create_event_no_save_on_error(event_params) do
+    case EventStore.process_from_event_params_no_save_on_error(event_params) do
+      {:ok, trx, event} ->
+        {:ok, "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
+
+      {:error, %Changeset{} = event_map_changeset} ->
+        errors = get_all_changeset_errors(event_map_changeset)
+        {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}", event_map_changeset}
+
+      {:error, error} ->
+        {:error, "Unexpected error processing event: #{inspect(error)}", event_map_changeset()}
+    end
+  end
+
   @spec event_map_changeset() :: Ecto.Changeset.t()
   def event_map_changeset() do
     %EventMap{

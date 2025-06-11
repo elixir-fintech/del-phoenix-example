@@ -18,26 +18,30 @@
   <:item title="Source Data">
     <pre class="text-sm">{Jason.encode!(@event.source_data, pretty: true)}</pre>
   </:item>
-  <:item title="Status"><span class={status_color(@event.status)}>{@event.status}</span></:item>
-  <:item title="OCC Retry">{@event.occ_retry_count}</:item>
+  <:item title="Status"><span class={status_color(@event.event_queue_item.status)}>{@event.event_queue_item.status}</span></:item>
+  <:item title="OCC Retry">{@event.event_queue_item.occ_retry_count}</:item>
   <:item title="Transaction ID">
-    <%= if @event.processed_transaction_id do %>
-    <.link href={~p"/instances/#{@event.instance_id}/transactions/#{@event.processed_transaction_id}"} class="underline">
-      {@event.processed_transaction_id}
+     <%= if @event.transactions != [] do %>
+     <%= for transaction <- @event.transactions do %>
+    <.link href={~p"/instances/#{@event.instance_id}/transactions/#{transaction.id}"} class="underline">
+      {transaction.id}
     </.link>
-    <%end %>
+    <% end %>
+    <% else %>
+      <span class="text-gray-500">No transactions</span>
+    <% end %>
   </:item>
   <:item title="Instance ID">
     <.link href={~p"/instances/#{@event.instance_id}"} class="underline">
       {@event.instance_id}
     </.link>
   </:item>
-  <:item title="Processed at">{format_datetime(@event.processed_at)}</:item>
+  <:item title="Processed at">{format_datetime(@event.event_queue_item.processing_completed_at)}</:item>
   <:item title="Errors">
-    <%= if @event.errors == [] do %>
+    <%= if @event.event_queue_item.errors == [] do %>
       <span class="text-green-500">No errors</span>
     <% else %>
-      <pre class="text-xs overflow-auto max-h-96 text-red-500">{Jason.encode!(@event.errors, pretty: true)}</pre>
+      <pre class="text-xs overflow-auto max-h-96 text-red-500">{Jason.encode!(@event.event_queue_item.errors, pretty: true)}</pre>
     <% end %>
   </:item>
   <:item title="Created at">{format_datetime(@event.inserted_at)}</:item>

@@ -33,7 +33,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
         errors = get_all_changeset_errors(event_map_changeset)
         {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}", event_map_changeset}
 
-      {:error, %Event{id: id, errors: errors}} ->
+      {:error, %Event{id: id, event_queue_item: %{errors: errors}}} ->
         {:error, "Error processing saved event with ID #{id}: #{inspect(errors)}", event_map_changeset()}
 
       {:error, error} ->

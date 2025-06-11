@@ -18,7 +18,7 @@ defmodule DelExampleWeb.AccountController do
         |> redirect(to: ~p"/instances/#{instance_id}/accounts/#{account}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, :new, changeset: changeset)
+        render(conn, :new, changeset: changeset, instance_id: instance_id)
     end
   end
 

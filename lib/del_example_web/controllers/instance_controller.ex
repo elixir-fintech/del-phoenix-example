@@ -29,14 +29,18 @@ defmodule DelExampleWeb.InstanceController do
 
   def show(conn, %{"id" => id}) do
     instance = get_instance!(id)
-    list = case list_accounts(id) do
-      {:ok, accounts} -> accounts
-      {:error, _} -> []
-    end
 
-    sums = Map.new(validate_instance(instance), fn %{currency: currency} = item ->
-      {currency, Map.drop(item, [:currency])}
-    end)
+    list =
+      case list_accounts(id) do
+        {:ok, accounts} -> accounts
+        {:error, _} -> []
+      end
+
+    sums =
+      Map.new(validate_instance(instance), fn %{currency: currency} = item ->
+        {currency, Map.drop(item, [:currency])}
+      end)
+
     render(conn, :show, instance: instance, accounts: list, sums: sums)
   end
 
@@ -62,8 +66,9 @@ defmodule DelExampleWeb.InstanceController do
 
   def delete(conn, %{"id" => id}) do
     instance = get_instance!(id)
+
     case delete_instance(instance) do
-      {:ok, %{id: id} } -> put_flash(conn, :info, "Instance #{id} deleted successfully.")
+      {:ok, %{id: id}} -> put_flash(conn, :info, "Instance #{id} deleted successfully.")
       {:error, changeset} -> put_flash(conn, :error, inspect(changeset.errors))
     end
     |> redirect(to: ~p"/instances")

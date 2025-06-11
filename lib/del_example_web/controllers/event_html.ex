@@ -3,5 +3,4 @@ defmodule DelExampleWeb.EventHTML do
   import DelExampleWeb.ViewHelpers
 
   embed_templates "event_html/*"
-
 end

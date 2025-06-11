@@ -3,7 +3,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   The DoubleEntryLedgerWeb context.
   """
 
-  #import Ecto.Query, warn: false
+  # import Ecto.Query, warn: false
 
   alias DoubleEntryLedger.Account
   alias DoubleEntryLedger.AccountStore

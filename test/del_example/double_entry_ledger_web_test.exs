@@ -34,12 +34,16 @@ defmodule DelExample.DoubleEntryLedgerWebTest do
       instance = instance_fixture()
       update_attrs = %{}
 
-      assert {:ok, %Instance{} = instance} = DoubleEntryLedgerWeb.update_instance(instance, update_attrs)
+      assert {:ok, %Instance{} = instance} =
+               DoubleEntryLedgerWeb.update_instance(instance, update_attrs)
     end
 
     test "update_instance/2 with invalid data returns error changeset" do
       instance = instance_fixture()
-      assert {:error, %Ecto.Changeset{}} = DoubleEntryLedgerWeb.update_instance(instance, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               DoubleEntryLedgerWeb.update_instance(instance, @invalid_attrs)
+
       assert instance == DoubleEntryLedgerWeb.get_instance!(instance.id)
     end
 
@@ -86,12 +90,16 @@ defmodule DelExample.DoubleEntryLedgerWebTest do
       account = account_fixture()
       update_attrs = %{}
 
-      assert {:ok, %Account{} = account} = DoubleEntryLedgerWeb.update_account(account, update_attrs)
+      assert {:ok, %Account{} = account} =
+               DoubleEntryLedgerWeb.update_account(account, update_attrs)
     end
 
     test "update_account/2 with invalid data returns error changeset" do
       account = account_fixture()
-      assert {:error, %Ecto.Changeset{}} = DoubleEntryLedgerWeb.update_account(account, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               DoubleEntryLedgerWeb.update_account(account, @invalid_attrs)
+
       assert account == DoubleEntryLedgerWeb.get_account!(account.id)
     end
 
@@ -127,7 +135,8 @@ defmodule DelExample.DoubleEntryLedgerWebTest do
     test "create_transaction/1 with valid data creates a transaction" do
       valid_attrs = %{}
 
-      assert {:ok, %Transaction{} = transaction} = DoubleEntryLedgerWeb.create_transaction(valid_attrs)
+      assert {:ok, %Transaction{} = transaction} =
+               DoubleEntryLedgerWeb.create_transaction(valid_attrs)
     end
 
     test "create_transaction/1 with invalid data returns error changeset" do
@@ -138,19 +147,26 @@ defmodule DelExample.DoubleEntryLedgerWebTest do
       transaction = transaction_fixture()
       update_attrs = %{}
 
-      assert {:ok, %Transaction{} = transaction} = DoubleEntryLedgerWeb.update_transaction(transaction, update_attrs)
+      assert {:ok, %Transaction{} = transaction} =
+               DoubleEntryLedgerWeb.update_transaction(transaction, update_attrs)
     end
 
     test "update_transaction/2 with invalid data returns error changeset" do
       transaction = transaction_fixture()
-      assert {:error, %Ecto.Changeset{}} = DoubleEntryLedgerWeb.update_transaction(transaction, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               DoubleEntryLedgerWeb.update_transaction(transaction, @invalid_attrs)
+
       assert transaction == DoubleEntryLedgerWeb.get_transaction!(transaction.id)
     end
 
     test "delete_transaction/1 deletes the transaction" do
       transaction = transaction_fixture()
       assert {:ok, %Transaction{}} = DoubleEntryLedgerWeb.delete_transaction(transaction)
-      assert_raise Ecto.NoResultsError, fn -> DoubleEntryLedgerWeb.get_transaction!(transaction.id) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        DoubleEntryLedgerWeb.get_transaction!(transaction.id)
+      end
     end
 
     test "change_transaction/1 returns a transaction changeset" do

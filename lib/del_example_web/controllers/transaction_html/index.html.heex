@@ -3,14 +3,19 @@
     <span class="bg-slate-800 text-white p-1 mr-3">Listing Transactions: </span>
     <span class="bg-green-500 text-white p-1">{@instance.name}</span>
   </div>
-  <:subtitle>Listing Transactions for instance ID 
+  <:subtitle>
+    Listing Transactions for instance ID
     <.link href={~p"/instances/#{@instance.id}"} class="underline">
       {@instance.id}
     </.link>
   </:subtitle>
 </.header>
 
-<.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/instances/#{@instance.id}/transactions/#{&1}")}>
+<.table
+  id="transactions"
+  rows={@transactions}
+  row_click={&JS.navigate(~p"/instances/#{@instance.id}/transactions/#{&1}")}
+>
   <:col :let={transaction} label="ID">{transaction.id}</:col>
   <:col :let={transaction} label="status">
     <span class={status_color(transaction.status)}>{transaction.status}</span>

@@ -5,8 +5,18 @@
 
   <.input field={f[:name]} label="Name" />
   <.input field={f[:description]} label="Description" />
-  <.input type="select" field={f[:currency]} label="Currency" options={DoubleEntryLedger.Currency.currency_atoms()} />
-  <.input type="select" field={f[:type]} label="Type" options={DoubleEntryLedger.Types.account_types()} />
+  <.input
+    type="select"
+    field={f[:currency]}
+    label="Currency"
+    options={DoubleEntryLedger.Currency.currency_atoms()}
+  />
+  <.input
+    type="select"
+    field={f[:type]}
+    label="Type"
+    options={DoubleEntryLedger.Types.account_types()}
+  />
 
   <:actions>
     <.button class="bg-slate-400 hover:bg-red-500">Save Account</.button>

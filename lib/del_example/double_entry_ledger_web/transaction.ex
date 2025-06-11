@@ -41,5 +41,5 @@ defmodule DelExample.DoubleEntryLedgerWeb.Transaction do
       %Transaction{}
 
   """
-  def get_transaction!(id), do: TransactionStore.get_by_id(id, [entries: :account])
+  def get_transaction!(id), do: TransactionStore.get_by_id(id, entries: :account)
 end

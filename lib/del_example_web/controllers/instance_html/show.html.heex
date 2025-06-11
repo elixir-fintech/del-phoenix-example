@@ -7,7 +7,7 @@
   <:actions>
     <.link href={~p"/instances/#{@instance}/edit"} class="mr-1">
       <.button class="bg-slate-300 hover:bg-green-500">
-        <.icon name="hero-pencil-solid"/>
+        <.icon name="hero-pencil-solid" />
       </.button>
     </.link>
     <.link href={~p"/instances/#{@instance}/events/new"} class="mr-1">
@@ -51,7 +51,11 @@
   </:actions>
 </.header>
 
-<.table id="accounts" rows={@accounts} row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1}")}>
+<.table
+  id="accounts"
+  rows={@accounts}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1}")}
+>
   <:col :let={account} label="Name">{account.name}</:col>
   <:col :let={account} label="ID">{account.id}</:col>
   <:col :let={account} label="Type">{account.type}</:col>
@@ -62,12 +66,16 @@
 
   <:action :let={account}>
     <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}>
-      <.icon name="hero-pencil-solid"/>
+      <.icon name="hero-pencil-solid" />
     </.link>
   </:action>
   <:action :let={account}>
-    <.link href={~p"/instances/#{@instance}/accounts/#{account}"} method="delete" data-confirm="Are you sure?">
-      <.icon name="hero-trash-solid"/>
+    <.link
+      href={~p"/instances/#{@instance}/accounts/#{account}"}
+      method="delete"
+      data-confirm="Are you sure?"
+    >
+      <.icon name="hero-trash-solid" />
     </.link>
   </:action>
 </.table>
@@ -81,5 +89,5 @@
 <div>
   <pre class="text-xs">{Jason.encode!(@sums, pretty: true)}</pre>
 </div>
- 
+
 <.back navigate={~p"/instances/"}>Back to instances</.back>

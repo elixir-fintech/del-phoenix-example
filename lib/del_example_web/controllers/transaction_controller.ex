@@ -6,12 +6,16 @@ defmodule DelExampleWeb.TransactionController do
   import DelExample.DoubleEntryLedgerWeb.Event, only: [list_events_for_transaction: 1]
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
 
-
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def index(conn, %{"instance_id" => instance_id, "account_id" => account_id}) do
     account = get_account!(account_id)
     transactions = list_transactions(instance_id, account_id)
-    render(conn, :index_account, transactions: transactions, instance_id: instance_id, account: account)
+
+    render(conn, :index_account,
+      transactions: transactions,
+      instance_id: instance_id,
+      account: account
+    )
   end
 
   def index(conn, %{"instance_id" => instance_id}) do

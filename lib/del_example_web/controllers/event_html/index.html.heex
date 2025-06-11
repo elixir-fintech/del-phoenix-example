@@ -3,7 +3,8 @@
     <span class="bg-blue-500 text-white p-1 mr-3">Listing Events:</span>
     <span class="bg-green-500 text-white p-1 mr-3">{@instance.id}</span>
   </div>
-  <:subtitle>Listing Events for instance ID 
+  <:subtitle>
+    Listing Events for instance ID
     <.link href={~p"/instances/#{@instance.id}"} class="underline">
       {@instance.id}
     </.link>
@@ -16,30 +17,40 @@
       Trx
     </.link>
   </:actions>
-  
 </.header>
 
-<.table id="events" rows={@events} row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}>
+<.table
+  id="events"
+  rows={@events}
+  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+>
   <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="Status | Transaction ID">
-    <span class={status_color(event.event_queue_item.status)}>{event.event_queue_item.status}</span>
+    <span class={status_color(event.event_queue_item.status)}>
+      {event.event_queue_item.status}
+    </span>
     <span>
-     <%= if event.transactions != [] do %>
-     <%= for transaction <- event.transactions do %>
-      | 
-    <.link href={~p"/instances/#{event.instance_id}/transactions/#{transaction.id}"} class="underline">
-      {transaction.id}
-    </.link>
-    <% end %>
-    <% else %>
-      <span class="text-gray-500">No transactions</span>
-    <% end %>
+      <%= if event.transactions != [] do %>
+        <%= for transaction <- event.transactions do %>
+          |
+          <.link
+            href={~p"/instances/#{event.instance_id}/transactions/#{transaction.id}"}
+            class="underline"
+          >
+            {transaction.id}
+          </.link>
+        <% end %>
+      <% else %>
+        <span class="text-gray-500">No transactions</span>
+      <% end %>
     </span>
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{event.action}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-  <:col :let={event} label="Processed at">{format_datetime(event.event_queue_item.processing_completed_at)}</:col>
+  <:col :let={event} label="Processed at">
+    {format_datetime(event.event_queue_item.processing_completed_at)}
+  </:col>
   <:col :let={event} label="transaction_data">
     <pre class="text-xs">{Jason.encode!(event.transaction_data, pretty: true)}</pre>
   </:col>

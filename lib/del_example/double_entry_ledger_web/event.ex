@@ -27,14 +27,18 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   def create_event(event_params) do
     case EventStore.process_from_event_params(event_params) do
       {:ok, trx, event} ->
-        {:ok, "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
+        {:ok,
+         "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
       {:error, %Changeset{} = event_map_changeset} ->
         errors = get_all_changeset_errors(event_map_changeset)
-        {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}", event_map_changeset}
+
+        {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}",
+         event_map_changeset}
 
       {:error, %Event{id: id, event_queue_item: %{errors: errors}}} ->
-        {:error, "Error processing saved event with ID #{id}: #{inspect(errors)}", event_map_changeset()}
+        {:error, "Error processing saved event with ID #{id}: #{inspect(errors)}",
+         event_map_changeset()}
 
       {:error, error} ->
         {:error, "Unexpected error processing event: #{inspect(error)}", event_map_changeset()}
@@ -46,11 +50,14 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   def create_event_no_save_on_error(event_params) do
     case EventStore.process_from_event_params_no_save_on_error(event_params) do
       {:ok, trx, event} ->
-        {:ok, "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
+        {:ok,
+         "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
       {:error, %Changeset{} = event_map_changeset} ->
         errors = get_all_changeset_errors(event_map_changeset)
-        {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}", event_map_changeset}
+
+        {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}",
+         event_map_changeset}
 
       {:error, error} ->
         {:error, "Unexpected error processing event: #{inspect(error)}", event_map_changeset()}
@@ -62,7 +69,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     %EventMap{
       transaction_data: %TransactionData{
         status: :posted,
-        entries: [%EntryData{currency: :EUR}, %EntryData{currency: :EUR}]}
+        entries: [%EntryData{currency: :EUR}, %EntryData{currency: :EUR}]
+      }
     }
     |> EventMap.changeset(%{})
   end

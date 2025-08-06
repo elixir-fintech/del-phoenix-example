@@ -23,7 +23,7 @@ defmodule DelExampleWeb.EventNewLive do
     changeset =
       EventMap.changeset(
         %EventMap{
-          action: :create,
+          action: :create_transaction,
           instance_id: instance_id,
           transaction_data: %TransactionData{status: :posted, entries: []}
         },

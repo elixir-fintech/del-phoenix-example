@@ -34,6 +34,7 @@ defmodule DelExample.MixProject do
     [
       {:phoenix, "~> 1.7.18"},
       {:phoenix_ecto, "~> 4.5"},
+      {:tidewave, "~> 0.2", only: :dev},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:ecto_psql_extras, "~> 0.6"},

@@ -1,5 +1,4 @@
 defmodule DelExampleWeb.EventNewLive do
-  alias DoubleEntryLedger.Event.EventMap
   use DelExampleWeb, :live_view
 
   import DelExample.DoubleEntryLedgerWeb.Event
@@ -7,7 +6,7 @@ defmodule DelExampleWeb.EventNewLive do
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
   alias DoubleEntryLedger.Event.EntryData
   alias DoubleEntryLedger.Event.TransactionData
-  alias DoubleEntryLedger.Event.EventMap
+  alias DoubleEntryLedger.Event.TransactionEventMap
 
   @currency_dropdown_options Money.Currency.all()
                              |> Enum.map(fn {k, v} ->
@@ -21,8 +20,8 @@ defmodule DelExampleWeb.EventNewLive do
     instance = get_instance!(instance_id)
 
     changeset =
-      EventMap.changeset(
-        %EventMap{
+      TransactionEventMap.changeset(
+        %TransactionEventMap{
           action: :create_transaction,
           instance_id: instance_id,
           transaction_data: %TransactionData{status: :posted, entries: []}
@@ -65,18 +64,18 @@ defmodule DelExampleWeb.EventNewLive do
   end
 
   @impl true
-  def handle_event("validate", %{"event_map" => params}, socket) do
+  def handle_event("validate", %{"transaction_event_map" => params}, socket) do
     params = Map.put(params, "instance_id", socket.assigns.instance.id)
 
     changeset =
-      %EventMap{}
-      |> EventMap.changeset(params)
+      %TransactionEventMap{}
+      |> TransactionEventMap.changeset(params)
 
     {:noreply, assign(socket, changeset: changeset)}
   end
 
   @impl true
-  def handle_event("account_changed", %{"event_map" => params}, socket) do
+  def handle_event("account_changed", %{"transaction_event_map" => params}, socket) do
     entries = get_in(params, ["transaction_data", "entries"])
 
     stored_transaction_data =
@@ -99,7 +98,7 @@ defmodule DelExampleWeb.EventNewLive do
   end
 
   @impl true
-  def handle_event("save", %{"event_map" => params}, socket) do
+  def handle_event("save", %{"transaction_event_map" => params}, socket) do
     params = Map.put(params, "instance_id", socket.assigns.instance.id)
 
     case create_event_no_save_on_error(params) do

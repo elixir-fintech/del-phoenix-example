@@ -5,7 +5,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
 
   alias Ecto.Changeset
   alias DoubleEntryLedger.Event
-  alias DoubleEntryLedger.Event.EventMap
+  alias DoubleEntryLedger.Event.TransactionEventMap
   alias DoubleEntryLedger.Event.TransactionData
   alias DoubleEntryLedger.Event.EntryData
   alias DoubleEntryLedger.EventStore
@@ -66,13 +66,13 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
 
   @spec event_map_changeset() :: Ecto.Changeset.t()
   def event_map_changeset() do
-    %EventMap{
+    %TransactionEventMap{
       transaction_data: %TransactionData{
         status: :posted,
         entries: [%EntryData{currency: :EUR}, %EntryData{currency: :EUR}]
       }
     }
-    |> EventMap.changeset(%{})
+    |> TransactionEventMap.changeset(%{})
   end
 
   def get_all_changeset_errors(changeset) do

@@ -67,7 +67,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   @spec event_map_changeset() :: Ecto.Changeset.t()
   def event_map_changeset() do
     %TransactionEventMap{
-      transaction_data: %TransactionData{
+      payload: %TransactionData{
         status: :posted,
         entries: [%EntryData{currency: :EUR}, %EntryData{currency: :EUR}]
       }

@@ -24,7 +24,7 @@ defmodule DelExampleWeb.EventNewLive do
         %TransactionEventMap{
           action: :create_transaction,
           instance_id: instance_id,
-          transaction_data: %TransactionData{status: :posted, entries: []}
+          payload: %TransactionData{status: :posted, entries: []}
         },
         %{}
       )

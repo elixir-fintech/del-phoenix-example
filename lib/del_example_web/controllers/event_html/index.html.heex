@@ -51,8 +51,8 @@
   <:col :let={event} label="Processed at">
     {format_datetime(event.event_queue_item.processing_completed_at)}
   </:col>
-  <:col :let={event} label="transaction_data">
-    <pre class="text-xs">{Jason.encode!(event.transaction_data, pretty: true)}</pre>
+  <:col :let={event} label="payload">
+    <pre class="text-xs">{Jason.encode!(event.payload, pretty: true)}</pre>
   </:col>
 </.table>
 

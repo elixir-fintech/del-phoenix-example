@@ -52,13 +52,13 @@ defmodule DelExampleWeb.EventNewLive do
   def handle_event("add-entry", _params, socket) do
     stored_changeset = socket.assigns.changeset
     [account | _] = socket.assigns.accounts
-    transaction_data = Ecto.Changeset.get_field(stored_changeset, :transaction_data)
+    transaction_data = Ecto.Changeset.get_field(stored_changeset, :payload)
     new_entry = %EntryData{account_id: account.id, currency: account.currency}
     entries = transaction_data.entries ++ [new_entry]
 
     changeset =
       stored_changeset
-      |> Ecto.Changeset.change(%{transaction_data: %{transaction_data | entries: entries}})
+      |> Ecto.Changeset.change(%{payload: %{transaction_data | entries: entries}})
 
     {:noreply, assign(socket, changeset: changeset)}
   end

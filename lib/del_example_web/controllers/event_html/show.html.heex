@@ -12,8 +12,8 @@
   <:item title="Source">{@event.source}</:item>
   <:item title="Source idempotent key">{@event.source_idempk}</:item>
   <:item title="Update idempotent key">{@event.update_idempk}</:item>
-  <:item title="Transaction data">
-    <pre class="text-sm">{Jason.encode!(@event.transaction_data, pretty: true)}</pre>
+  <:item title="Payload">
+    <pre class="text-sm">{Jason.encode!(@event.payload, pretty: true)}</pre>
   </:item>
   <:item title="Source Data">
     <pre class="text-sm">{Jason.encode!(@event.source_data, pretty: true)}</pre>
@@ -76,8 +76,8 @@
   <:col :let={event} label="action">{"#{event.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">{format_datetime(event.processed_at)}</:col>
-  <:col :let={event} label="transaction_data">
-    <pre class="text-xs">{Jason.encode!(event.transaction_data, pretty: true)}</pre>
+  <:col :let={event} label="payload">
+    <pre class="text-xs">{Jason.encode!(event.payload, pretty: true)}</pre>
   </:col>
 </.table>
 <.back navigate={~p"/instances/#{@event.instance_id}/events"}>Back to events</.back>

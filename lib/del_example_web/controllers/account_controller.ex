@@ -26,10 +26,12 @@ defmodule DelExampleWeb.AccountController do
   def show(conn, %{"id" => id, "instance_id" => instance_id}) do
     account = get_account!(id)
     balance_history = get_balance_history(account.id)
+    events = list_events_for_account(account.id)
 
     render(conn, :show,
       account: account,
       instance_id: instance_id,
+      events: events,
       balance_history: balance_history
     )
   end

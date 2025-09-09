@@ -8,25 +8,29 @@ defmodule DelExampleWeb.AccountEventNewLive do
   alias DoubleEntryLedger.Event.AccountEventMap
 
   @currency_dropdown_options Money.Currency.all()
-                            |> Enum.map(fn {k, v} ->
-                              ["#{v.name} : (#{v.symbol}) : #{v.exponent}": k]
-                            end)
-                            |> List.flatten()
-                            |> Enum.sort()
+                             |> Enum.map(fn {k, v} ->
+                               ["#{v.name} : (#{v.symbol}) : #{v.exponent}": k]
+                             end)
+                             |> List.flatten()
+                             |> Enum.sort()
 
   @impl true
   def mount(%{"instance_id" => instance_id}, _session, socket) do
     instance = get_instance!(instance_id)
 
-    changeset = AccountEventMap.changeset(
-      %AccountEventMap{
-        action: :create_account,
-        instance_id: instance.id,
-        payload: %AccountData{
-          name: "",
-          type: :asset,
-          currency: :EUR
-        }}, %{})
+    changeset =
+      AccountEventMap.changeset(
+        %AccountEventMap{
+          action: :create_account,
+          instance_id: instance.id,
+          payload: %AccountData{
+            name: "",
+            type: :asset,
+            currency: :EUR
+          }
+        },
+        %{}
+      )
 
     options = %{
       currencies: @currency_dropdown_options,
@@ -34,10 +38,11 @@ defmodule DelExampleWeb.AccountEventNewLive do
       account_types: Account.account_types()
     }
 
-    {:ok, assign(socket,
-     changeset: changeset,
-     instance: instance,
-     options: options
+    {:ok,
+     assign(socket,
+       changeset: changeset,
+       instance: instance,
+       options: options
      )}
   end
 

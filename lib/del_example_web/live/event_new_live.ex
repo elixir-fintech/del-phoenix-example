@@ -29,7 +29,10 @@ defmodule DelExampleWeb.EventNewLive do
         %{}
       )
 
-    {:ok, accounts} = list_accounts(instance_id)
+    accounts = case list_accounts(instance_id) do
+      {:ok, accounts} -> accounts
+      {:error, _reason} -> []
+    end
 
     options = %{
       accounts:

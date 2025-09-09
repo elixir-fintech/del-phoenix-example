@@ -20,6 +20,7 @@ defmodule DelExampleWeb.Router do
     get "/", InstanceController, :index
 
     live "/instances/:instance_id/events/new", EventNewLive
+    live "/instances/:instance_id/account_events/new", AccountEventNewLive
 
     resources "/instances", InstanceController do
       resources "/accounts", AccountController, except: [:index] do

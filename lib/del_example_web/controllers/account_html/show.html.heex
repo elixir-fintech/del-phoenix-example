@@ -39,6 +39,32 @@
 <div class="h-1 bg-slate-200 my-5"></div>
 
 <.header>
+  Events
+</.header>
+
+<.table
+  id="events"
+  rows={@events}
+  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+>
+  <:col :let={event} label="Event ID">{event.id}</:col>
+  <:col :let={event} label="status">
+    <span class={status_color(event.event_queue_item.status)}>
+      {event.event_queue_item.status}
+    </span>
+  </:col>
+  <:col :let={event} label="source">{event_source_format(event)}</:col>
+  <:col :let={event} label="action">{"#{event.action}"}</:col>
+  <:col :let={event} label="payload">{"#{Jason.encode!(event.payload, pretty: true)}"}</:col>
+  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+  <:col :let={event} label="Processed at">
+    {format_datetime(event.event_queue_item.processing_completed_at)}
+  </:col>
+</.table>
+
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
   Balance History
 </.header>
 

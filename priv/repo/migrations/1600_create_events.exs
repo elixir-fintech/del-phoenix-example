@@ -24,15 +24,17 @@ defmodule DoubleEntryLedger.Repo.Migrations.CreateEvents do
     create index(:events, [:source_idempk], prefix: "double_entry_ledger")
     create index(:events, [:instance_id], prefix: "double_entry_ledger")
     create index(:events, [:instance_id, :action], prefix: "double_entry_ledger")
+
     create unique_index(:events, [:instance_id, :source, :source_idempk],
-      prefix: "double_entry_ledger",
-      name: "unique_instance_source_source_idempk",
-      where: "action = 'create_transaction'"
-    )
+             prefix: "double_entry_ledger",
+             name: "unique_instance_source_source_idempk",
+             where: "action = 'create_transaction'"
+           )
+
     create unique_index(:events, [:instance_id, :source, :source_idempk, :update_idempk],
-      prefix: "double_entry_ledger",
-      name: "unique_instance_source_source_idempk_update_idempk",
-      where: "action = 'update_transaction'"
-    )
+             prefix: "double_entry_ledger",
+             name: "unique_instance_source_source_idempk_update_idempk",
+             where: "action = 'update_transaction'"
+           )
   end
 end

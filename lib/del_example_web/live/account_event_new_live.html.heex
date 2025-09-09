@@ -15,7 +15,12 @@
   <.input field={f[:source_idempk]} label="Idempotent Id" />
   <.inputs_for :let={ad} field={f[:payload]}>
     <.input field={ad[:name]} label="Account Name" />
-    <.input type="select" field={ad[:type]} label="Account Type" options={@options[:account_types]} />
+    <.input
+      type="select"
+      field={ad[:type]}
+      label="Account Type"
+      options={@options[:account_types]}
+    />
     <.input type="select" field={ad[:currency]} label="Currency" options={@options[:currencies]} />
   </.inputs_for>
 

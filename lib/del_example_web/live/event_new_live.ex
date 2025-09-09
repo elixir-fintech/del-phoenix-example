@@ -79,10 +79,10 @@ defmodule DelExampleWeb.EventNewLive do
 
   @impl true
   def handle_event("account_changed", %{"transaction_event_map" => params}, socket) do
-    entries = get_in(params, ["transaction_data", "entries"])
+    entries = get_in(params, ["payload", "entries"])
 
     stored_transaction_data =
-      Ecto.Changeset.get_field(socket.assigns.changeset, :transaction_data)
+      Ecto.Changeset.get_field(socket.assigns.changeset, :payload)
 
     if entries && is_map(entries) do
       new_entries =
@@ -91,7 +91,7 @@ defmodule DelExampleWeb.EventNewLive do
       changeset =
         socket.assigns.changeset
         |> Ecto.Changeset.change(%{
-          transaction_data: %{stored_transaction_data | entries: new_entries}
+          payload: %{stored_transaction_data | entries: new_entries}
         })
 
       {:noreply, assign(socket, changeset: changeset)}

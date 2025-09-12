@@ -4,7 +4,6 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   """
 
   alias Ecto.Changeset
-  alias DoubleEntryLedger.Event
   alias DoubleEntryLedger.Event.TransactionEventMap
   alias DoubleEntryLedger.Event.TransactionData
   alias DoubleEntryLedger.Event.EntryData
@@ -20,29 +19,6 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
 
   def get_event(id) do
     EventStore.get_by_id(id)
-  end
-
-  @spec create_event(map()) ::
-          {:ok, String.t()} | {:error, String.t(), Changeset.t()}
-  def create_event(event_params) do
-    case EventStore.process_from_event_params(event_params) do
-      {:ok, trx, event} ->
-        {:ok,
-         "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
-
-      {:error, %Changeset{} = event_map_changeset} ->
-        errors = get_all_changeset_errors(event_map_changeset)
-
-        {:error, "Error processing event. Event was not saved. #{Jason.encode!(errors)}",
-         event_map_changeset}
-
-      {:error, %Event{id: id, event_queue_item: %{errors: errors}}} ->
-        {:error, "Error processing saved event with ID #{id}: #{inspect(errors)}",
-         event_map_changeset()}
-
-      {:error, error} ->
-        {:error, "Unexpected error processing event: #{inspect(error)}", event_map_changeset()}
-    end
   end
 
   @spec create_event_no_save_on_error(map()) ::

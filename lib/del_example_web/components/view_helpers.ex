@@ -39,8 +39,11 @@ defmodule DelExampleWeb.ViewHelpers do
     [
       "src:\u00A0#{event.source}",
       "source_idempk:\u00A0#{event.source_idempk}",
-      "update_idempk:\u00A0#{event.update_idempk}"
+      if event.update_idempk do
+        "update_idempk:\u00A0#{event.update_idempk}"
+      end
     ]
+    |> Enum.reject(& &1 == "" || is_nil(&1))
     |> Enum.join(", ")
   end
 end

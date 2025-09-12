@@ -38,7 +38,7 @@ defmodule DelExampleWeb.EventNewLive do
     options = %{
       accounts:
         Enum.map(accounts, fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end) |> List.flatten(),
-      actions: DoubleEntryLedger.Event.actions(),
+      actions: DoubleEntryLedger.Event.actions(:transaction),
       states: DoubleEntryLedger.Transaction.states(),
       currencies: @currency_dropdown_options
     }

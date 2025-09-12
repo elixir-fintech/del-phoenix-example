@@ -34,7 +34,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
 
     options = %{
       currencies: @currency_dropdown_options,
-      actions: DoubleEntryLedger.Event.actions(),
+      actions: DoubleEntryLedger.Event.actions(:account),
       account_types: Account.account_types()
     }
 

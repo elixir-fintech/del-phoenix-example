@@ -15,6 +15,7 @@
   <.input field={f[:source_idempk]} label="Idempotent Id" />
   <%= if Ecto.Changeset.get_field(@changeset, :action) == :update_account do %>
     <.input field={f[:update_idempk]} label="Update Idempotent Id" />
+    <.input field={f[:update_source]} label="Update Source (if different from Source)" />
   <% end %>
   <.inputs_for :let={ad} field={f[:payload]}>
     <%= if Ecto.Changeset.get_field(@changeset, :action) == :create_account do %>

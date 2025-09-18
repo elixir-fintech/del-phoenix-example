@@ -52,11 +52,11 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
           {:ok, Account.t() | Transaction.t(), String.t()} | {:error, String.t(), Changeset.t()}
   def create_event_no_save_on_error(event_params) do
     case EventStore.process_from_event_params_no_save_on_error(event_params) do
-      {:ok, %Transaction{} = trx, %Event{} = event} ->
+      {:ok, %Transaction{} = trx, event} ->
         {:ok, trx,
          "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
-      {:ok, %Account{} = account, %Event{} = event} ->
+      {:ok, %Account{} = account, event} ->
         {:ok, account,
          "#{event.action} event with ID #{event.id}) processed account with ID #{account.id}"}
 

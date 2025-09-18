@@ -10,7 +10,7 @@
 </.header>
 
 <.table id="instances" rows={@instances} row_click={&JS.navigate(~p"/instances/#{&1}")}>
-  <:col :let={instance} label="Name">{instance.name}</:col>
+  <:col :let={instance} label="Name">{instance.address}</:col>
   <:col :let={instance} label="ID">{instance.id}</:col>
   <:col :let={instance} label="Description">{instance.description}</:col>
   <:col :let={instance} label="Inserted At">{format_datetime(instance.inserted_at)}</:col>

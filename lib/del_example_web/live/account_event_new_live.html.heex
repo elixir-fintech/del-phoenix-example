@@ -13,7 +13,11 @@
   <.input type="select" field={f[:action]} label="Action" options={@options[:actions]} />
   <.input field={f[:source]} label="Source" />
   <.input field={f[:source_idempk]} label="Idempotent Id" />
+  <%= if Ecto.Changeset.get_field(@changeset, :action) == :update_account do %>
+    <.input field={f[:update_idempk]} label="Update Idempotent Id" />
+  <% end %>
   <.inputs_for :let={ad} field={f[:payload]}>
+  <%= if Ecto.Changeset.get_field(@changeset, :action) == :create_account do %>
     <.input field={ad[:name]} label="Account Name" />
     <.input
       type="select"
@@ -21,7 +25,13 @@
       label="Account Type"
       options={@options[:account_types]}
     />
+    <.input field={ad[:description]} label="Description" />
     <.input type="select" field={ad[:currency]} label="Currency" options={@options[:currencies]} />
+    <.input type="select" field={ad[:allowed_negative]} label="Allow Negative Balance" options={@options[:boolean]} />
+  <% end %>
+  <%= if Ecto.Changeset.get_field(@changeset, :action) == :update_account do %>
+    <.input field={ad[:description]} label="Description" />
+  <% end %>
   </.inputs_for>
 
   <:actions>

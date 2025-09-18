@@ -4,10 +4,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   """
 
   alias Ecto.Changeset
-  alias DoubleEntryLedger.Event.TransactionEventMap
-  alias DoubleEntryLedger.Event.TransactionData
-  alias DoubleEntryLedger.Event.EntryData
-  alias DoubleEntryLedger.EventStore
+  alias DoubleEntryLedger.Event.{TransactionEventMap, TransactionData, EntryData}
+  alias DoubleEntryLedger.{EventStore, Account, Transaction, Event}
 
   def list_events(instance_id) do
     EventStore.list_all_for_instance(instance_id, 1, 1000)
@@ -17,17 +15,30 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     EventStore.list_all_for_transaction(transaction_id)
   end
 
+  def list_events_for_account(account_id) do
+    EventStore.list_all_for_account(account_id)
+  end
+
   def get_event(id) do
     EventStore.get_by_id(id)
   end
 
+  def get_create_event(:account, account_id), do: EventStore.get_create_account_event(account_id)
+  def get_create_event(:transaction, transaction_id), do: EventStore.get_create_transaction_event(transaction_id)
+
   @spec create_event_no_save_on_error(map()) ::
-          {:ok, String.t()} | {:error, String.t(), Changeset.t()}
+          {:ok, Account.t() | Transaction.t(),  String.t()} | {:error, String.t(), Changeset.t()}
   def create_event_no_save_on_error(event_params) do
     case EventStore.process_from_event_params_no_save_on_error(event_params) do
-      {:ok, trx, event} ->
+      {:ok, %Transaction{} = trx, %Event{} = event} ->
         {:ok,
+          trx,
          "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
+
+      {:ok, %Account{} = account, %Event{} = event} ->
+        {:ok,
+         account,
+         "#{event.action} event with ID #{event.id}) processed account with ID #{account.id}"}
 
       {:error, %Changeset{} = event_map_changeset} ->
         errors = get_all_changeset_errors(event_map_changeset)

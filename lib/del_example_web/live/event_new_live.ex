@@ -4,9 +4,8 @@ defmodule DelExampleWeb.EventNewLive do
   import DelExample.DoubleEntryLedgerWeb.Event
   import DelExample.DoubleEntryLedgerWeb.Account, only: [list_accounts: 1]
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
-  alias DoubleEntryLedger.Event.EntryData
-  alias DoubleEntryLedger.Event.TransactionData
-  alias DoubleEntryLedger.Event.TransactionEventMap
+  alias DoubleEntryLedger.Event.{EntryData, TransactionData, TransactionEventMap}
+  alias DoubleEntryLedger.Transaction
 
   @currency_dropdown_options Money.Currency.all()
                              |> Enum.map(fn {k, v} ->
@@ -16,6 +15,42 @@ defmodule DelExampleWeb.EventNewLive do
                              |> Enum.sort()
 
   @impl true
+  def mount(%{"instance_id" => instance_id, "trx_id" => trx_id}, _session, socket) do
+    instance = get_instance!(instance_id)
+
+    event = get_create_event(:transaction, trx_id)
+    [trx | _] = event.transactions
+
+    changeset =
+      TransactionEventMap.changeset(
+        %TransactionEventMap{
+          action: :update_transaction,
+          instance_id: instance_id,
+          source: event.source,
+          source_idempk: event.source_idempk,
+          payload: %TransactionData{
+            status: trx.status,
+            entries: Enum.map(trx.entries, fn e ->
+              %EntryData{
+                account_id: e.account_id,
+                currency: e.value.currency,
+                amount: e.value.amount
+              }
+            end)
+          }
+        },
+        %{}
+      )
+
+    {:ok,
+     assign(socket,
+       instance: instance,
+       accounts: get_accounts(instance_id),
+       options: get_form_options(instance_id),
+       changeset: changeset
+     )}
+  end
+
   def mount(%{"instance_id" => instance_id}, _session, socket) do
     instance = get_instance!(instance_id)
 
@@ -29,25 +64,11 @@ defmodule DelExampleWeb.EventNewLive do
         %{}
       )
 
-    accounts =
-      case list_accounts(instance_id) do
-        {:ok, accounts} -> accounts
-        {:error, _reason} -> []
-      end
-
-    options = %{
-      accounts:
-        Enum.map(accounts, fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end) |> List.flatten(),
-      actions: DoubleEntryLedger.Event.actions(:transaction),
-      states: DoubleEntryLedger.Transaction.states(),
-      currencies: @currency_dropdown_options
-    }
-
     {:ok,
      assign(socket,
        instance: instance,
-       accounts: accounts,
-       options: options,
+       accounts: get_accounts(instance_id),
+       options: get_form_options(instance_id),
        changeset: changeset
      )}
   end
@@ -106,11 +127,11 @@ defmodule DelExampleWeb.EventNewLive do
     params = Map.put(params, "instance_id", socket.assigns.instance.id)
 
     case create_event_no_save_on_error(params) do
-      {:ok, message} ->
+      {:ok, %Transaction{} = trx, message} ->
         {:noreply,
          socket
          |> put_flash(:info, message)
-         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.id}")}
+         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.id}/transactions/#{trx.id}")}
 
       {:error, message, changeset} ->
         {:noreply,
@@ -148,5 +169,23 @@ defmodule DelExampleWeb.EventNewLive do
     else
       entry
     end
+  end
+
+  defp get_accounts(instance_id) do
+      case list_accounts(instance_id) do
+        {:ok, accounts} -> accounts
+        {:error, _reason} -> []
+      end
+  end
+
+  defp get_form_options(instance_id) do
+    %{
+      accounts:
+        Enum.map(get_accounts(instance_id), fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end)
+        |> List.flatten(),
+      actions: DoubleEntryLedger.Event.actions(:transaction),
+      states: DoubleEntryLedger.Transaction.states(),
+      currencies: @currency_dropdown_options
+    }
   end
 end

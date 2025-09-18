@@ -65,7 +65,7 @@
   <:col :let={account} label="Pending">{balance_format(account.pending, account.currency)}</:col>
 
   <:action :let={account}>
-    <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}>
+    <.link navigate={~p"/instances/#{@instance}/account_events/new/?account_id=#{account.id}"}>
       <.icon name="hero-pencil-solid" />
     </.link>
   </:action>

@@ -13,24 +13,6 @@ defmodule DelExampleWeb.EventController do
   def show(conn, %{"id" => id}) do
     event = get_event(id)
 
-    trx_events =
-      case event.transactions do
-        [] ->
-          []
-
-        [trx | _] ->
-          Enum.filter(list_events_for_transaction(trx.id), fn e -> e.id != id end)
-      end
-
-    account_event =
-      case event.account do
-        nil ->
-          []
-
-        account ->
-          Enum.filter(list_events_for_account(account.id), fn e -> e.id != id end)
-      end
-
-    render(conn, :show, event: event, events: trx_events ++ account_event)
+    render(conn, :show, event: event, events: get_related_events(event))
   end
 end

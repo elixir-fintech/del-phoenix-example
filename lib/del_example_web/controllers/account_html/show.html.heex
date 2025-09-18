@@ -6,7 +6,7 @@
   <:subtitle>ID: {@account.id}</:subtitle>
 
   <:actions>
-    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}/edit"} class="mr-1">
+    <.link href={~p"/instances/#{@instance_id}/account_events/new/?account_id=#{@account.id}"} class="mr-1">
       <.button class="bg-slate-300 hover:bg-red-500">
         <.icon name="hero-pencil-solid" />
       </.button>

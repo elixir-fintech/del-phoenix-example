@@ -76,7 +76,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
     params = Map.put(params, "instance_id", socket.assigns.instance.id)
 
     case create_event_no_save_on_error(params) do
-      {:ok, %Account{} = account, message} ->
+      {:ok, account, message} ->
         {:noreply,
          socket
          |> put_flash(:info, message)

@@ -23,6 +23,26 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     EventStore.get_by_id(id)
   end
 
+  def get_related_events(%Event{id: id} = event) do
+    trx_events =
+      case event.transactions do
+        [] -> []
+
+        [trx | _] ->
+          Enum.filter(list_events_for_transaction(trx.id), fn e -> e.id != id end)
+      end
+
+    account_events =
+      case event.account do
+        %Account{} = account ->
+          Enum.filter(list_events_for_account(account.id), fn e -> e.id != id end)
+
+        _ -> []
+      end
+
+    trx_events ++ account_events
+  end
+
   def get_create_event(:account, account_id), do: EventStore.get_create_account_event(account_id)
 
   def get_create_event(:transaction, transaction_id),

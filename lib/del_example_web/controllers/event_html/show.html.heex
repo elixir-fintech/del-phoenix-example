@@ -12,6 +12,7 @@
   <:item title="Source">{@event.source}</:item>
   <:item title="Source idempotent key">{@event.source_idempk}</:item>
   <:item title="Update idempotent key">{@event.update_idempk}</:item>
+  <:item title="Update source">{@event.update_source}</:item>
   <:item title="Payload">
     <pre class="text-sm">{Jason.encode!(@event.payload, pretty: true)}</pre>
   </:item>

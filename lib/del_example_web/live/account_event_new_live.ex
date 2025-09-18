@@ -1,7 +1,9 @@
 defmodule DelExampleWeb.AccountEventNewLive do
   use DelExampleWeb, :live_view
 
-  import DelExample.DoubleEntryLedgerWeb.Event, only: [get_create_event: 2, create_event_no_save_on_error: 1]
+  import DelExample.DoubleEntryLedgerWeb.Event,
+    only: [get_create_event: 2, create_event_no_save_on_error: 1]
+
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
   alias DoubleEntryLedger.Account
   alias DoubleEntryLedger.Event.AccountData
@@ -20,7 +22,6 @@ defmodule DelExampleWeb.AccountEventNewLive do
 
     event = get_create_event(:account, account_id)
     account = event.account
-
 
     changeset =
       AccountEventMap.changeset(
@@ -46,6 +47,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
 
   def mount(%{"instance_id" => instance_id}, _session, socket) do
     instance = get_instance!(instance_id)
+
     changeset =
       AccountEventMap.changeset(
         %AccountEventMap{

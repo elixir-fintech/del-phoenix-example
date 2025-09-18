@@ -43,7 +43,7 @@ defmodule DelExampleWeb.ViewHelpers do
         "update_idempk:\u00A0#{event.update_idempk}"
       end
     ]
-    |> Enum.reject(& &1 == "" || is_nil(&1))
+    |> Enum.reject(&(&1 == "" || is_nil(&1)))
     |> Enum.join(", ")
   end
 end

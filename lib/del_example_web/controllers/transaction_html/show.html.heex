@@ -6,7 +6,9 @@
   <:subtitle>This is a transaction record from your database.</:subtitle>
   <:actions>
     <%= if @transaction.status == :pending do %>
-      <.link navigate={~p"/instances/#{@transaction.instance_id}/events/new/?trx_id=#{@transaction.id}"}>
+      <.link navigate={
+        ~p"/instances/#{@transaction.instance_id}/events/new/?trx_id=#{@transaction.id}"
+      }>
         <.button class="bg-slate-300 hover:bg-green-500">
           <.icon name="hero-pencil-solid" />
         </.button>

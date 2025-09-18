@@ -30,13 +30,14 @@ defmodule DelExampleWeb.EventNewLive do
           source_idempk: event.source_idempk,
           payload: %TransactionData{
             status: trx.status,
-            entries: Enum.map(trx.entries, fn e ->
-              %EntryData{
-                account_id: e.account_id,
-                currency: e.value.currency,
-                amount: e.value.amount
-              }
-            end)
+            entries:
+              Enum.map(trx.entries, fn e ->
+                %EntryData{
+                  account_id: e.account_id,
+                  currency: e.value.currency,
+                  amount: e.value.amount
+                }
+              end)
           }
         },
         %{}
@@ -172,10 +173,10 @@ defmodule DelExampleWeb.EventNewLive do
   end
 
   defp get_accounts(instance_id) do
-      case list_accounts(instance_id) do
-        {:ok, accounts} -> accounts
-        {:error, _reason} -> []
-      end
+    case list_accounts(instance_id) do
+      {:ok, accounts} -> accounts
+      {:error, _reason} -> []
+    end
   end
 
   defp get_form_options(instance_id) do

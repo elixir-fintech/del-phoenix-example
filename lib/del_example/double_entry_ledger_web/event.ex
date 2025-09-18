@@ -24,20 +24,20 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   end
 
   def get_create_event(:account, account_id), do: EventStore.get_create_account_event(account_id)
-  def get_create_event(:transaction, transaction_id), do: EventStore.get_create_transaction_event(transaction_id)
+
+  def get_create_event(:transaction, transaction_id),
+    do: EventStore.get_create_transaction_event(transaction_id)
 
   @spec create_event_no_save_on_error(map()) ::
-          {:ok, Account.t() | Transaction.t(),  String.t()} | {:error, String.t(), Changeset.t()}
+          {:ok, Account.t() | Transaction.t(), String.t()} | {:error, String.t(), Changeset.t()}
   def create_event_no_save_on_error(event_params) do
     case EventStore.process_from_event_params_no_save_on_error(event_params) do
       {:ok, %Transaction{} = trx, %Event{} = event} ->
-        {:ok,
-          trx,
+        {:ok, trx,
          "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
       {:ok, %Account{} = account, %Event{} = event} ->
-        {:ok,
-         account,
+        {:ok, account,
          "#{event.action} event with ID #{event.id}) processed account with ID #{account.id}"}
 
       {:error, %Changeset{} = event_map_changeset} ->

@@ -2,6 +2,7 @@ defmodule DelExampleWeb.AccountController do
   use DelExampleWeb, :controller
 
   import DelExample.DoubleEntryLedgerWeb.Account
+  import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
   alias DoubleEntryLedger.Account
 
   def new(conn, %{"instance_id" => instance_id}) do
@@ -24,12 +25,14 @@ defmodule DelExampleWeb.AccountController do
   end
 
   def show(conn, %{"id" => id, "instance_id" => instance_id}) do
+    instance = get_instance!(instance_id)
     account = get_account!(id)
     balance_history = get_balance_history(account.id)
     events = list_events_for_account(account.id)
 
     render(conn, :show,
       account: account,
+      instance: instance,
       instance_id: instance_id,
       events: events,
       balance_history: balance_history

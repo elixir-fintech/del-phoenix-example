@@ -25,7 +25,7 @@ defmodule DelExampleWeb.EventNewLive do
       TransactionEventMap.changeset(
         %TransactionEventMap{
           action: :update_transaction,
-          instance_id: instance_id,
+          instance_address: instance.address,
           source: event.source,
           source_idempk: event.source_idempk,
           payload: %TransactionData{
@@ -59,7 +59,7 @@ defmodule DelExampleWeb.EventNewLive do
       TransactionEventMap.changeset(
         %TransactionEventMap{
           action: :create_transaction,
-          instance_id: instance_id,
+          instance_address: instance.address,
           payload: %TransactionData{status: :posted, entries: []}
         },
         %{}
@@ -91,7 +91,7 @@ defmodule DelExampleWeb.EventNewLive do
 
   @impl true
   def handle_event("validate", %{"transaction_event_map" => params}, socket) do
-    params = Map.put(params, "instance_id", socket.assigns.instance.id)
+    params = Map.put(params, "instance_address", socket.assigns.instance.address)
 
     changeset =
       %TransactionEventMap{}
@@ -125,7 +125,7 @@ defmodule DelExampleWeb.EventNewLive do
 
   @impl true
   def handle_event("save", %{"transaction_event_map" => params}, socket) do
-    params = Map.put(params, "instance_id", socket.assigns.instance.id)
+    params = Map.put(params, "instance_address", socket.assigns.instance.address)
 
     case create_event_no_save_on_error(params) do
       {:ok, trx, message} ->

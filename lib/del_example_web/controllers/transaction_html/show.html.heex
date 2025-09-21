@@ -22,7 +22,7 @@
   <:item title="Status">{@transaction.status}</:item>
   <:item title="Instance id">
     <.link href={~p"/instances/#{@transaction.instance_id}"} class="underline">
-      {@transaction.instance_id}
+      {@instance.address}
     </.link>
   </:item>
   <:item title="Posted at">{format_datetime(@transaction.posted_at)}</:item>
@@ -71,7 +71,6 @@
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.action}"}</:col>
-  <:col :let={event} label="payload">{"#{Jason.encode!(event.payload, pretty: true)}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">
     {format_datetime(event.event_queue_item.processing_completed_at)}

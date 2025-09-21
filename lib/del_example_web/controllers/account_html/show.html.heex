@@ -33,7 +33,7 @@
     {to_money(@account.available, @account.currency)}
   </:item>
   <:item title="Instance ID">
-    <.link href={~p"/instances/#{@instance_id}"} class="underline">{@account.instance_id}</.link>
+    <.link href={~p"/instances/#{@instance_id}"} class="underline">{@instance.address}</.link>
   </:item>
   <:item title="Inserted At">{format_datetime(@account.inserted_at)}</:item>
   <:item title="Updated At">{format_datetime(@account.updated_at)}</:item>
@@ -58,7 +58,6 @@
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.action}"}</:col>
-  <:col :let={event} label="payload">{"#{Jason.encode!(event.payload, pretty: true)}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">
     {format_datetime(event.event_queue_item.processing_completed_at)}

@@ -27,7 +27,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
       AccountEventMap.changeset(
         %AccountEventMap{
           action: :update_account,
-          instance_id: instance.id,
+          instance_address: instance.address,
           source: event.source,
           source_idempk: event.source_idempk,
           payload: %AccountData{
@@ -52,7 +52,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
       AccountEventMap.changeset(
         %AccountEventMap{
           action: :create_account,
-          instance_id: instance.id,
+          instance_address: instance.address,
           payload: %AccountData{
             name: "",
             type: :asset,
@@ -73,7 +73,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
 
   @impl true
   def handle_event("save", %{"account_event_map" => params}, socket) do
-    params = Map.put(params, "instance_id", socket.assigns.instance.id)
+    params = Map.put(params, "instance_address", socket.assigns.instance.address)
 
     case create_event_no_save_on_error(params) do
       {:ok, account, message} ->
@@ -92,7 +92,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
 
   @impl true
   def handle_event("validate", %{"account_event_map" => params}, socket) do
-    params = Map.put(params, "instance_id", socket.assigns.instance.id)
+    params = Map.put(params, "instance_address", socket.assigns.instance.address)
 
     changeset =
       %AccountEventMap{}

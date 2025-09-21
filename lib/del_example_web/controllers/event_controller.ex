@@ -10,9 +10,10 @@ defmodule DelExampleWeb.EventController do
     render(conn, :index, events: events, instance: instance)
   end
 
-  def show(conn, %{"id" => id}) do
+  def show(conn, %{"instance_id" => instance_id, "id" => id}) do
     event = get_event(id)
+    instance = get_instance!(instance_id)
 
-    render(conn, :show, event: event, events: get_related_events(event))
+    render(conn, :show, event: event, events: get_related_events(event), instance: instance)
   end
 end

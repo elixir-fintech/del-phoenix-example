@@ -25,7 +25,7 @@
   row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
 >
   <:col :let={event} label="ID">{event.id}</:col>
-  <:col :let={event} label="Status | Transaction or Account ID">
+  <:col :let={event} label="Status | Transaction ID or Account address">
     <span class={status_color(event.event_queue_item.status)}>
       {event.event_queue_item.status}
     </span>
@@ -46,7 +46,7 @@
             href={~p"/instances/#{event.instance_id}/accounts/#{event.account.id}"}
             class="underline text-red-900"
           >
-            {event.account.id}
+            {event.account.address}
           </.link>
         <% else %>
           <span class="text-gray-500">No associated record</span>

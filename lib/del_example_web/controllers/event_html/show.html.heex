@@ -41,13 +41,13 @@
       <span class="text-gray-500">No associated transactions</span>
     <% end %>
   </:item>
-  <:item title="Account ID">
+  <:item title="Account address">
     <%= if @event.account != nil do %>
       <.link
         href={~p"/instances/#{@event.instance_id}/accounts/#{@event.account.id}"}
         class="underline"
       >
-        {@event.account.id}
+        {@event.account.address}
       </.link>
     <% else %>
       <span class="text-gray-500">No associated account</span>

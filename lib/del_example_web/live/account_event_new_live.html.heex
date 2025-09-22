@@ -42,6 +42,7 @@
       />
     <% end %>
     <%= if Ecto.Changeset.get_field(@changeset, :action) == :update_account do %>
+      <.input field={ad[:name]} label="Account Name" />
       <.input field={ad[:description]} label="Description" />
     <% end %>
   </.inputs_for>

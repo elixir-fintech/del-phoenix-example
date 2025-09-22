@@ -56,7 +56,7 @@
   rows={@accounts}
   row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1}")}
 >
-  <:col :let={account} label="Name">{account.name}</:col>
+  <:col :let={account} label="Name">{account.address}</:col>
   <:col :let={account} label="ID">{account.id}</:col>
   <:col :let={account} label="Type">{account.type}</:col>
   <:col :let={account} label="Currency">{account.currency}</:col>

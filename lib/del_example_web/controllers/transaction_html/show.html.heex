@@ -37,7 +37,7 @@
 </.header>
 
 <.table id="entries" rows={@transaction.entries}>
-  <:col :let={e} label="Account Name">{e.account.name}</:col>
+  <:col :let={e} label="Account address">{e.account.address}</:col>
   <:col :let={e} label="Account ID">
     <.link
       href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account_id}"}

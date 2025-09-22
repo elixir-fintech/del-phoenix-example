@@ -5,7 +5,6 @@ defmodule DelExampleWeb.EventNewLive do
   import DelExample.DoubleEntryLedgerWeb.Account, only: [list_accounts: 1]
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
   alias DoubleEntryLedger.Event.{EntryData, TransactionData, TransactionEventMap}
-  alias DoubleEntryLedger.Transaction
 
   @currency_dropdown_options Money.Currency.all()
                              |> Enum.map(fn {k, v} ->
@@ -182,7 +181,8 @@ defmodule DelExampleWeb.EventNewLive do
   defp get_form_options(instance_id) do
     %{
       accounts:
-        Enum.map(get_accounts(instance_id), fn acc -> ["#{acc.name}: #{acc.type} ": acc.id] end)
+        Enum.map(get_accounts(instance_id), fn acc -> ["#{acc.address}  (#{acc.type})": acc.id] end)
+
         |> List.flatten(),
       actions: DoubleEntryLedger.Event.actions(:transaction),
       states: DoubleEntryLedger.Transaction.states(),

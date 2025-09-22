@@ -20,6 +20,7 @@
   <.inputs_for :let={ad} field={f[:payload]}>
     <%= if Ecto.Changeset.get_field(@changeset, :action) == :create_account do %>
       <.input field={ad[:name]} label="Account Name" />
+      <.input field={ad[:address]} label="Account Address" />
       <.input
         type="select"
         field={ad[:type]}

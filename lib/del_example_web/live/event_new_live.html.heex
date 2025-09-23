@@ -23,8 +23,8 @@
       <.input
         type="select"
         phx-change="account_changed"
-        field={entry[:account_id]}
-        label="Account Id"
+        field={entry[:account_address]}
+        label="Account Address"
         options={@options[:accounts]}
       />
       <.input field={entry[:amount]} label="Amount" />

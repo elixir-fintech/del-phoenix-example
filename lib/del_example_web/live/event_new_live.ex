@@ -32,7 +32,7 @@ defmodule DelExampleWeb.EventNewLive do
             entries:
               Enum.map(trx.entries, fn e ->
                 %EntryData{
-                  account_id: e.account_id,
+                  account_address: e.account_address,
                   currency: e.value.currency,
                   amount: e.value.amount
                 }
@@ -78,7 +78,7 @@ defmodule DelExampleWeb.EventNewLive do
     stored_changeset = socket.assigns.changeset
     [account | _] = socket.assigns.accounts
     transaction_data = Ecto.Changeset.get_field(stored_changeset, :payload)
-    new_entry = %EntryData{account_id: account.id, currency: account.currency}
+    new_entry = %EntryData{account_address: account.address, currency: account.currency}
     entries = transaction_data.entries ++ [new_entry]
 
     changeset =
@@ -181,7 +181,7 @@ defmodule DelExampleWeb.EventNewLive do
   defp get_form_options(instance_id) do
     %{
       accounts:
-        Enum.map(get_accounts(instance_id), fn acc -> ["#{acc.address}  (#{acc.type})": acc.id] end)
+        Enum.map(get_accounts(instance_id), fn acc -> ["#{acc.address}  (#{acc.type})": acc.address] end)
 
         |> List.flatten(),
       actions: DoubleEntryLedger.Event.actions(:transaction),

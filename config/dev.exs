@@ -19,6 +19,9 @@ config :double_entry_ledger, DoubleEntryLedger.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :double_entry_ledger,
+  schema_prefix: "double_entry_ledger"
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

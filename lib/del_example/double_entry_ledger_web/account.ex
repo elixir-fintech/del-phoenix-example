@@ -56,7 +56,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
 
   """
   def get_balance_history(account_id) do
-    {:ok, balance} = AccountStore.get_balance_history(account_id)
+    {:ok, balance} = AccountStore.get_balance_history_by_id(account_id)
     balance
   end
 

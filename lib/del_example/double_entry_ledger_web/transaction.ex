@@ -14,7 +14,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Transaction do
 
   """
   def list_transactions(instance_id) do
-    TransactionStore.list_all_for_instance(instance_id)
+    TransactionStore.list_all_for_instance_id(instance_id)
   end
 
   @doc """
@@ -27,7 +27,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Transaction do
 
   """
   def list_transactions(instance_id, account_id) do
-    TransactionStore.list_all_for_instance_and_account(instance_id, account_id)
+    TransactionStore.list_all_for_instance_id_and_account_id(instance_id, account_id)
   end
 
   @doc """

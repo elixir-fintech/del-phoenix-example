@@ -8,15 +8,15 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   alias DoubleEntryLedger.{EventStore, Account, Transaction, Event}
 
   def list_events(instance_id) do
-    EventStore.list_all_for_instance(instance_id, 1, 1000)
+    EventStore.list_all_for_instance_id(instance_id, 1, 1000)
   end
 
   def list_events_for_transaction(transaction_id) do
-    EventStore.list_all_for_transaction(transaction_id)
+    EventStore.list_all_for_transaction_id(transaction_id)
   end
 
   def list_events_for_account(account_id) do
-    EventStore.list_all_for_account(account_id)
+    EventStore.list_all_for_account_id(account_id)
   end
 
   def get_event(id) do

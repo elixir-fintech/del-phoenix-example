@@ -6,7 +6,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   # import Ecto.Query, warn: false
 
   alias DoubleEntryLedger.Account
-  alias DoubleEntryLedger.{AccountStore, EventStore}
+  alias DoubleEntryLedger.AccountStore
 
   @doc """
   Returns the list of accounts.
@@ -58,9 +58,5 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   def get_balance_history(account_id) do
     {:ok, balance} = AccountStore.get_balance_history_by_id(account_id)
     balance
-  end
-
-  def list_events_for_account(account_id) do
-    EventStore.list_all_for_account(account_id)
   end
 end

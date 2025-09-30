@@ -6,9 +6,9 @@ defmodule DelExampleWeb.AccountController do
 
   alias DelExample.DoubleEntryLedgerWeb.Event
 
-  def show(conn, %{"id" => id, "instance_id" => instance_id}) do
+  def show(conn, %{"address" => address, "instance_id" => instance_id}) do
     instance = get_instance!(instance_id)
-    account = get_account!(id)
+    account = get_account!(instance.address, address)
     balance_history = get_balance_history(account.id)
     events = Event.list_events_for_account(account.id)
 
@@ -21,8 +21,9 @@ defmodule DelExampleWeb.AccountController do
     )
   end
 
-  def delete(conn, %{"id" => id, "instance_id" => instance_id}) do
-    account = get_account!(id)
+  def delete(conn, %{"address" => address, "instance_id" => instance_id}) do
+    instance = get_instance!(instance_id)
+    account = get_account!(instance.address, address)
 
     case delete_account(account) do
       {:ok, %{id: id}} -> put_flash(conn, :info, "Account #{id} deleted successfully.")

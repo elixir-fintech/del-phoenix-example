@@ -37,13 +37,12 @@
 </.header>
 
 <.table id="entries" rows={@transaction.entries}>
-  <:col :let={e} label="Account address">{e.account.address}</:col>
-  <:col :let={e} label="Account ID">
+  <:col :let={e} label="Account address">
     <.link
-      href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account_id}"}
+      href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account.address}"}
       class="underline"
     >
-      {e.account.id}
+      {e.account.address}
     </.link>
   </:col>
   <:col :let={e} label="Value">{e.value}</:col>

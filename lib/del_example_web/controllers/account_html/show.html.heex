@@ -1,7 +1,7 @@
 <.header>
   <div class="flex items-center">
     <span class="bg-red-500 text-white p-1 mr-3">Account:</span>
-    <span>{@account.name}</span>
+    <span>{@account.address}</span>
   </div>
   <:subtitle>ID: {@account.id}</:subtitle>
 
@@ -15,7 +15,7 @@
       </.button>
     </.link>
     <.link
-      href={~p"/instances/#{@instance_id}/accounts/#{@account}/transactions"}
+      href={~p"/instances/#{@instance_id}/accounts/#{@account.address}/transactions"}
       class="underline"
     >
       Trx

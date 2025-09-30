@@ -54,7 +54,7 @@
 <.table
   id="accounts"
   rows={@accounts}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1.address}")}
 >
   <:col :let={account} label="Name">{account.address}</:col>
   <:col :let={account} label="Type">{account.type}</:col>
@@ -70,7 +70,7 @@
   </:action>
   <:action :let={account}>
     <.link
-      href={~p"/instances/#{@instance}/accounts/#{account}"}
+      href={~p"/instances/#{@instance}/accounts/#{account.address}"}
       method="delete"
       data-confirm="Are you sure?"
     >

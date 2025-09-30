@@ -21,7 +21,7 @@ defmodule DelExampleWeb.ViewHelpers do
   end
 
   def to_money(value, currency) do
-    DoubleEntryLedger.Currency.to_money(value, currency)
+    DoubleEntryLedger.Utils.Currency.to_money(value, currency)
   end
 
   def balance_format(balance, currency) do

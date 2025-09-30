@@ -30,7 +30,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
       %Account{}
 
   """
-  def get_account!(id), do: AccountStore.get_by_id(id)
+  def get_account!(instance_address, address),
+    do: AccountStore.get_by_address(instance_address, address)
 
   @doc """
   Deletes a Account.

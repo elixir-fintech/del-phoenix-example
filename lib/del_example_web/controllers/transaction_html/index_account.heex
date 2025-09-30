@@ -4,9 +4,9 @@
     <span class="bg-red-500 text-white p-1">{@account.address}</span>
   </div>
   <:subtitle>
-    Listing Transactions for account ID
-    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account}"} class="underline">
-      {@account.id}
+    Listing Transactions for account
+    <.link href={~p"/instances/#{@instance_id}/accounts/#{@account.address}"} class="underline">
+      {@account.address}
     </.link>
   </:subtitle>
 </.header>
@@ -41,4 +41,4 @@
   </:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@instance_id}/accounts/#{@account}"}>Back to Account</.back>
+<.back navigate={~p"/instances/#{@instance_id}/accounts/#{@account.address}"}>Back to Account</.back>

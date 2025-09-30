@@ -23,7 +23,7 @@ defmodule DelExampleWeb.Router do
     live "/instances/:instance_id/account_events/new", AccountEventNewLive
 
     resources "/instances", InstanceController do
-      resources "/accounts", AccountController, except: [:index] do
+      resources "/accounts", AccountController, param: "address", except: [:index] do
         resources "/transactions", TransactionController, only: [:index, :show]
       end
 

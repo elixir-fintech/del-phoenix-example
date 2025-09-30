@@ -2,7 +2,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Transaction do
   @moduledoc """
   The DoubleEntryLedgerWeb context for Transaction.
   """
-  alias DoubleEntryLedger.TransactionStore
+  alias DoubleEntryLedger.Stores.TransactionStore
 
   @doc """
   Returns the list of transactions.

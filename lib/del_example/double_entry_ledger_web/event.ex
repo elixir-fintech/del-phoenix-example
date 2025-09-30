@@ -5,7 +5,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
 
   alias Ecto.Changeset
   alias DoubleEntryLedger.Event.{TransactionEventMap, TransactionData, EntryData}
-  alias DoubleEntryLedger.{EventStore, Account, Transaction, Event}
+  alias DoubleEntryLedger.{Account, Transaction, Event}
+  alias DoubleEntryLedger.Stores.EventStore
   alias DoubleEntryLedger.Apis.EventApi
 
   def list_events(instance_id) do
@@ -52,7 +53,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   @spec create_event_no_save_on_error(map()) ::
           {:ok, Account.t() | Transaction.t(), String.t()} | {:error, String.t(), Changeset.t()}
   def create_event_no_save_on_error(event_params) do
-    case EventApi.process_from_event_params_no_save_on_error(event_params) do
+    case EventApi.process_from_params(event_params, [on_error: :fail]) do
       {:ok, %Transaction{} = trx, event} ->
         {:ok, trx,
          "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}

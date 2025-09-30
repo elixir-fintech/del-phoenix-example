@@ -6,7 +6,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   # import Ecto.Query, warn: false
 
   alias DoubleEntryLedger.Account
-  alias DoubleEntryLedger.AccountStore
+  alias DoubleEntryLedger.Stores.AccountStore
 
   @doc """
   Returns the list of accounts.

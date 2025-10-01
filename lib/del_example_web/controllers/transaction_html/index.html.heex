@@ -5,7 +5,7 @@
   </div>
   <:subtitle>
     Listing Transactions for instance ID
-    <.link href={~p"/instances/#{@instance.id}"} class="underline">
+    <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.id}
     </.link>
   </:subtitle>
@@ -14,7 +14,7 @@
 <.table
   id="transactions"
   rows={@transactions}
-  row_click={&JS.navigate(~p"/instances/#{@instance.id}/transactions/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/transactions/#{&1}")}
 >
   <:col :let={transaction} label="ID">{transaction.id}</:col>
   <:col :let={transaction} label="status">
@@ -25,4 +25,4 @@
   <:col :let={transaction} label="Updated at">{format_datetime(transaction.updated_at)}</:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@instance.id}"}>Back to instance</.back>
+<.back navigate={~p"/instances/#{@instance}"}>Back to instance</.back>

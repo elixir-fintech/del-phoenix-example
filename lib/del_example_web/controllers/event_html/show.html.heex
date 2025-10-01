@@ -14,7 +14,7 @@
   <:item title="Update idempotent key">{@event.update_idempk}</:item>
   <:item title="Update source">{@event.update_source}</:item>
   <:item title="Instance ID">
-    <.link href={~p"/instances/#{@event.instance_id}"} class="underline">
+    <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.address}
     </.link>
   </:item>
@@ -31,7 +31,7 @@
     <%= if @event.transactions != [] do %>
       <%= for transaction <- @event.transactions do %>
         <.link
-          href={~p"/instances/#{@event.instance_id}/transactions/#{transaction.id}"}
+          href={~p"/instances/#{@instance}/transactions/#{transaction.id}"}
           class="underline"
         >
           {transaction.id}
@@ -44,7 +44,7 @@
   <:item title="Account address">
     <%= if @event.account != nil do %>
       <.link
-        href={~p"/instances/#{@event.instance_id}/accounts/#{@event.account.id}"}
+        href={~p"/instances/#{@instance}/accounts/#{@event.account.address}"}
         class="underline"
       >
         {@event.account.address}
@@ -76,7 +76,7 @@
 <.table
   id="events"
   rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
 >
   <:col :let={event} label="Event ID">{event.id}</:col>
   <:col :let={event} label="status">
@@ -94,4 +94,4 @@
     <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>
   </:col>
 </.table>
-<.back navigate={~p"/instances/#{@event.instance_id}/events"}>Back to events</.back>
+<.back navigate={~p"/instances/#{@instance}/events"}>Back to events</.back>

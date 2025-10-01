@@ -1,9 +1,0 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-red-500 text-white p-1 mr-3">New Account</span>
-  </div>
-</.header>
-
-<.account_form changeset={@changeset} action={~p"/instances/#{@instance_id}/accounts"} />
-
-<.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>

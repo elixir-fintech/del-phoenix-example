@@ -5,15 +5,15 @@
   </div>
   <:subtitle>
     Listing all events for instance 
-    <.link href={~p"/instances/#{@instance.id}"} class="underline">
+    <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.address}
     </.link>
   </:subtitle>
   <:actions>
-    <.link href={~p"/instances/#{@instance.id}/events/new"}>
+    <.link href={~p"/instances/#{@instance}/events/new"}>
       <.button class="bg-slate-400 hover:bg-blue-500 mr-1">+ Event</.button>
     </.link>
-    <.link href={~p"/instances/#{@instance.id}/transactions"} class="mr-1 underline">
+    <.link href={~p"/instances/#{@instance}/transactions"} class="mr-1 underline">
       Trx
     </.link>
   </:actions>
@@ -22,7 +22,7 @@
 <.table
   id="events"
   rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
 >
   <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="Status | Transaction ID or Account address">
@@ -34,7 +34,7 @@
         <%= for transaction <- event.transactions do %>
           |
           <.link
-            href={~p"/instances/#{event.instance_id}/transactions/#{transaction.id}"}
+            href={~p"/instances/#{@instance}/transactions/#{transaction.id}"}
             class="underline"
           >
             {transaction.id}
@@ -43,7 +43,7 @@
       <% else %>
         <%= if event.account != nil do %>
           <.link
-            href={~p"/instances/#{event.instance_id}/accounts/#{event.account.id}"}
+            href={~p"/instances/#{@instance}/accounts/#{event.account.id}"}
             class="underline text-red-900"
           >
             {event.account.address}
@@ -62,4 +62,4 @@
   </:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@instance.id}"}>Back to instance</.back>
+<.back navigate={~p"/instances/#{@instance}"}>Back to instance</.back>

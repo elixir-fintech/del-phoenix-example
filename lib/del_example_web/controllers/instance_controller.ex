@@ -27,11 +27,11 @@ defmodule DelExampleWeb.InstanceController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    instance = get_instance!(id)
+  def show(conn, %{"address" => address}) do
+    instance = get_instance!(address)
 
     list =
-      case list_accounts(id) do
+      case list_accounts(instance.id) do
         {:ok, accounts} -> accounts
         {:error, _} -> []
       end
@@ -44,31 +44,31 @@ defmodule DelExampleWeb.InstanceController do
     render(conn, :show, instance: instance, accounts: list, sums: sums)
   end
 
-  def edit(conn, %{"id" => id}) do
-    instance = get_instance!(id)
+  def edit(conn, %{"address" => address}) do
+    instance = get_instance!(address)
     changeset = change_instance(instance)
     render(conn, :edit, instance: instance, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "instance" => instance_params}) do
-    instance = get_instance!(id)
+  def update(conn, %{"address" => address, "instance" => instance_params}) do
+    instance = get_instance!(address)
 
     case update_instance(instance, instance_params) do
       {:ok, instance} ->
         conn
         |> put_flash(:info, "Instance updated successfully.")
-        |> redirect(to: ~p"/instances/#{instance}")
+        |> redirect(to: ~p"/instances/#{instance.address}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :edit, instance: instance, changeset: changeset)
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    instance = get_instance!(id)
+  def delete(conn, %{"address" => address}) do
+    instance = get_instance!(address)
 
     case delete_instance(instance) do
-      {:ok, %{id: id}} -> put_flash(conn, :info, "Instance #{id} deleted successfully.")
+      {:ok, %{address: addr}} -> put_flash(conn, :info, "Instance #{addr} deleted successfully.")
       {:error, changeset} -> put_flash(conn, :error, inspect(changeset.errors))
     end
     |> redirect(to: ~p"/instances")

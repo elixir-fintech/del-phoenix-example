@@ -5,6 +5,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
     only: [get_create_event: 2, create_event_no_save_on_error: 1]
 
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
+  import DelExample.DoubleEntryLedgerWeb.Account, only: [get_account!: 2]
   alias DoubleEntryLedger.Account
   alias DoubleEntryLedger.Event.AccountData
   alias DoubleEntryLedger.Event.AccountEventMap
@@ -17,11 +18,11 @@ defmodule DelExampleWeb.AccountEventNewLive do
                              |> Enum.sort()
 
   @impl true
-  def mount(%{"instance_id" => instance_id, "account_id" => account_id}, _session, socket) do
-    instance = get_instance!(instance_id)
+  def mount(%{"instance_address" => instance_address, "account_address" => account_address}, _session, socket) do
+    instance = get_instance!(instance_address)
+    account = get_account!(instance.address, account_address)
 
-    event = get_create_event(:account, account_id)
-    account = event.account
+    event = get_create_event(:account, account.id)
 
     changeset =
       AccountEventMap.changeset(
@@ -45,8 +46,8 @@ defmodule DelExampleWeb.AccountEventNewLive do
      )}
   end
 
-  def mount(%{"instance_id" => instance_id}, _session, socket) do
-    instance = get_instance!(instance_id)
+  def mount(%{"instance_address" => instance_address}, _session, socket) do
+    instance = get_instance!(instance_address)
 
     changeset =
       AccountEventMap.changeset(
@@ -80,7 +81,7 @@ defmodule DelExampleWeb.AccountEventNewLive do
         {:noreply,
          socket
          |> put_flash(:info, message)
-         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.id}/accounts/#{account.id}")}
+         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.address}/accounts/#{account.address}")}
 
       {:error, message, changeset} ->
         {:noreply,

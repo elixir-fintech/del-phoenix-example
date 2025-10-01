@@ -1,14 +1,10 @@
 defmodule DelExampleWeb.AccountNewLive do
   use DelExampleWeb, :live_view
 
-  import DelExample.DoubleEntryLedgerWeb.Event,
-    only: [get_create_event: 2, create_event_no_save_on_error: 1]
-
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
-  import DelExample.DoubleEntryLedgerWeb.Account, only: [get_account!: 2]
   alias DoubleEntryLedger.Account
   alias DoubleEntryLedger.Event.AccountData
-  alias DoubleEntryLedger.Event.AccountEventMap
+  alias DelExample.DoubleEntryLedgerWeb.Account, as: DelAccount
 
   @currency_dropdown_options Money.Currency.all()
                              |> Enum.map(fn {k, v} ->
@@ -18,51 +14,17 @@ defmodule DelExampleWeb.AccountNewLive do
                              |> Enum.sort()
 
   @impl true
-  def mount(%{"instance_address" => instance_address, "account_address" => account_address}, _session, socket) do
-    instance = get_instance!(instance_address)
-    account = get_account!(instance.address, account_address)
-
-    event = get_create_event(:account, account.id)
-
-    changeset =
-      AccountEventMap.changeset(
-        %AccountEventMap{
-          action: :update_account,
-          instance_address: instance.address,
-          source: event.source,
-          source_idempk: event.source_idempk,
-          payload: %AccountData{
-            description: account.description
-          }
-        },
-        %{}
-      )
-
-    {:ok,
-     assign(socket,
-       changeset: changeset,
-       instance: instance,
-       options: get_form_options()
-     )}
-  end
-
   def mount(%{"instance_address" => instance_address}, _session, socket) do
     instance = get_instance!(instance_address)
 
     changeset =
-      AccountEventMap.changeset(
-        %AccountEventMap{
-          action: :create_account,
-          instance_address: instance.address,
-          source: "manual",
-          source_idempk: Nanoid.generate(),
-          payload: %AccountData{
+      AccountData.changeset(
+          %AccountData{
             name: "",
-            type: :asset,
+            type: nil,
             currency: :EUR,
             allowed_negative: false
-          }
-        },
+          },
         %{}
       )
 
@@ -75,31 +37,30 @@ defmodule DelExampleWeb.AccountNewLive do
   end
 
   @impl true
-  def handle_event("save", %{"account_event_map" => params}, socket) do
-    params = Map.put(params, "instance_address", socket.assigns.instance.address)
+  def handle_event("save", %{"account_data" => params}, socket) do
+    instance = socket.assigns.instance
 
-    case create_event_no_save_on_error(params) do
-      {:ok, account, message} ->
+    case DelAccount.create(instance.address, params) do
+      {:ok, account} ->
         {:noreply,
          socket
-         |> put_flash(:info, message)
+         |> assign(account: account)
+         |> put_flash(:info, "Account #{account.address} created")
          |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.address}/accounts/#{account.address}")}
 
-      {:error, message, changeset} ->
+      {:error, changeset} ->
         {:noreply,
          socket
          |> assign(changeset: changeset)
-         |> put_flash(:error, message)}
+         |> put_flash(:error, "Errors: #{inspect(changeset.errors)}")}
     end
   end
 
   @impl true
-  def handle_event("validate", %{"account_event_map" => params}, socket) do
-    params = Map.put(params, "instance_address", socket.assigns.instance.address)
-
+  def handle_event("validate", %{"account_data" => params}, socket) do
     changeset =
-      %AccountEventMap{}
-      |> AccountEventMap.changeset(params)
+      %AccountData{}
+      |> AccountData.update_changeset(params)
 
     {:noreply, assign(socket, changeset: changeset)}
   end
@@ -107,7 +68,6 @@ defmodule DelExampleWeb.AccountNewLive do
   defp get_form_options do
     %{
       currencies: @currency_dropdown_options,
-      actions: DoubleEntryLedger.Event.actions(:account),
       account_types: Account.account_types(),
       boolean: [Yes: true, No: false]
     }

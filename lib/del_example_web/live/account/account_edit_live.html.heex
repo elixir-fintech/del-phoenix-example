@@ -4,7 +4,7 @@
     <span>{@account.address}</span>
   </div>
 
-  <:subtitle>Update an account and create an update event for audit purposes</:subtitle>
+  <:subtitle>Update an account and add an update event for audit purposes</:subtitle>
 </.header>
 <.simple_form :let={f} for={@changeset} phx-change="validate" phx-submit="save">
   <.error :if={@changeset.action}>

@@ -44,7 +44,7 @@ defmodule DelExampleWeb.AccountEditLive do
         {:noreply,
          socket
          |> assign(changeset: changeset)
-         |> put_flash(:error, "Error")}
+         |> put_flash(:error, "Errors: #{inspect(changeset.errors)}")}
     end
   end
 

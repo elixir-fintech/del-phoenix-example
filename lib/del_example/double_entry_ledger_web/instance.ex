@@ -32,7 +32,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Instance do
       %Instance{}
 
   """
-  def get_instance!(id), do: InstanceStore.get_by_id(id)
+  def get_instance!(address), do: InstanceStore.get_by_address(address)
 
   @doc """
   Creates a instance.

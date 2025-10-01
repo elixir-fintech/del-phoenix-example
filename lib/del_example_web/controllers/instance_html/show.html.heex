@@ -64,13 +64,13 @@
   <:col :let={account} label="Pending">{balance_format(account.pending, account.currency)}</:col>
 
   <:action :let={account}>
-    <.link navigate={~p"/instances/#{@instance}/account_events/new/?account_id=#{account.id}"}>
+    <.link navigate={~p"/instances/#{@instance}/account_events/new/?account_address=#{account.address}"}>
       <.icon name="hero-pencil-solid" />
     </.link>
   </:action>
   <:action :let={account}>
     <.link
-      href={~p"/instances/#{@instance}/accounts/#{account.address}"}
+      href={~p"/instances/#{@instance}/accounts/#{account}"}
       method="delete"
       data-confirm="Are you sure?"
     >

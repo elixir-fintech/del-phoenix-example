@@ -19,11 +19,11 @@ defmodule DelExampleWeb.Router do
 
     get "/", InstanceController, :index
 
-    live "/instances/:instance_id/events/new", EventNewLive
-    live "/instances/:instance_id/account_events/new", AccountEventNewLive
+    live "/instances/:instance_address/events/new", EventNewLive
+    live "/instances/:instance_address/account_events/new", AccountEventNewLive
 
-    resources "/instances", InstanceController do
-      resources "/accounts", AccountController, param: "address", except: [:index] do
+    resources "/instances", InstanceController, param: "address" do
+      resources "/accounts", AccountController, param: "address", only: [:show, :delete] do
         resources "/transactions", TransactionController, only: [:index, :show]
       end
 

@@ -7,7 +7,7 @@
   <:actions>
     <%= if @transaction.status == :pending do %>
       <.link navigate={
-        ~p"/instances/#{@transaction.instance_id}/events/new/?trx_id=#{@transaction.id}"
+        ~p"/instances/#{@instance}/events/new/?trx_id=#{@transaction.id}"
       }>
         <.button class="bg-slate-300 hover:bg-green-500">
           <.icon name="hero-pencil-solid" />
@@ -21,7 +21,7 @@
   <:item title="ID">{@transaction.id}</:item>
   <:item title="Status">{@transaction.status}</:item>
   <:item title="Instance id">
-    <.link href={~p"/instances/#{@transaction.instance_id}"} class="underline">
+    <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.address}
     </.link>
   </:item>
@@ -39,7 +39,7 @@
 <.table id="entries" rows={@transaction.entries}>
   <:col :let={e} label="Account address">
     <.link
-      href={~p"/instances/#{@transaction.instance_id}/accounts/#{e.account.address}"}
+      href={~p"/instances/#{@instance}/accounts/#{e.account}"}
       class="underline"
     >
       {e.account.address}
@@ -60,7 +60,7 @@
 <.table
   id="events"
   rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
 >
   <:col :let={event} label="Event ID">{event.id}</:col>
   <:col :let={event} label="status">
@@ -76,6 +76,6 @@
   </:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@transaction.instance_id}/transactions"}>
+<.back navigate={~p"/instances/#{@instance}/transactions"}>
   Back to transactions
 </.back>

@@ -14,8 +14,8 @@ defmodule DelExampleWeb.EventNewLive do
                              |> Enum.sort()
 
   @impl true
-  def mount(%{"instance_id" => instance_id, "trx_id" => trx_id}, _session, socket) do
-    instance = get_instance!(instance_id)
+  def mount(%{"instance_address" => instance_address, "trx_id" => trx_id}, _session, socket) do
+    instance = get_instance!(instance_address)
 
     event = get_create_event(:transaction, trx_id)
     [trx | _] = event.transactions
@@ -45,14 +45,14 @@ defmodule DelExampleWeb.EventNewLive do
     {:ok,
      assign(socket,
        instance: instance,
-       accounts: get_accounts(instance_id),
-       options: get_form_options(instance_id),
+       accounts: get_accounts(instance.id),
+       options: get_form_options(instance.id),
        changeset: changeset
      )}
   end
 
-  def mount(%{"instance_id" => instance_id}, _session, socket) do
-    instance = get_instance!(instance_id)
+  def mount(%{"instance_address" => instance_address}, _session, socket) do
+    instance = get_instance!(instance_address)
 
     changeset =
       TransactionEventMap.changeset(
@@ -67,8 +67,8 @@ defmodule DelExampleWeb.EventNewLive do
     {:ok,
      assign(socket,
        instance: instance,
-       accounts: get_accounts(instance_id),
-       options: get_form_options(instance_id),
+       accounts: get_accounts(instance.id),
+       options: get_form_options(instance.id),
        changeset: changeset
      )}
   end
@@ -131,7 +131,7 @@ defmodule DelExampleWeb.EventNewLive do
         {:noreply,
          socket
          |> put_flash(:info, message)
-         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.id}/transactions/#{trx.id}")}
+         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.address}/transactions/#{trx.id}")}
 
       {:error, message, changeset} ->
         {:noreply,
@@ -159,13 +159,13 @@ defmodule DelExampleWeb.EventNewLive do
   end
 
   defp update_entry(form_entry, entry, accounts) do
-    account_id = Map.get(form_entry, "account_id")
-    account = Enum.find(accounts, fn acc -> "#{acc.id}" == account_id end)
+    account_address = Map.get(form_entry, "account_address")
+    account = Enum.find(accounts, fn acc -> "#{acc.address}" == account_address end)
 
     if account do
       # Update the currency for this entry
       %{entry | currency: account.currency}
-      |> Map.put(:account_id, account.id)
+      |> Map.put(:account_address, account.address)
     else
       entry
     end

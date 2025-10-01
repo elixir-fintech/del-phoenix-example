@@ -7,7 +7,7 @@
 
   <:actions>
     <.link
-      href={~p"/instances/#{@instance_id}/account_events/new/?account_id=#{@account.id}"}
+      href={~p"/instances/#{@instance}/account_events/new/?account_address=#{@account.address}"}
       class="mr-1"
     >
       <.button class="bg-slate-300 hover:bg-red-500">
@@ -15,7 +15,7 @@
       </.button>
     </.link>
     <.link
-      href={~p"/instances/#{@instance_id}/accounts/#{@account.address}/transactions"}
+      href={~p"/instances/#{@instance}/accounts/#{@account}/transactions"}
       class="underline"
     >
       Trx
@@ -34,7 +34,7 @@
     {to_money(@account.available, @account.currency)}
   </:item>
   <:item title="Instance ID">
-    <.link href={~p"/instances/#{@instance_id}"} class="underline">{@instance.address}</.link>
+    <.link href={~p"/instances/#{@instance}"} class="underline">{@instance.address}</.link>
   </:item>
   <:item title="Inserted At">{format_datetime(@account.inserted_at)}</:item>
   <:item title="Updated At">{format_datetime(@account.updated_at)}</:item>
@@ -49,7 +49,7 @@
 <.table
   id="events"
   rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{&1.instance_id}/events/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
 >
   <:col :let={event} label="Event ID">{event.id}</:col>
   <:col :let={event} label="status">
@@ -79,7 +79,7 @@
   <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
   <:col :let={bhe} label="Trx ID">
     <.link
-      href={~p"/instances/#{@instance_id}/transactions/#{bhe.transaction_id}"}
+      href={~p"/instances/#{@instance}/transactions/#{bhe.transaction_id}"}
       class="underline"
     >
       {bhe.transaction_id}
@@ -87,4 +87,4 @@
   </:col>
 </.table>
 
-<.back navigate={~p"/instances/#{@instance_id}"}>Back to instance</.back>
+<.back navigate={~p"/instances/#{@instance}"}>Back to instance</.back>

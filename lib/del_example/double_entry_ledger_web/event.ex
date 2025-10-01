@@ -58,10 +58,6 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
         {:ok, trx,
          "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
-      {:ok, %Account{} = account, event} ->
-        {:ok, account,
-         "#{event.action} event with ID #{event.id}) processed account with ID #{account.id}"}
-
       {:error, %Changeset{} = event_map_changeset} ->
         errors = get_all_changeset_errors(event_map_changeset)
 

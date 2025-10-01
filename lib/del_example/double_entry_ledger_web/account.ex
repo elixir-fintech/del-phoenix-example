@@ -8,9 +8,22 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   alias DoubleEntryLedger.Account
   alias DoubleEntryLedger.Stores.AccountStore
 
-  def update(instance_address, address, params),
-    do: AccountStore.update(instance_address, address, params, Nanoid.generate(), "DelExample.DoubleEntryLedgerWebAccount.update/3")
 
+  def create(instance_address, params) do
+    case AccountStore.create(instance_address, params, Nanoid.generate(), "Portal Create Account") do
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, Ecto.Changeset.get_embed(changeset, :payload)}
+      rest -> rest
+    end
+  end
+
+  def update(instance_address, address, params) do
+    case AccountStore.update(instance_address, address, params, Nanoid.generate(), "Portal Update Account") do
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, Ecto.Changeset.get_embed(changeset, :payload)}
+      rest -> rest
+    end
+  end
   @doc """
   Returns the list of accounts.
 

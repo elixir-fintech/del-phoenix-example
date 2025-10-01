@@ -1,19 +1,15 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-blue-500 text-white p-1 mr-3">New Account Event for: </span>
+    <span class="bg-blue-500 text-white p-1 mr-3">New Account Event for Ledger: </span>
     <span>{@instance.address}</span>
   </div>
 
-  <:subtitle>Use this form to create account events that will be immediately processed</:subtitle>
+  <:subtitle>Create an account and add a create event for audit purposes</:subtitle>
 </.header>
-<.simple_form :let={f} for={@changeset} phx-change="validate" phx-submit="save">
+<.simple_form :let={ad} for={@changeset} phx-change="validate" phx-submit="save">
   <.error :if={@changeset.action}>
     Oops, something went wrong! Please check the errors below.
   </.error>
-  <.input type="select" field={f[:action]} label="Action" options={@options[:actions]} />
-  <.input field={f[:source]} label="Source" />
-  <.input field={f[:source_idempk]} label="Idempotent Id" />
-  <.inputs_for :let={ad} field={f[:payload]}>
     <.input field={ad[:name]} label="Account Name" />
     <.input field={ad[:address]} label="Account Address" />
     <.input
@@ -21,6 +17,7 @@
       field={ad[:type]}
       label="Account Type"
       options={@options[:account_types]}
+      prompt="Select account type"
     />
     <.input field={ad[:description]} label="Description" />
     <.input
@@ -28,6 +25,7 @@
       field={ad[:currency]}
       label="Currency"
       options={@options[:currencies]}
+      prompt="Select account currency"
     />
     <.input
       type="select"
@@ -35,10 +33,9 @@
       label="Allow Negative Balance"
       options={@options[:boolean]}
     />
-  </.inputs_for>
 
   <:actions>
-    <.button class="bg-slate-400 hover:bg-blue-500">Process Account Event</.button>
+    <.button class="bg-slate-400 hover:bg-blue-500">Create Account</.button>
   </:actions>
 </.simple_form>
 

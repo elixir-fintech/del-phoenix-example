@@ -8,6 +8,9 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   alias DoubleEntryLedger.Account
   alias DoubleEntryLedger.Stores.AccountStore
 
+  def update(instance_address, address, params),
+    do: AccountStore.update(instance_address, address, params, Nanoid.generate(), "DelExample.DoubleEntryLedgerWebAccount.update/3")
+
   @doc """
   Returns the list of accounts.
 

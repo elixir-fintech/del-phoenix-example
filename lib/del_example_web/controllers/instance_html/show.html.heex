@@ -45,7 +45,7 @@
 <.header>
   Associated Accounts
   <:actions>
-    <.link href={~p"/instances/#{@instance}/account_events/new"}>
+    <.link href={~p"/instances/#{@instance}/accounts/new"}>
       <.button class="bg-slate-400 hover:bg-red-500">+ Account</.button>
     </.link>
   </:actions>
@@ -64,7 +64,7 @@
   <:col :let={account} label="Pending">{balance_format(account.pending, account.currency)}</:col>
 
   <:action :let={account}>
-    <.link navigate={~p"/instances/#{@instance}/account_events/new/?account_address=#{account.address}"}>
+    <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}>
       <.icon name="hero-pencil-solid" />
     </.link>
   </:action>

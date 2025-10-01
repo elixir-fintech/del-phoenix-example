@@ -1,4 +1,4 @@
-defmodule DelExampleWeb.AccountEventNewLive do
+defmodule DelExampleWeb.AccountNewLive do
   use DelExampleWeb, :live_view
 
   import DelExample.DoubleEntryLedgerWeb.Event,
@@ -54,6 +54,8 @@ defmodule DelExampleWeb.AccountEventNewLive do
         %AccountEventMap{
           action: :create_account,
           instance_address: instance.address,
+          source: "manual",
+          source_idempk: Nanoid.generate(),
           payload: %AccountData{
             name: "",
             type: :asset,

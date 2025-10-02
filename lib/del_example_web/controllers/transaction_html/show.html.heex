@@ -7,7 +7,7 @@
   <:actions>
     <%= if @transaction.status == :pending do %>
       <.link navigate={
-        ~p"/instances/#{@instance}/events/new/?trx_id=#{@transaction.id}"
+        ~p"/instances/#{@instance}/transactions/#{@transaction}/edit"
       }>
         <.button class="bg-slate-300 hover:bg-green-500">
           <.icon name="hero-pencil-solid" />

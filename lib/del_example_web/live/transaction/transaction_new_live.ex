@@ -1,10 +1,10 @@
 defmodule DelExampleWeb.TransactionNewLive do
   use DelExampleWeb, :live_view
 
-  import DelExample.DoubleEntryLedgerWeb.Event
-  import DelExample.DoubleEntryLedgerWeb.Account, only: [list_accounts: 1]
+  import DelExample.DoubleEntryLedgerWeb.Account, only: [list_accounts: 1, get_account!: 2]
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
-  alias DoubleEntryLedger.Event.{EntryData, TransactionData, TransactionEventMap}
+  alias DoubleEntryLedger.Event.{EntryData, TransactionData}
+  alias DelExample.DoubleEntryLedgerWeb.Transaction
 
   @currency_dropdown_options Money.Currency.all()
                              |> Enum.map(fn {k, v} ->
@@ -14,76 +14,87 @@ defmodule DelExampleWeb.TransactionNewLive do
                              |> Enum.sort()
 
   @impl true
+  def mount(%{"instance_address" => instance_address, "account_address" => address}, _session, socket) do
+    instance = get_instance!(instance_address)
+    account = get_account!(instance_address, address)
+
+    changeset = get_changeset([
+        %EntryData{account_address: account.address, amount: nil, currency: account.currency},
+        %EntryData{account_address: nil, amount: nil, currency: nil}
+      ]
+    )
+
+    {:ok, create_assigns(socket, instance, changeset)}
+  end
+
   def mount(%{"instance_address" => instance_address}, _session, socket) do
     instance = get_instance!(instance_address)
 
-    changeset =
-      TransactionEventMap.changeset(
-        %TransactionEventMap{
-          action: :create_transaction,
-          instance_address: instance.address,
-          payload: %TransactionData{
-            status: :posted,
-            entries: [
-              %EntryData{},
-              %EntryData{}
-            ]
-          }
-        },
-        %{}
-      )
+    changeset = get_changeset([
+        %EntryData{account_address: nil, amount: nil, currency: nil},
+        %EntryData{account_address: nil, amount: nil, currency: nil}
+      ]
+    )
 
-    {:ok,
+    {:ok, create_assigns(socket, instance, changeset)}
+  end
+
+  def get_changeset(entries, status \\ :posted) do
+    TransactionData.changeset(
+      %TransactionData{
+        status: status,
+        entries: entries
+      },
+      %{}
+    )
+  end
+
+  def create_assigns(socket, instance, changeset) do
      assign(socket,
        instance: instance,
        accounts: get_accounts(instance.id),
        options: get_form_options(instance.id),
        changeset: changeset
-     )}
+     )
   end
 
   @impl true
-  def handle_event("add-entry", _params, socket) do
-    stored_changeset = socket.assigns.changeset
-    [account | _] = socket.assigns.accounts
-    transaction_data = Ecto.Changeset.get_field(stored_changeset, :payload)
-    new_entry = %EntryData{account_address: account.address, currency: account.currency}
-    entries = transaction_data.entries ++ [new_entry]
+  def handle_event("add-entry", _params, %{assigns: %{changeset: cs}} = socket) do
+    current_entries = Ecto.Changeset.get_field(cs, :entries)
+    new_entry = %EntryData{account_address: nil, amount: nil, currency: nil}
+    entries = current_entries ++ [new_entry]
 
     changeset =
-      stored_changeset
-      |> Ecto.Changeset.change(%{payload: %{transaction_data | entries: entries}})
+      cs
+      |> Ecto.Changeset.change(%{entries: entries})
 
     {:noreply, assign(socket, changeset: changeset)}
   end
 
   @impl true
-  def handle_event("validate", %{"transaction_event_map" => params}, socket) do
-    params = Map.put(params, "instance_address", socket.assigns.instance.address)
+  def handle_event("validate", %{"transaction_data" => params}, socket) do
 
     changeset =
-      %TransactionEventMap{}
-      |> TransactionEventMap.changeset(params)
+      %TransactionData{}
+      |> TransactionData.changeset(params)
 
     {:noreply, assign(socket, changeset: changeset)}
   end
 
   @impl true
-  def handle_event("account_changed", %{"transaction_event_map" => params}, socket) do
-    entries = get_in(params, ["payload", "entries"])
+  def handle_event("account_changed", %{"transaction_data" => params}, %{assigns: %{changeset: cs, accounts: accs}} = socket) do
+    entries = get_in(params, ["entries"])
 
-    stored_transaction_data =
-      Ecto.Changeset.get_field(socket.assigns.changeset, :payload)
+    stored_entries =
+      Ecto.Changeset.get_field(cs, :entries)
 
     if entries && is_map(entries) do
       new_entries =
-        create_new_entries(entries, stored_transaction_data.entries, socket.assigns.accounts)
+        create_new_entries(entries, stored_entries, accs)
 
       changeset =
-        socket.assigns.changeset
-        |> Ecto.Changeset.change(%{
-          payload: %{stored_transaction_data | entries: new_entries}
-        })
+        cs
+        |> Ecto.Changeset.change(%{entries: new_entries})
 
       {:noreply, assign(socket, changeset: changeset)}
     else
@@ -92,21 +103,19 @@ defmodule DelExampleWeb.TransactionNewLive do
   end
 
   @impl true
-  def handle_event("save", %{"transaction_event_map" => params}, socket) do
-    params = Map.put(params, "instance_address", socket.assigns.instance.address)
-
-    case create_event_no_save_on_error(params) do
-      {:ok, trx, message} ->
+  def handle_event("save", %{"transaction_data" => params}, %{assigns: %{instance: instance}} = socket) do
+    case Transaction.create(instance.address, params) do
+      {:ok, trx} ->
         {:noreply,
          socket
-         |> put_flash(:info, message)
-         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.address}/transactions/#{trx.id}")}
+         |> put_flash(:info, "Transaction: #{trx.id} created")
+         |> push_navigate(to: ~p"/instances/#{instance.address}/transactions/#{trx.id}")}
 
-      {:error, message, changeset} ->
+      {:error, changeset} ->
         {:noreply,
          socket
          |> assign(changeset: changeset)
-         |> put_flash(:error, message)}
+         |> put_flash(:error, "Errors: #{inspect(changeset.errors)}")}
     end
   end
 
@@ -151,9 +160,7 @@ defmodule DelExampleWeb.TransactionNewLive do
     %{
       accounts:
         Enum.map(get_accounts(instance_id), fn acc -> ["#{acc.address}  (#{acc.type})": acc.address] end)
-
         |> List.flatten(),
-      actions: DoubleEntryLedger.Event.actions(:transaction),
       states: Enum.reject(DoubleEntryLedger.Transaction.states(), &(&1 == :archived)),
       currencies: @currency_dropdown_options
     }

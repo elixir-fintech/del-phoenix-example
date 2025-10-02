@@ -7,16 +7,11 @@
   <:subtitle>Use this form to create events that will be immediately processed</:subtitle>
 </.header>
 <!-- filepath: /home/chris/Projects/ME/del_example_web/live/event_new_live.html.heex -->
-<.simple_form :let={f} for={@changeset} phx-change="validate" phx-submit="save">
+<.simple_form :let={td} for={@changeset} phx-change="validate" phx-submit="save">
   <.error :if={@changeset.action}>
     Oops, something went wrong! Please check the errors below.
   </.error>
-  <.input type="select" field={f[:action]} label="Action" options={@options[:actions]} />
-  <.input field={f[:source]} label="Source" />
-  <.input field={f[:source_idempk]} label="Idempotent Id" />
-  <.inputs_for :let={td} field={f[:payload]}>
     <.input type="select" field={td[:status]} label="Transaction status" options={@options[:states]} />
-
     <.inputs_for :let={entry} field={td[:entries]}>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <.input
@@ -28,7 +23,6 @@
           prompt="Select an account"
         />
         <.input field={entry[:amount]} label="Amount" />
-
         <.input
           type="select"
           field={entry[:currency]}
@@ -38,7 +32,6 @@
         />
       </div>
     </.inputs_for>
-  </.inputs_for>
 
   <div class="mt-2">
     <button type="button" phx-click="add-entry">Add Entry</button>

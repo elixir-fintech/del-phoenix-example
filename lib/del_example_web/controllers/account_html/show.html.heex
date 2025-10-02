@@ -14,6 +14,9 @@
         <.icon name="hero-pencil-solid" />
       </.button>
     </.link>
+    <.link href={~p"/instances/#{@instance}/transactions/new?account_address=#{@account}"} class="mr-1">
+      <.button class="bg-slate-400 hover:bg-blue-500">+ Trx</.button>
+    </.link>
     <.link
       href={~p"/instances/#{@instance}/accounts/#{@account}/transactions"}
       class="underline"

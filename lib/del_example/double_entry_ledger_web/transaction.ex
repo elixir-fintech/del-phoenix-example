@@ -4,6 +4,35 @@ defmodule DelExample.DoubleEntryLedgerWeb.Transaction do
   """
   alias DoubleEntryLedger.Stores.TransactionStore
 
+  def create(instance_address, params) do
+    TransactionStore.create(
+      instance_address,
+      params,
+      Nanoid.generate(),
+      on_error: :fail
+    )
+    |> case do
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, Ecto.Changeset.get_embed(changeset, :payload)}
+      rest -> rest
+    end
+  end
+
+  def update(instance_address, transaction_id, params) do
+    TransactionStore.update(
+      instance_address,
+      transaction_id,
+      params,
+      Nanoid.generate(),
+      on_error: :fail
+    )
+    |> case do
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, Ecto.Changeset.get_embed(changeset, :payload)}
+      rest -> rest
+    end
+  end
+
   @doc """
   Returns the list of transactions.
 

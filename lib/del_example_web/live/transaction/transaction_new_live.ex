@@ -1,4 +1,4 @@
-defmodule DelExampleWeb.EventNewLive do
+defmodule DelExampleWeb.TransactionNewLive do
   use DelExampleWeb, :live_view
 
   import DelExample.DoubleEntryLedgerWeb.Event
@@ -14,43 +14,6 @@ defmodule DelExampleWeb.EventNewLive do
                              |> Enum.sort()
 
   @impl true
-  def mount(%{"instance_address" => instance_address, "trx_id" => trx_id}, _session, socket) do
-    instance = get_instance!(instance_address)
-
-    event = get_create_event(:transaction, trx_id)
-    [trx | _] = event.transactions
-
-    changeset =
-      TransactionEventMap.changeset(
-        %TransactionEventMap{
-          action: :update_transaction,
-          instance_address: instance.address,
-          source: event.source,
-          source_idempk: event.source_idempk,
-          payload: %TransactionData{
-            status: trx.status,
-            entries:
-              Enum.map(trx.entries, fn e ->
-                %EntryData{
-                  account_address: e.account_address,
-                  currency: e.value.currency,
-                  amount: e.value.amount
-                }
-              end)
-          }
-        },
-        %{}
-      )
-
-    {:ok,
-     assign(socket,
-       instance: instance,
-       accounts: get_accounts(instance.id),
-       options: get_form_options(instance.id),
-       changeset: changeset
-     )}
-  end
-
   def mount(%{"instance_address" => instance_address}, _session, socket) do
     instance = get_instance!(instance_address)
 
@@ -59,7 +22,13 @@ defmodule DelExampleWeb.EventNewLive do
         %TransactionEventMap{
           action: :create_transaction,
           instance_address: instance.address,
-          payload: %TransactionData{status: :posted, entries: []}
+          payload: %TransactionData{
+            status: :posted,
+            entries: [
+              %EntryData{},
+              %EntryData{}
+            ]
+          }
         },
         %{}
       )
@@ -185,7 +154,7 @@ defmodule DelExampleWeb.EventNewLive do
 
         |> List.flatten(),
       actions: DoubleEntryLedger.Event.actions(:transaction),
-      states: DoubleEntryLedger.Transaction.states(),
+      states: Enum.reject(DoubleEntryLedger.Transaction.states(), &(&1 == :archived)),
       currencies: @currency_dropdown_options
     }
   end

@@ -1,7 +1,7 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-blue-500 text-white p-1 mr-3">New Event for: </span>
-    <span>{@instance.address}</span>
+    <span class="bg-blue-500 text-white p-1 mr-3">Update transaction: </span>
+    <span>{@transaction.id}</span>
   </div>
 
   <:subtitle>Use this form to create events that will be immediately processed</:subtitle>
@@ -14,32 +14,27 @@
   <.input type="select" field={f[:action]} label="Action" options={@options[:actions]} />
   <.input field={f[:source]} label="Source" />
   <.input field={f[:source_idempk]} label="Idempotent Id" />
-  <%= if Ecto.Changeset.get_field(@changeset, :action) == :update_transaction do %>
-    <.input field={f[:update_idempk]} label="Update Idempotent Id" />
-  <% end %>
+  <.input field={f[:update_idempk]} label="Update Idempotent Id" />
   <.inputs_for :let={td} field={f[:payload]}>
     <.input type="select" field={td[:status]} label="status" options={@options[:states]} />
     <.inputs_for :let={entry} field={td[:entries]}>
-      <.input
-        type="select"
-        phx-change="account_changed"
-        field={entry[:account_address]}
-        label="Account Address"
-        options={@options[:accounts]}
-      />
-      <.input field={entry[:amount]} label="Amount" />
-      <.input
-        type="select"
-        field={entry[:currency]}
-        label="Currency"
-        options={@options[:currencies]}
-      />
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <.input
+          type="text"
+          field={entry[:account_address]}
+          label="Account Address"
+          readonly
+        />
+        <.input field={entry[:amount]} label="Amount" />
+        <.input
+          type="text"
+          field={entry[:currency]}
+          label="Currency"
+          readonly
+        />
+      </div>
     </.inputs_for>
   </.inputs_for>
-
-  <div class="mt-2">
-    <button type="button" phx-click="add-entry">Add Entry</button>
-  </div>
 
   <:actions>
     <.button class="bg-slate-400 hover:bg-blue-500">Process Event</.button>

@@ -19,7 +19,11 @@ defmodule DelExampleWeb.Router do
 
     get "/", InstanceController, :index
 
-    live "/instances/:instance_address/events/new", EventNewLive
+    # Transaction
+    live "/instances/:instance_address/transactions/new", TransactionNewLive
+    live "/instances/:instance_address/transactions/:transaction_id/edit", TransactionEditLive
+
+    # Account
     live "/instances/:instance_address/accounts/new", AccountNewLive
     live "/instances/:instance_address/accounts/:account_address/edit", AccountEditLive
 

@@ -38,9 +38,12 @@ defmodule DelExampleWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DelExampleWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", DelExampleWeb do
+    pipe_through :api
+
+    #post "/:instance_address/events", EventsApiController, :create
+    get "/:instance_address/events/:id", EventApiController, :show
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:del_example, :dev_routes) do

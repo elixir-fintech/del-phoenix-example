@@ -9,6 +9,9 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   alias DoubleEntryLedger.Stores.EventStore
   alias DoubleEntryLedger.Apis.EventApi
 
+  @account_actions [:create_account, :update_account]
+  @trx_actions [:create_transaction, :update_transaction]
+
   def list_events(instance_id) do
     EventStore.list_all_for_instance_id(instance_id, 1, 1000)
   end
@@ -21,29 +24,43 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     EventStore.list_all_for_account_id(account_id)
   end
 
-  def get_event(id) do
-    EventStore.get_by_id(id)
+  def get_event(instance_address, id) do
+    EventStore.get_by_instance_address_and_id(instance_address, id)
   end
 
-  def get_related_events(%Event{id: id} = event) do
-    trx_events =
-      case event.transactions do
-        [] -> []
+  def get_related_events(event), do: get_related_events(event, :all)
 
-        [trx | _] ->
-          Enum.filter(list_events_for_transaction(trx.id), fn e -> e.id != id end)
-      end
+  def get_related_events(%{action: action} = event, :same_type)
+    when action in @account_actions, do: get_related_events(event, :account)
 
-    account_events =
-      case event.account do
-        %Account{} = account ->
-          Enum.filter(list_events_for_account(account.id), fn e -> e.id != id end)
+  def get_related_events(%{action: action} = event, :same_type)
+    when action in @trx_actions, do: get_related_events(event, :transaction)
 
-        _ -> []
-      end
+  def get_related_events(%Event{id: id} = event, :account) do
+    case event.account do
+      %Account{} = account ->
+        Enum.filter(list_events_for_account(account.id), fn
+          e -> e.id != id && e.action not in @trx_actions
+        end)
 
-    trx_events ++ account_events
+      _ -> []
+    end
   end
+
+  def get_related_events(%Event{id: id} = event, :transaction) do
+    case event.transactions do
+      [] -> []
+
+      [trx | _] ->
+        Enum.filter(list_events_for_transaction(trx.id), fn
+          e -> e.id != id && e.action not in @account_actions
+        end)
+    end
+  end
+
+  def get_related_events(event, :all),
+    do: get_related_events(event, :transaction) ++ get_related_events(event, :account)
+
 
   def get_create_event(:account, account_id), do: EventStore.get_create_account_event(account_id)
 

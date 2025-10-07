@@ -65,7 +65,13 @@ defmodule DelExampleWeb.TransactionEditLive do
         {:noreply,
          socket
          |> assign(changeset: changeset)
-         |> put_flash(:error, "Errors: #{inspect(changeset.errors)}")}
+         |> put_flash(:error, "Errors: #{inspect(get_all_errors(changeset))}")}
     end
+  end
+
+  def get_all_errors(changeset) do
+    Ecto.Changeset.traverse_errors(changeset, fn {msg, _} ->
+      msg
+    end)
   end
 end

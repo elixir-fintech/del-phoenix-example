@@ -12,6 +12,10 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   @account_actions [:create_account, :update_account]
   @trx_actions [:create_transaction, :update_transaction]
 
+  def create(event_params) do
+    EventApi.create_from_params(event_params)
+  end
+
   def list_events(instance_id) do
     EventStore.list_all_for_instance_id(instance_id, 1, 1000)
   end

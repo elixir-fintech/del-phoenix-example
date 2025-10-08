@@ -41,7 +41,7 @@ defmodule DelExampleWeb.Router do
   scope "/api", DelExampleWeb do
     pipe_through :api
 
-    #post "/:instance_address/events", EventsApiController, :create
+    post "/events", EventApiController, :create
     get "/:instance_address/events/:id", EventApiController, :show
   end
 

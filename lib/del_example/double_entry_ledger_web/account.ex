@@ -10,7 +10,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
 
 
   def create(instance_address, params) do
-    case AccountStore.create(instance_address, params, Nanoid.generate(), "Portal Create Account") do
+    case AccountStore.create(instance_address, params, Nanoid.generate(), "portal_create_account") do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, Ecto.Changeset.get_embed(changeset, :payload)}
       rest -> rest
@@ -18,7 +18,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   end
 
   def update(instance_address, address, params) do
-    case AccountStore.update(instance_address, address, params, Nanoid.generate(), "Portal Update Account") do
+    case AccountStore.update(instance_address, address, params, Nanoid.generate(), "portal_update_account") do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, Ecto.Changeset.get_embed(changeset, :payload)}
       rest -> rest

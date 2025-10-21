@@ -20,7 +20,8 @@ config :double_entry_ledger, DoubleEntryLedger.Repo,
   pool_size: 10
 
 config :double_entry_ledger,
-  schema_prefix: "double_entry_ledger"
+  schema_prefix: "double_entry_ledger",
+  idempotency_secret: "123456677890"
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

@@ -16,6 +16,7 @@ defmodule DelExampleWeb.ViewHelpers do
       :pending -> "text-yellow-600"
       :failed -> "text-red-600 font-bold"
       :archived -> "text-red-600 font-bold"
+      :dead_letter -> "text-black-600 font-bold"
       _ -> "text-gray-600"
     end
   end
@@ -37,10 +38,10 @@ defmodule DelExampleWeb.ViewHelpers do
 
   def event_source_format(event) do
     [
-      "src:\u00A0#{event.source}",
-      "source_idempk:\u00A0#{event.source_idempk}",
-      if event.update_idempk do
-        "update_idempk:\u00A0#{event.update_idempk}"
+      "src:\u00A0#{event.event_map.source}",
+      "source_idempk:\u00A0#{event.event_map.source_idempk}",
+      if event.event_map.update_idempk do
+        "update_idempk:\u00A0#{event.event_map.update_idempk}"
       end
     ]
     |> Enum.reject(&(&1 == "" || is_nil(&1)))

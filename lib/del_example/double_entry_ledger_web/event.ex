@@ -44,7 +44,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     case event.account do
       %Account{} = account ->
         Enum.filter(list_events_for_account(account.id), fn
-          e -> e.id != id && e.action not in @trx_actions
+          e -> e.id != id && e.event_map.action not in @trx_actions
         end)
 
       _ -> []
@@ -57,7 +57,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
 
       [trx | _] ->
         Enum.filter(list_events_for_transaction(trx.id), fn
-          e -> e.id != id && e.action not in @account_actions
+          e -> e.id != id && e.event_map.action not in @account_actions
         end)
     end
   end
@@ -77,7 +77,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
     case EventApi.process_from_params(event_params, [on_error: :fail]) do
       {:ok, %Transaction{} = trx, event} ->
         {:ok, trx,
-         "#{event.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
+         "#{event.event_map.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
       {:error, %Changeset{} = event_map_changeset} ->
         errors = get_all_changeset_errors(event_map_changeset)

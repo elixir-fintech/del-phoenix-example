@@ -8,11 +8,8 @@
 
 <.list>
   <:item title="ID">{@event.id}</:item>
-  <:item title="Action">{@event.action}</:item>
-  <:item title="Source">{@event.source}</:item>
-  <:item title="Source idempotent key">{@event.source_idempk}</:item>
-  <:item title="Update idempotent key">{@event.update_idempk}</:item>
-  <:item title="Update source">{@event.update_source}</:item>
+  <:item title="Action">{@event.event_map.action}</:item>
+  <:item title="Source">{@event.event_map.source}</:item>
   <:item title="Instance ID">
     <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.address}
@@ -26,7 +23,6 @@
       {@event.event_queue_item.status}
     </span>
   </:item>
-  <:item title="OCC Retry">{@event.event_queue_item.occ_retry_count}</:item>
   <:item title="Transaction ID">
     <%= if @event.transactions != [] do %>
       <%= for transaction <- @event.transactions do %>
@@ -63,6 +59,9 @@
       <pre class="text-xs overflow-auto max-h-96 text-red-500">{Jason.encode!(@event.event_queue_item.errors, pretty: true)}</pre>
     <% end %>
   </:item>
+  <:item title="OCC Retry">{@event.event_queue_item.occ_retry_count}</:item>
+  <:item title="Retries">{@event.event_queue_item.retry_count}</:item>
+  <:item title="Retry after">{format_datetime(@event.event_queue_item.next_retry_after)}</:item>
   <:item title="Created at">{format_datetime(@event.inserted_at)}</:item>
   <:item title="Updated at">{format_datetime(@event.updated_at)}</:item>
 </.list>
@@ -85,7 +84,7 @@
     </span>
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
-  <:col :let={event} label="action">{"#{event.action}"}</:col>
+  <:col :let={event} label="action">{"#{event.event_map.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">
     {format_datetime(event.event_queue_item.processing_completed_at)}

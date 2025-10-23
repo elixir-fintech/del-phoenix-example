@@ -47,4 +47,8 @@ defmodule DelExampleWeb.ViewHelpers do
     |> Enum.reject(&(&1 == "" || is_nil(&1)))
     |> Enum.join(", ")
   end
+
+  def assoc_loaded_and_present?(%Ecto.Association.NotLoaded{}), do: false
+  def assoc_loaded_and_present?(nil), do: false
+  def assoc_loaded_and_present?(_), do: true
 end

@@ -13,7 +13,6 @@ defmodule DelExampleWeb.JournalEventController do
   def show(conn, %{"instance_address" => instance_address, "id" => id}) do
     event = get_event(instance_address, id)
 
-    #render(conn, :show, event: event, events: get_related_events(event), instance: event.instance)
-    render(conn, :show, event: event, events: [], instance: event.instance)
+    render(conn, :show, event: event, events: get_related_events(event), instance: event.instance)
   end
 end

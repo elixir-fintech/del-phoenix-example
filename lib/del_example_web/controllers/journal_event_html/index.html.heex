@@ -1,0 +1,65 @@
+<.header>
+  <div class="flex items-center">
+    <span class="bg-blue-500 text-white p-1 mr-3">Listing Journal Events:</span>
+    <span class="bg-green-500 text-white p-1 mr-3">{@instance.address}</span>
+  </div>
+  <:subtitle>
+    Listing all events for instance 
+    <.link href={~p"/instances/#{@instance}"} class="underline">
+      {@instance.address}
+    </.link>
+  </:subtitle>
+  <:actions>
+    <.link href={~p"/instances/#{@instance}/transactions/new"}>
+      <.button class="bg-slate-400 hover:bg-blue-500 mr-1">+ Trx</.button>
+    </.link>
+    <.link href={~p"/instances/#{@instance}/transactions"} class="mr-1 underline">
+      Trx
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="events"
+  rows={@events}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
+>
+  <:col :let={event} label="ID">{event.id}</:col>
+  <:col :let={event} label="Status | Transaction ID or Account address">
+    <span class={status_color(event.event_queue_item.status)}>
+      {event.event_queue_item.status}
+    </span>
+    <span>
+      <%= if event.transactions != [] do %>
+        <%= for transaction <- event.transactions do %>
+          |
+          <.link
+            href={~p"/instances/#{@instance}/transactions/#{transaction.id}"}
+            class="underline"
+          >
+            {transaction.id}
+          </.link>
+        <% end %>
+      <% else %>
+        <%= if event.account != nil do %>
+          <.link
+            href={~p"/instances/#{@instance}/accounts/#{event.account.id}"}
+            class="underline text-red-900"
+          >
+            {event.account.address}
+          </.link>
+        <% else %>
+          <span class="text-gray-500">No associated record</span>
+        <% end %>
+      <% end %>
+    </span>
+  </:col>
+  <:col :let={event} label="source">{event_source_format(event)}</:col>
+  <:col :let={event} label="action">{event.event_map.action}</:col>
+  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+  <:col :let={event} label="Processed at">
+    {format_datetime(event.event_queue_item.processing_completed_at)}
+  </:col>
+</.table>
+
+<.back navigate={~p"/instances/#{@instance}"}>Back to instance</.back>

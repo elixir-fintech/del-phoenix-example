@@ -4,13 +4,13 @@ defmodule DelExampleWeb.AccountController do
   import DelExample.DoubleEntryLedgerWeb.Account
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
 
-  alias DelExample.DoubleEntryLedgerWeb.Event
+  alias DelExample.DoubleEntryLedgerWeb.JournalEvent
 
   def show(conn, %{"address" => address, "instance_address" => instance_address}) do
     instance = get_instance!(instance_address)
     account = get_account!(instance_address, address)
     balance_history = get_balance_history(account.id)
-    events = Event.list_events_for_account(account.id)
+    events = JournalEvent.list_events_for_account(account.id)
 
     render(conn, :show,
       account: account,

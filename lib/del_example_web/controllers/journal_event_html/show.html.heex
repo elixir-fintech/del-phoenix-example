@@ -1,0 +1,70 @@
+<.header>
+  <div class="flex items-center">
+    <span class="bg-blue-500 text-white p-1 mr-3">Journal Event:</span>
+    <span class="mr-3">{@event.id}</span>
+  </div>
+  <:subtitle>ID: {@event.id}</:subtitle>
+</.header>
+
+<.list>
+  <:item title="ID">{@event.id}</:item>
+  <:item title="Action">{@event.event_map.action}</:item>
+  <:item title="Source">{@event.event_map.source}</:item>
+  <:item title="Instance ID">
+    <.link href={~p"/instances/#{@instance}"} class="underline">
+      {@instance.address}
+    </.link>
+  </:item>
+  <:item title="EventMap">
+    <pre class="text-sm">{Jason.encode!(@event.event_map, pretty: true)}</pre>
+  </:item>
+  <:item title="Status">
+    <span class={status_color(:processed)}>
+      :processed
+    </span>
+  </:item>
+  <:item title="Account address">
+    <%= if @event.account != nil do %>
+      <.link
+        href={~p"/instances/#{@instance}/accounts/#{@event.account.address}"}
+        class="underline"
+      >
+        {@event.account.address}
+      </.link>
+    <% else %>
+      <span class="text-gray-500">No associated account</span>
+    <% end %>
+  </:item>
+  <:item title="Processed at">
+    {format_datetime(@event.inserted_at)}
+  </:item>
+</.list>
+
+<div class="h-1 bg-slate-200 my-5"></div>
+
+<.header>
+  Related Events
+</.header>
+
+<.table
+  id="events"
+  rows={@events}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
+>
+  <:col :let={event} label="Event ID">{event.id}</:col>
+  <:col :let={event} label="status">
+    <span class={status_color(event.event_queue_item.status)}>
+      {event.event_queue_item.status}
+    </span>
+  </:col>
+  <:col :let={event} label="source">{event_source_format(event)}</:col>
+  <:col :let={event} label="action">{"#{event.event_map.action}"}</:col>
+  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+  <:col :let={event} label="Processed at">
+    {format_datetime(event.event_queue_item.processing_completed_at)}
+  </:col>
+  <:col :let={event} label="event_map">
+    <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>
+  </:col>
+</.table>
+<.back navigate={~p"/instances/#{@instance}/events"}>Back to events</.back>

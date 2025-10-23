@@ -1,6 +1,6 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-blue-500 text-white p-1 mr-3">Event:</span>
+    <span class="bg-purple-500 text-white p-1 mr-3">Queue Item</span>
     <span class="mr-3">{@event.id}</span>
   </div>
   <:subtitle>ID: {@event.id}</:subtitle>
@@ -93,4 +93,4 @@
     <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>
   </:col>
 </.table>
-<.back navigate={~p"/instances/#{@instance}/events"}>Back to events</.back>
+<.back navigate={~p"/instances/#{@instance}/events"}>Back to Queue</.back>

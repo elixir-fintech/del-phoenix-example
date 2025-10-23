@@ -1,6 +1,6 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-blue-500 text-white p-1 mr-3">Journal Event:</span>
+    <span class="bg-blue-500 text-white p-1 mr-3">Journal Event</span>
     <span class="mr-3">{@event.id}</span>
   </div>
   <:subtitle>ID: {@event.id}</:subtitle>
@@ -23,8 +23,20 @@
       :processed
     </span>
   </:item>
+  <:item title="Transaction ID">
+    <%= if assoc_loaded_and_present?(@event.transaction) do %>
+        <.link
+          href={~p"/instances/#{@instance}/transactions/#{@event.transaction.id}"}
+          class="underline"
+        >
+          {@event.transaction.id}
+        </.link>
+    <% else %>
+      <span class="text-gray-500">No associated transactions</span>
+    <% end %>
+  </:item>
   <:item title="Account address">
-    <%= if @event.account != nil do %>
+    <%= if assoc_loaded_and_present?(@event.account) do %>
       <.link
         href={~p"/instances/#{@instance}/accounts/#{@event.account.address}"}
         class="underline"
@@ -67,4 +79,4 @@
     <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>
   </:col>
 </.table>
-<.back navigate={~p"/instances/#{@instance}/events"}>Back to events</.back>
+<.back navigate={~p"/instances/#{@instance}/journal_events"}>Back to Journal Events</.back>

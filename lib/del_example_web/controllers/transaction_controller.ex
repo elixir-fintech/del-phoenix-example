@@ -3,7 +3,7 @@ defmodule DelExampleWeb.TransactionController do
 
   import DelExample.DoubleEntryLedgerWeb.Transaction
   import DelExample.DoubleEntryLedgerWeb.Account, only: [get_account!: 2]
-  import DelExample.DoubleEntryLedgerWeb.Event, only: [list_events_for_transaction: 1]
+  import DelExample.DoubleEntryLedgerWeb.JournalEvent, only: [list_events_for_transaction: 1]
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
 
   @spec index(Plug.Conn.t(), map()) :: Plug.Conn.t()

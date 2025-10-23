@@ -61,6 +61,7 @@ defmodule DelExample.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:nanoid, "~> 2.1"},
+      {:oban_web, "~> 2.11"},
       {:double_entry_ledger, path: "../double_entry_ledger"}
     ]
   end

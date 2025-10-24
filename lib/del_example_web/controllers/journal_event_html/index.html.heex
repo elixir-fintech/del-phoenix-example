@@ -8,7 +8,7 @@
     </span>
   </div>
   <:subtitle>
-    Listing journal events for instance 
+    Listing journal events for instance
     <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.id}
     </.link>
@@ -32,13 +32,13 @@
   <:col :let={event} label="Status | Transaction ID or Account address">
     <span>
       <%= if assoc_loaded_and_present?(event.transaction) do %>
-          |
-          <.link
-            href={~p"/instances/#{@instance}/transactions/#{event.transaction.id}"}
-            class="underline"
-          >
-            {event.transaction.id}
-          </.link>
+        |
+        <.link
+          href={~p"/instances/#{@instance}/transactions/#{event.transaction.id}"}
+          class="underline"
+        >
+          {event.transaction.id}
+        </.link>
       <% else %>
         <%= if assoc_loaded_and_present?(event.account) do %>
           <.link

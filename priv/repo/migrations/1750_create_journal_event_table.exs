@@ -16,26 +16,32 @@ defmodule DoubleEntryLedger.Repo.Migrations.CreateJournalEvents do
 
     create index(:journal_events, [:inserted_at], prefix: @schema_prefix)
     create index(:journal_events, [:instance_id], prefix: @schema_prefix)
-    create index(:journal_events, [
-        :instance_id,
-        "(event_map->>'action')",
-        "(event_map->>'source')",
-        "(event_map->>'source_idempk')"
-      ],
-      name: "idx_journal_events_create_transaction_triple_expr",
-      prefix: @schema_prefix,
-      include: [:id]
-    )
-    create index(:journal_events, [
-        :instance_id,
-        "(event_map->>'source')",
-        "(event_map->>'source_idempk')",
-        "(event_map->>'update_idempk')"
-      ],
-      where: "event_map->>'action' = 'update_transaction'",
-      name: "idx_journal_events_update_transaction_triple_expr",
-      prefix: @schema_prefix,
-      include: [:id]
-    )
+
+    create index(
+             :journal_events,
+             [
+               :instance_id,
+               "(event_map->>'action')",
+               "(event_map->>'source')",
+               "(event_map->>'source_idempk')"
+             ],
+             name: "idx_journal_events_create_transaction_triple_expr",
+             prefix: @schema_prefix,
+             include: [:id]
+           )
+
+    create index(
+             :journal_events,
+             [
+               :instance_id,
+               "(event_map->>'source')",
+               "(event_map->>'source_idempk')",
+               "(event_map->>'update_idempk')"
+             ],
+             where: "event_map->>'action' = 'update_transaction'",
+             name: "idx_journal_events_update_transaction_triple_expr",
+             prefix: @schema_prefix,
+             include: [:id]
+           )
   end
 end

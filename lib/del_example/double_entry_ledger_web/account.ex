@@ -8,12 +8,13 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   alias DoubleEntryLedger.Account
   alias DoubleEntryLedger.Stores.AccountStore
 
-
   def create(instance_address, params) do
     case AccountStore.create(instance_address, params, "portal_create_account") do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, Ecto.Changeset.get_embed(changeset, :payload)}
-      rest -> rest
+
+      rest ->
+        rest
     end
   end
 
@@ -21,9 +22,12 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
     case AccountStore.update(instance_address, address, params, "portal_update_account") do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, Ecto.Changeset.get_embed(changeset, :payload)}
-      rest -> rest
+
+      rest ->
+        rest
     end
   end
+
   @doc """
   Returns the list of accounts.
 

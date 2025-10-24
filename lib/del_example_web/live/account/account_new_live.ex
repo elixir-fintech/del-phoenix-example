@@ -19,12 +19,12 @@ defmodule DelExampleWeb.AccountNewLive do
 
     changeset =
       AccountData.changeset(
-          %AccountData{
-            name: "",
-            type: nil,
-            currency: :EUR,
-            allowed_negative: false
-          },
+        %AccountData{
+          name: "",
+          type: nil,
+          currency: :EUR,
+          allowed_negative: false
+        },
         %{}
       )
 
@@ -46,7 +46,9 @@ defmodule DelExampleWeb.AccountNewLive do
          socket
          |> assign(account: account)
          |> put_flash(:info, "Account #{account.address} created")
-         |> push_navigate(to: ~p"/instances/#{socket.assigns.instance.address}/accounts/#{account.address}")}
+         |> push_navigate(
+           to: ~p"/instances/#{socket.assigns.instance.address}/accounts/#{account.address}"
+         )}
 
       {:error, changeset} ->
         {:noreply,

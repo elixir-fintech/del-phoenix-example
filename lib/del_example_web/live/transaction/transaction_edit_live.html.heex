@@ -14,19 +14,9 @@
   <.input type="select" field={td[:status]} label="status" options={@states} />
   <.inputs_for :let={entry} field={td[:entries]}>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <.input
-        type="text"
-        field={entry[:account_address]}
-        label="Account Address"
-        readonly
-      />
+      <.input type="text" field={entry[:account_address]} label="Account Address" readonly />
       <.input field={entry[:amount]} label="Amount" />
-      <.input
-        type="text"
-        field={entry[:currency]}
-        label="Currency"
-        readonly
-      />
+      <.input type="text" field={entry[:currency]} label="Currency" readonly />
     </div>
   </.inputs_for>
 

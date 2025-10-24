@@ -8,7 +8,11 @@ defmodule DelExampleWeb.TransactionEditLive do
   alias DoubleEntryLedger.Event.{EntryData, TransactionData}
 
   @impl true
-  def mount(%{"instance_address" => instance_address, "transaction_id" => trx_id}, _session, socket) do
+  def mount(
+        %{"instance_address" => instance_address, "transaction_id" => trx_id},
+        _session,
+        socket
+      ) do
     instance = get_instance!(instance_address)
 
     event = get_create_event(:transaction, trx_id)
@@ -41,7 +45,6 @@ defmodule DelExampleWeb.TransactionEditLive do
      )}
   end
 
-
   @impl true
   def handle_event("validate", %{"transaction_data" => params}, socket) do
     changeset =
@@ -52,7 +55,11 @@ defmodule DelExampleWeb.TransactionEditLive do
   end
 
   @impl true
-  def handle_event("save", %{"transaction_data" => params}, %{assigns: %{instance: i, transaction: t}} = socket) do
+  def handle_event(
+        "save",
+        %{"transaction_data" => params},
+        %{assigns: %{instance: i, transaction: t}} = socket
+      ) do
     case Transaction.update(i.address, t.id, params) do
       {:ok, trx} ->
         {:noreply,

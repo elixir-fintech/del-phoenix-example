@@ -14,6 +14,7 @@ defmodule DelExampleWeb.EventApiController do
         conn
         |> put_status(:created)
         |> render(:created, event: event)
+
       {:error, _error} ->
         conn
         |> put_status(:unprocessable_entity)

@@ -35,10 +35,12 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   def get_related_events(event), do: get_related_events(event, :all)
 
   def get_related_events(%{action: action} = event, :same_type)
-    when action in @account_actions, do: get_related_events(event, :account)
+      when action in @account_actions,
+      do: get_related_events(event, :account)
 
   def get_related_events(%{action: action} = event, :same_type)
-    when action in @trx_actions, do: get_related_events(event, :transaction)
+      when action in @trx_actions,
+      do: get_related_events(event, :transaction)
 
   def get_related_events(%Event{id: id} = event, :account) do
     case event.account do
@@ -47,13 +49,15 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
           e -> e.id != id && e.event_map.action not in @trx_actions
         end)
 
-      _ -> []
+      _ ->
+        []
     end
   end
 
   def get_related_events(%Event{id: id} = event, :transaction) do
     case event.transactions do
-      [] -> []
+      [] ->
+        []
 
       [trx | _] ->
         Enum.filter(list_events_for_transaction(trx.id), fn
@@ -65,7 +69,6 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   def get_related_events(event, :all),
     do: get_related_events(event, :transaction) ++ get_related_events(event, :account)
 
-
   def get_create_event(:account, account_id), do: EventStore.get_create_account_event(account_id)
 
   def get_create_event(:transaction, transaction_id),
@@ -74,7 +77,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Event do
   @spec create_event_no_save_on_error(map()) ::
           {:ok, Account.t() | Transaction.t(), String.t()} | {:error, String.t(), Changeset.t()}
   def create_event_no_save_on_error(event_params) do
-    case EventApi.process_from_params(event_params, [on_error: :fail]) do
+    case EventApi.process_from_params(event_params, on_error: :fail) do
       {:ok, %Transaction{} = trx, event} ->
         {:ok, trx,
          "#{event.event_map.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}

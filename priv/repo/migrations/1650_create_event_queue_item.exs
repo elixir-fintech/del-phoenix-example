@@ -27,10 +27,16 @@ defmodule DoubleEntryLedger.Repo.Migrations.CreateEventQueueItem do
     create index(:event_queue_items, :processing_completed_at, prefix: @schema_prefix)
     create index(:event_queue_items, :status, prefix: @schema_prefix)
     create index(:event_queue_items, :next_retry_after, prefix: @schema_prefix)
-    create index(:event_queue_items, [:next_retry_after, :status], prefix: @schema_prefix, name: "idx_event_queue_items_next_retry_status")
+
+    create index(:event_queue_items, [:next_retry_after, :status],
+             prefix: @schema_prefix,
+             name: "idx_event_queue_items_next_retry_status"
+           )
+
     create index(:event_queue_items, [:status, :inserted_at],
-      prefix: @schema_prefix,
-      where: "status = 'dead_letter'",
-      name: "idx_event_queue_items_dead_letter_queue")
+             prefix: @schema_prefix,
+             where: "status = 'dead_letter'",
+             name: "idx_event_queue_items_dead_letter_queue"
+           )
   end
 end

@@ -1,9 +1,8 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-red-500 text-white p-1 mr-3">Account:</span>
+    <span class="bg-red-500 text-white p-1 mr-3">Account</span>
     <span>{@account.address}</span>
   </div>
-  <:subtitle>ID: {@account.id}</:subtitle>
 
   <:actions>
     <.link
@@ -46,7 +45,7 @@
 <div class="h-1 bg-slate-200 my-5"></div>
 
 <.header>
-  Events
+  <span class="bg-slate-100 text-blue-500 p-1 mr-3">Journal Events</span>
 </.header>
 
 <.table
@@ -54,7 +53,7 @@
   rows={@events}
   row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
 >
-  <:col :let={event} label="Event ID">{event.id}</:col>
+  <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.event_map.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>

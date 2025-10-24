@@ -1,9 +1,8 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-green-500 text-white p-1 mr-3">Instance:</span>
+    <span class="bg-green-500 text-white p-1 mr-3">Instance</span>
     <span>{@instance.address}</span>
   </div>
-  <:subtitle>ID: {@instance.id}</:subtitle>
   <:actions>
     <.link href={~p"/instances/#{@instance}/edit"} class="mr-1">
       <.button class="bg-slate-300 hover:bg-green-500">

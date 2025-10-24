@@ -1,10 +1,14 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-slate-800 text-white p-1 mr-3">Listing Transactions: </span>
-    <span class="bg-green-500 text-white p-1">{@instance.address}</span>
+    <span class="bg-slate-800 text-white p-1 mr-3">Transactions</span>
+    <span class="bg-slate-100 text-green-500 p-1">
+    <.link href={~p"/instances/#{@instance}"}>
+      {@instance.address}
+    </.link>
+    </span>
   </div>
   <:subtitle>
-    Listing Transactions for instance ID
+    Listing transactions for instance 
     <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.id}
     </.link>

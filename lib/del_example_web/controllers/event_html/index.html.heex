@@ -1,12 +1,16 @@
 <.header>
   <div class="flex items-center">
     <span class="bg-purple-500 text-white p-1 mr-3">Queue</span>
-    <span class="bg-green-500 text-white p-1 mr-3">{@instance.address}</span>
+    <span class="bg-slate-100 text-green-500 p-1 mr-3">
+      <.link href={~p"/instances/#{@instance}"}>
+        {@instance.address}
+      </.link>
+    </span>
   </div>
   <:subtitle>
     Listing Queue for instance 
     <.link href={~p"/instances/#{@instance}"} class="underline">
-      {@instance.address}
+      {@instance.id}
     </.link>
   </:subtitle>
   <:actions>
@@ -43,7 +47,7 @@
       <% else %>
         <%= if event.account != nil do %>
           <.link
-            href={~p"/instances/#{@instance}/accounts/#{event.account.id}"}
+            href={~p"/instances/#{@instance}/accounts/#{event.account.address}"}
             class="underline text-red-900"
           >
             {event.account.address}

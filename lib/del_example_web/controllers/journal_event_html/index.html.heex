@@ -1,12 +1,16 @@
 <.header>
   <div class="flex items-center">
     <span class="bg-blue-500 text-white p-1 mr-3">Journal Events</span>
-    <span class="bg-green-500 text-white p-1 mr-3">{@instance.address}</span>
+    <span class="bg-slate-100 text-green-500 p-1 mr-3">
+      <.link href={~p"/instances/#{@instance}"}>
+        {@instance.address}
+      </.link>
+    </span>
   </div>
   <:subtitle>
-    Listing all journal events for instance 
+    Listing journal events for instance 
     <.link href={~p"/instances/#{@instance}"} class="underline">
-      {@instance.address}
+      {@instance.id}
     </.link>
   </:subtitle>
   <:actions>
@@ -26,9 +30,6 @@
 >
   <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="Status | Transaction ID or Account address">
-    <span class={status_color(:processed)}>
-      :processed
-    </span>
     <span>
       <%= if assoc_loaded_and_present?(event.transaction) do %>
           |

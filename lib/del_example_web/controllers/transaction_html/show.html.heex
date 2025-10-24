@@ -1,9 +1,8 @@
 <.header>
   <div class="flex items-center">
-    <span class="bg-slate-800 text-white p-1 mr-3">Transaction: </span>
+    <span class="bg-slate-800 text-white p-1 mr-3">Transaction</span>
     <span>{@transaction.id}</span>
   </div>
-  <:subtitle>This is a transaction record from your database.</:subtitle>
   <:actions>
     <%= if @transaction.status == :pending do %>
       <.link navigate={
@@ -63,11 +62,6 @@
   row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
 >
   <:col :let={event} label="Event ID">{event.id}</:col>
-  <:col :let={event} label="status">
-    <span class={status_color(:processed)}>
-      :processed
-    </span>
-  </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.event_map.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>

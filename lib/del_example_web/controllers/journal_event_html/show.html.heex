@@ -3,7 +3,6 @@
     <span class="bg-blue-500 text-white p-1 mr-3">Journal Event</span>
     <span class="mr-3">{@event.id}</span>
   </div>
-  <:subtitle>ID: {@event.id}</:subtitle>
 </.header>
 
 <.list>
@@ -17,11 +16,6 @@
   </:item>
   <:item title="EventMap">
     <pre class="text-sm">{Jason.encode!(@event.event_map, pretty: true)}</pre>
-  </:item>
-  <:item title="Status">
-    <span class={status_color(:processed)}>
-      :processed
-    </span>
   </:item>
   <:item title="Transaction ID">
     <%= if assoc_loaded_and_present?(@event.transaction) do %>
@@ -55,26 +49,18 @@
 <div class="h-1 bg-slate-200 my-5"></div>
 
 <.header>
-  Related Events
+  <span class="bg-slate-100 text-blue-500 p-1 mr-3">Related Journal Events</span>
 </.header>
 
 <.table
   id="events"
   rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
 >
-  <:col :let={event} label="Event ID">{event.id}</:col>
-  <:col :let={event} label="status">
-    <span class={status_color(event.event_queue_item.status)}>
-      {event.event_queue_item.status}
-    </span>
-  </:col>
+  <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.event_map.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-  <:col :let={event} label="Processed at">
-    {format_datetime(event.event_queue_item.processing_completed_at)}
-  </:col>
   <:col :let={event} label="event_map">
     <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>
   </:col>

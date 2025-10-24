@@ -19,12 +19,12 @@
   </:item>
   <:item title="Transaction ID">
     <%= if assoc_loaded_and_present?(@event.transaction) do %>
-        <.link
-          href={~p"/instances/#{@instance}/transactions/#{@event.transaction.id}"}
-          class="underline"
-        >
-          {@event.transaction.id}
-        </.link>
+      <.link
+        href={~p"/instances/#{@instance}/transactions/#{@event.transaction.id}"}
+        class="underline"
+      >
+        {@event.transaction.id}
+      </.link>
     <% else %>
       <span class="text-gray-500">No associated transactions</span>
     <% end %>

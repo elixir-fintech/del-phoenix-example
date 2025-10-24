@@ -2,13 +2,13 @@
   <div class="flex items-center">
     <span class="bg-slate-800 text-white p-1 mr-3">Transactions</span>
     <span class="bg-slate-100 text-green-500 p-1">
-    <.link href={~p"/instances/#{@instance}"}>
-      {@instance.address}
-    </.link>
+      <.link href={~p"/instances/#{@instance}"}>
+        {@instance.address}
+      </.link>
     </span>
   </div>
   <:subtitle>
-    Listing transactions for instance 
+    Listing transactions for instance
     <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.id}
     </.link>

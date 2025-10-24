@@ -26,10 +26,7 @@
   <:item title="Transaction ID">
     <%= if @event.transactions != [] do %>
       <%= for transaction <- @event.transactions do %>
-        <.link
-          href={~p"/instances/#{@instance}/transactions/#{transaction.id}"}
-          class="underline"
-        >
+        <.link href={~p"/instances/#{@instance}/transactions/#{transaction.id}"} class="underline">
           {transaction.id}
         </.link>
       <% end %>

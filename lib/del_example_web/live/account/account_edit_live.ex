@@ -6,16 +6,20 @@ defmodule DelExampleWeb.AccountEditLive do
   alias DelExample.DoubleEntryLedgerWeb.Account, as: DelAccount
 
   @impl true
-  def mount(%{"instance_address" => instance_address, "account_address" => account_address}, _session, socket) do
+  def mount(
+        %{"instance_address" => instance_address, "account_address" => account_address},
+        _session,
+        socket
+      ) do
     instance = get_instance!(instance_address)
     account = DelAccount.get_account!(instance.address, account_address)
 
     changeset =
       AccountData.update_changeset(
-          %AccountData{
-            name: account.name,
-            description: account.description
-          },
+        %AccountData{
+          name: account.name,
+          description: account.description
+        },
         %{}
       )
 

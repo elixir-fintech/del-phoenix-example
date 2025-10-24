@@ -3,5 +3,4 @@ defmodule DelExampleWeb.AccountHTML do
   import DelExampleWeb.ViewHelpers
 
   embed_templates "account_html/*"
-
 end

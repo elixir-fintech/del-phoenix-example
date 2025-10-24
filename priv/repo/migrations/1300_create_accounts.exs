@@ -17,8 +17,12 @@ defmodule DoubleEntryLedger.Repo.Migrations.CreateAccounts do
       add :pending, :map, default: %{}
       add :available, :integer, null: false, default: 0
       add :allowed_negative, :boolean, default: true
-      add :instance_id, references(:instances, on_delete: :restrict, type: :binary_id), null: false
-      add :lock_version, :integer, default: 1 # Optimistic locking
+
+      add :instance_id, references(:instances, on_delete: :restrict, type: :binary_id),
+        null: false
+
+      # Optimistic locking
+      add :lock_version, :integer, default: 1
 
       timestamps(type: :utc_datetime_usec)
     end
@@ -26,15 +30,16 @@ defmodule DoubleEntryLedger.Repo.Migrations.CreateAccounts do
     # This regex allows for the address to start with _. This is to allow for system accounts that
     # are distinct from user generated accounts.
     create constraint(:accounts, :address_format_chk,
-      prefix: @schema_prefix,
-      check: "address ~ '^_?[A-Za-z0-9]+(:[A-Za-z0-9_]+)*$'"
-    )
-    create index(:accounts, [:instance_id], prefix: @schema_prefix)
-    create unique_index(:accounts, [:instance_id, :address],
-      prefix: @schema_prefix,
-      name: "unique_address_per_instance",
-      include: [:id]
-    )
+             prefix: @schema_prefix,
+             check: "address ~ '^_?[A-Za-z0-9]+(:[A-Za-z0-9_]+)*$'"
+           )
 
+    create index(:accounts, [:instance_id], prefix: @schema_prefix)
+
+    create unique_index(:accounts, [:instance_id, :address],
+             prefix: @schema_prefix,
+             name: "unique_address_per_instance",
+             include: [:id]
+           )
   end
 end

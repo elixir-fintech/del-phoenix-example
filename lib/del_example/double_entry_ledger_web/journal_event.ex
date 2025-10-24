@@ -28,10 +28,12 @@ defmodule DelExample.DoubleEntryLedgerWeb.JournalEvent do
   def get_related_events(event), do: get_related_events(event, :all)
 
   def get_related_events(%{action: action} = event, :same_type)
-    when action in @account_actions, do: get_related_events(event, :account)
+      when action in @account_actions,
+      do: get_related_events(event, :account)
 
   def get_related_events(%{action: action} = event, :same_type)
-    when action in @trx_actions, do: get_related_events(event, :transaction)
+      when action in @trx_actions,
+      do: get_related_events(event, :transaction)
 
   def get_related_events(%JournalEvent{id: id} = event, :account) do
     case event.account do
@@ -40,7 +42,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.JournalEvent do
           e -> e.id != id && e.event_map.action not in @trx_actions
         end)
 
-      _ -> []
+      _ ->
+        []
     end
   end
 
@@ -51,7 +54,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.JournalEvent do
           e -> e.id != id && e.event_map.action not in @account_actions
         end)
 
-      _ -> []
+      _ ->
+        []
     end
   end
 

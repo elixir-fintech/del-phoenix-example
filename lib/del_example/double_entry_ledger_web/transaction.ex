@@ -14,7 +14,9 @@ defmodule DelExample.DoubleEntryLedgerWeb.Transaction do
     |> case do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, Ecto.Changeset.get_embed(changeset, :payload)}
-      rest -> rest
+
+      rest ->
+        rest
     end
   end
 
@@ -29,7 +31,9 @@ defmodule DelExample.DoubleEntryLedgerWeb.Transaction do
     |> case do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, Ecto.Changeset.get_embed(changeset, :payload)}
-      rest -> rest
+
+      rest ->
+        rest
     end
   end
 

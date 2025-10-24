@@ -14,15 +14,19 @@ defmodule DelExampleWeb.TransactionNewLive do
                              |> Enum.sort()
 
   @impl true
-  def mount(%{"instance_address" => instance_address, "account_address" => address}, _session, socket) do
+  def mount(
+        %{"instance_address" => instance_address, "account_address" => address},
+        _session,
+        socket
+      ) do
     instance = get_instance!(instance_address)
     account = get_account!(instance_address, address)
 
-    changeset = get_changeset([
+    changeset =
+      get_changeset([
         %EntryData{account_address: account.address, amount: nil, currency: account.currency},
         %EntryData{account_address: nil, amount: nil, currency: nil}
-      ]
-    )
+      ])
 
     {:ok, create_assigns(socket, instance, changeset)}
   end
@@ -30,11 +34,11 @@ defmodule DelExampleWeb.TransactionNewLive do
   def mount(%{"instance_address" => instance_address}, _session, socket) do
     instance = get_instance!(instance_address)
 
-    changeset = get_changeset([
+    changeset =
+      get_changeset([
         %EntryData{account_address: nil, amount: nil, currency: nil},
         %EntryData{account_address: nil, amount: nil, currency: nil}
-      ]
-    )
+      ])
 
     {:ok, create_assigns(socket, instance, changeset)}
   end
@@ -50,12 +54,12 @@ defmodule DelExampleWeb.TransactionNewLive do
   end
 
   def create_assigns(socket, instance, changeset) do
-     assign(socket,
-       instance: instance,
-       accounts: get_accounts(instance.id),
-       options: get_form_options(instance.id),
-       changeset: changeset
-     )
+    assign(socket,
+      instance: instance,
+      accounts: get_accounts(instance.id),
+      options: get_form_options(instance.id),
+      changeset: changeset
+    )
   end
 
   @impl true
@@ -73,7 +77,6 @@ defmodule DelExampleWeb.TransactionNewLive do
 
   @impl true
   def handle_event("validate", %{"transaction_data" => params}, socket) do
-
     changeset =
       %TransactionData{}
       |> TransactionData.changeset(params)
@@ -82,7 +85,11 @@ defmodule DelExampleWeb.TransactionNewLive do
   end
 
   @impl true
-  def handle_event("account_changed", %{"transaction_data" => params}, %{assigns: %{changeset: cs, accounts: accs}} = socket) do
+  def handle_event(
+        "account_changed",
+        %{"transaction_data" => params},
+        %{assigns: %{changeset: cs, accounts: accs}} = socket
+      ) do
     entries = get_in(params, ["entries"])
 
     stored_entries =
@@ -103,7 +110,11 @@ defmodule DelExampleWeb.TransactionNewLive do
   end
 
   @impl true
-  def handle_event("save", %{"transaction_data" => params}, %{assigns: %{instance: instance}} = socket) do
+  def handle_event(
+        "save",
+        %{"transaction_data" => params},
+        %{assigns: %{instance: instance}} = socket
+      ) do
     case Transaction.create(instance.address, params) do
       {:ok, trx} ->
         {:noreply,
@@ -159,7 +170,9 @@ defmodule DelExampleWeb.TransactionNewLive do
   defp get_form_options(instance_id) do
     %{
       accounts:
-        Enum.map(get_accounts(instance_id), fn acc -> ["#{acc.address}  (#{acc.type})": acc.address] end)
+        Enum.map(get_accounts(instance_id), fn acc ->
+          ["#{acc.address}  (#{acc.type})": acc.address]
+        end)
         |> List.flatten(),
       states: Enum.reject(DoubleEntryLedger.Transaction.states(), &(&1 == :archived)),
       currencies: @currency_dropdown_options

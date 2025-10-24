@@ -10,29 +10,29 @@
   <.error :if={@changeset.action}>
     Oops, something went wrong! Please check the errors below.
   </.error>
-    <.input field={ad[:name]} label="Account Name" />
-    <.input field={ad[:address]} label="Account Address" />
-    <.input
-      type="select"
-      field={ad[:type]}
-      label="Account Type"
-      options={@options[:account_types]}
-      prompt="Select account type"
-    />
-    <.input field={ad[:description]} label="Description" />
-    <.input
-      type="select"
-      field={ad[:currency]}
-      label="Currency"
-      options={@options[:currencies]}
-      prompt="Select account currency"
-    />
-    <.input
-      type="select"
-      field={ad[:allowed_negative]}
-      label="Allow Negative Balance"
-      options={@options[:boolean]}
-    />
+  <.input field={ad[:name]} label="Account Name" />
+  <.input field={ad[:address]} label="Account Address" />
+  <.input
+    type="select"
+    field={ad[:type]}
+    label="Account Type"
+    options={@options[:account_types]}
+    prompt="Select account type"
+  />
+  <.input field={ad[:description]} label="Description" />
+  <.input
+    type="select"
+    field={ad[:currency]}
+    label="Currency"
+    options={@options[:currencies]}
+    prompt="Select account currency"
+  />
+  <.input
+    type="select"
+    field={ad[:allowed_negative]}
+    label="Allow Negative Balance"
+    options={@options[:boolean]}
+  />
 
   <:actions>
     <.button class="bg-slate-400 hover:bg-blue-500">Create Account</.button>

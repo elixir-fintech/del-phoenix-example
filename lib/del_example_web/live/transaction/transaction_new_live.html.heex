@@ -11,27 +11,32 @@
   <.error :if={@changeset.action}>
     Oops, something went wrong! Please check the errors below.
   </.error>
-    <.input type="select" field={td[:status]} label="Transaction status" options={@options[:states]} />
-    <.inputs_for :let={entry} field={td[:entries]}>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <.input
-          type="select"
-          phx-change="account_changed"
-          field={entry[:account_address]}
-          label="Account Address"
-          options={@options[:accounts]}
-          prompt="Select an account"
-        />
-        <.input field={entry[:amount]} label="Amount" />
-        <.input
-          type="select"
-          field={entry[:currency]}
-          label="Currency"
-          options={@options[:currencies]}
-          prompt="Select a currency"
-        />
-      </div>
-    </.inputs_for>
+  <.input
+    type="select"
+    field={td[:status]}
+    label="Transaction status"
+    options={@options[:states]}
+  />
+  <.inputs_for :let={entry} field={td[:entries]}>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <.input
+        type="select"
+        phx-change="account_changed"
+        field={entry[:account_address]}
+        label="Account Address"
+        options={@options[:accounts]}
+        prompt="Select an account"
+      />
+      <.input field={entry[:amount]} label="Amount" />
+      <.input
+        type="select"
+        field={entry[:currency]}
+        label="Currency"
+        options={@options[:currencies]}
+        prompt="Select a currency"
+      />
+    </div>
+  </.inputs_for>
 
   <div class="mt-2">
     <button type="button" phx-click="add-entry">Add Entry</button>

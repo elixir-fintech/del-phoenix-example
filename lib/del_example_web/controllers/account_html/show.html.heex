@@ -5,21 +5,18 @@
   </div>
 
   <:actions>
-    <.link
-      href={~p"/instances/#{@instance}/accounts/#{@account}/edit"}
-      class="mr-1"
-    >
+    <.link href={~p"/instances/#{@instance}/accounts/#{@account}/edit"} class="mr-1">
       <.button class="bg-slate-300 hover:bg-red-500">
         <.icon name="hero-pencil-solid" />
       </.button>
     </.link>
-    <.link href={~p"/instances/#{@instance}/transactions/new?account_address=#{@account}"} class="mr-1">
+    <.link
+      href={~p"/instances/#{@instance}/transactions/new?account_address=#{@account}"}
+      class="mr-1"
+    >
       <.button class="bg-slate-400 hover:bg-blue-500">+ Trx</.button>
     </.link>
-    <.link
-      href={~p"/instances/#{@instance}/accounts/#{@account}/transactions"}
-      class="underline"
-    >
+    <.link href={~p"/instances/#{@instance}/accounts/#{@account}/transactions"} class="underline">
       Trx
     </.link>
   </:actions>
@@ -72,10 +69,7 @@
   <:col :let={bhe} label="Pending">{balance_format(bhe.pending, @account.currency)}</:col>
   <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
   <:col :let={bhe} label="Trx ID">
-    <.link
-      href={~p"/instances/#{@instance}/transactions/#{bhe.transaction_id}"}
-      class="underline"
-    >
+    <.link href={~p"/instances/#{@instance}/transactions/#{bhe.transaction_id}"} class="underline">
       {bhe.transaction_id}
     </.link>
   </:col>

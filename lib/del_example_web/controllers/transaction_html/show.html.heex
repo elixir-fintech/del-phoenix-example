@@ -5,9 +5,7 @@
   </div>
   <:actions>
     <%= if @transaction.status == :pending do %>
-      <.link navigate={
-        ~p"/instances/#{@instance}/transactions/#{@transaction}/edit"
-      }>
+      <.link navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}>
         <.button class="bg-slate-300 hover:bg-green-500">
           <.icon name="hero-pencil-solid" />
         </.button>
@@ -37,10 +35,7 @@
 
 <.table id="entries" rows={@transaction.entries}>
   <:col :let={e} label="Account address">
-    <.link
-      href={~p"/instances/#{@instance}/accounts/#{e.account}"}
-      class="underline"
-    >
+    <.link href={~p"/instances/#{@instance}/accounts/#{e.account}"} class="underline">
       {e.account.address}
     </.link>
   </:col>

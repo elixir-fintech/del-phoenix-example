@@ -8,7 +8,10 @@ defmodule DoubleEntryLedger.Repo.Migrations.CreateEntries do
       add :id, :binary_id, primary_key: true
       add :type, :string, null: false
       add :value, :map
-      add :transaction_id, references(:transactions, on_delete: :nothing, type: :binary_id), null: false
+
+      add :transaction_id, references(:transactions, on_delete: :nothing, type: :binary_id),
+        null: false
+
       add :account_id, references(:accounts, on_delete: :nothing, type: :binary_id), null: false
 
       timestamps(type: :utc_datetime_usec)

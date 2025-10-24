@@ -19,7 +19,7 @@ defmodule DelExampleWeb.Router do
   scope "/", DelExampleWeb do
     pipe_through :browser
 
-    oban_dashboard "/oban"
+    oban_dashboard("/oban")
 
     get "/", InstanceController, :index
 

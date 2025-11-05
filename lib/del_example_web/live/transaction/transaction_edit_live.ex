@@ -2,10 +2,10 @@ defmodule DelExampleWeb.TransactionEditLive do
   use DelExampleWeb, :live_view
 
   alias DoubleEntryLedger.{Repo, Entry}
-  import DelExample.DoubleEntryLedgerWeb.Event
+  import DelExample.DoubleEntryLedgerWeb.Command
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
   alias DelExample.DoubleEntryLedgerWeb.Transaction
-  alias DoubleEntryLedger.Event.{EntryData, TransactionData}
+  alias DoubleEntryLedger.Command.{EntryData, TransactionData}
 
   @impl true
   def mount(
@@ -15,8 +15,7 @@ defmodule DelExampleWeb.TransactionEditLive do
       ) do
     instance = get_instance!(instance_address)
 
-    event = get_create_event(:transaction, trx_id)
-    [trx | _] = event.transactions
+    %{transaction: trx } = get_create_event(:transaction, trx_id)
 
     trx = Repo.preload(trx, entries: :account)
 

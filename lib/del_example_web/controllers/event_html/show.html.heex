@@ -19,46 +19,23 @@
     <pre class="text-sm">{Jason.encode!(@event.event_map, pretty: true)}</pre>
   </:item>
   <:item title="Status">
-    <span class={status_color(@event.event_queue_item.status)}>
-      {@event.event_queue_item.status}
+    <span class={status_color(@event.command_queue_item.status)}>
+      {@event.command_queue_item.status}
     </span>
   </:item>
-  <:item title="Transaction ID">
-    <%= if @event.transactions != [] do %>
-      <%= for transaction <- @event.transactions do %>
-        <.link href={~p"/instances/#{@instance}/transactions/#{transaction.id}"} class="underline">
-          {transaction.id}
-        </.link>
-      <% end %>
-    <% else %>
-      <span class="text-gray-500">No associated transactions</span>
-    <% end %>
-  </:item>
-  <:item title="Account address">
-    <%= if @event.account != nil do %>
-      <.link
-        href={~p"/instances/#{@instance}/accounts/#{@event.account.address}"}
-        class="underline"
-      >
-        {@event.account.address}
-      </.link>
-    <% else %>
-      <span class="text-gray-500">No associated account</span>
-    <% end %>
-  </:item>
   <:item title="Processed at">
-    {format_datetime(@event.event_queue_item.processing_completed_at)}
+    {format_datetime(@event.command_queue_item.processing_completed_at)}
   </:item>
   <:item title="Errors">
-    <%= if @event.event_queue_item.errors == [] do %>
+    <%= if @event.command_queue_item.errors == [] do %>
       <span class="text-green-500">No errors</span>
     <% else %>
-      <pre class="text-xs overflow-auto max-h-96 text-red-500">{Jason.encode!(@event.event_queue_item.errors, pretty: true)}</pre>
+      <pre class="text-xs overflow-auto max-h-96 text-red-500">{Jason.encode!(@event.command_queue_item.errors, pretty: true)}</pre>
     <% end %>
   </:item>
-  <:item title="OCC Retry">{@event.event_queue_item.occ_retry_count}</:item>
-  <:item title="Retries">{@event.event_queue_item.retry_count}</:item>
-  <:item title="Retry after">{format_datetime(@event.event_queue_item.next_retry_after)}</:item>
+  <:item title="OCC Retry">{@event.command_queue_item.occ_retry_count}</:item>
+  <:item title="Retries">{@event.command_queue_item.retry_count}</:item>
+  <:item title="Retry after">{format_datetime(@event.command_queue_item.next_retry_after)}</:item>
   <:item title="Created at">{format_datetime(@event.inserted_at)}</:item>
   <:item title="Updated at">{format_datetime(@event.updated_at)}</:item>
 </.list>
@@ -74,17 +51,17 @@
   rows={@events}
   row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
 >
-  <:col :let={event} label="Event ID">{event.id}</:col>
+  <:col :let={event} label="Command ID">{event.id}</:col>
   <:col :let={event} label="status">
-    <span class={status_color(event.event_queue_item.status)}>
-      {event.event_queue_item.status}
+    <span class={status_color(event.command_queue_item.status)}>
+      {event.command_queue_item.status}
     </span>
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{"#{event.event_map.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">
-    {format_datetime(event.event_queue_item.processing_completed_at)}
+    {format_datetime(event.command_queue_item.processing_completed_at)}
   </:col>
   <:col :let={event} label="event_map">
     <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>

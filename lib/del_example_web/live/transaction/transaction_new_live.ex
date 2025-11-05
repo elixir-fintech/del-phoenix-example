@@ -3,7 +3,7 @@ defmodule DelExampleWeb.TransactionNewLive do
 
   import DelExample.DoubleEntryLedgerWeb.Account, only: [list_accounts: 1, get_account!: 2]
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
-  alias DoubleEntryLedger.Event.{EntryData, TransactionData}
+  alias DoubleEntryLedger.Command.{EntryData, TransactionData}
   alias DelExample.DoubleEntryLedgerWeb.Transaction
 
   @currency_dropdown_options Money.Currency.all()

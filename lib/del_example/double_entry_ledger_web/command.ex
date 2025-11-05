@@ -7,13 +7,13 @@ defmodule DelExample.DoubleEntryLedgerWeb.Command do
   alias DoubleEntryLedger.Command.{TransactionEventMap, TransactionData, EntryData}
   alias DoubleEntryLedger.{Account, Transaction}
   alias DoubleEntryLedger.Stores.{CommandStore, JournalEventStore}
-  alias DoubleEntryLedger.Apis.EventApi
+  alias DoubleEntryLedger.Apis.CommandApi
 
   # @account_actions [:create_account, :update_account]
   # @trx_actions [:create_transaction, :update_transaction]
 
   def create(event_params) do
-    EventApi.create_from_params(event_params)
+    CommandApi.create_from_params(event_params)
   end
 
   def list_events(instance_id) do
@@ -38,7 +38,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Command do
   @spec create_event_no_save_on_error(map()) ::
           {:ok, Account.t() | Transaction.t(), String.t()} | {:error, String.t(), Changeset.t()}
   def create_event_no_save_on_error(event_params) do
-    case EventApi.process_from_params(event_params, on_error: :fail) do
+    case CommandApi.process_from_params(event_params, on_error: :fail) do
       {:ok, %Transaction{} = trx, event} ->
         {:ok, trx,
          "#{event.event_map.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}

@@ -46,8 +46,8 @@ defmodule DelExampleWeb.Router do
   scope "/api", DelExampleWeb do
     pipe_through :api
 
-    post "/events", EventApiController, :create
-    get "/:instance_address/events/:id", EventApiController, :show
+    post "/events", CommandApiController, :create
+    get "/:instance_address/events/:id", CommandApiController, :show
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

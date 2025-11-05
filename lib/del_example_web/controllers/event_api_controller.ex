@@ -1,4 +1,4 @@
-defmodule DelExampleWeb.EventApiController do
+defmodule DelExampleWeb.CommandApiController do
   use DelExampleWeb, :controller
 
   import DelExample.DoubleEntryLedgerWeb.Command

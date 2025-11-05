@@ -3,7 +3,7 @@ defmodule DelExampleWeb.AccountNewLive do
 
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
   alias DoubleEntryLedger.Account
-  alias DoubleEntryLedger.Event.AccountData
+  alias DoubleEntryLedger.Command.AccountData
   alias DelExample.DoubleEntryLedgerWeb.Account, as: DelAccount
 
   @currency_dropdown_options Money.Currency.all()

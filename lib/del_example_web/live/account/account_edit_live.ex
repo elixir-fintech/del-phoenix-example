@@ -2,7 +2,7 @@ defmodule DelExampleWeb.AccountEditLive do
   use DelExampleWeb, :live_view
 
   import DelExample.DoubleEntryLedgerWeb.Instance, only: [get_instance!: 1]
-  alias DoubleEntryLedger.Event.AccountData
+  alias DoubleEntryLedger.Command.AccountData
   alias DelExample.DoubleEntryLedgerWeb.Account, as: DelAccount
 
   @impl true

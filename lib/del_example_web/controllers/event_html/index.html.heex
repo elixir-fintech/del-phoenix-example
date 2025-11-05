@@ -30,39 +30,15 @@
 >
   <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="Status | Transaction ID or Account address">
-    <span class={status_color(event.event_queue_item.status)}>
-      {event.event_queue_item.status}
-    </span>
-    <span>
-      <%= if event.transactions != [] do %>
-        <%= for transaction <- event.transactions do %>
-          |
-          <.link
-            href={~p"/instances/#{@instance}/transactions/#{transaction.id}"}
-            class="underline"
-          >
-            {transaction.id}
-          </.link>
-        <% end %>
-      <% else %>
-        <%= if event.account != nil do %>
-          <.link
-            href={~p"/instances/#{@instance}/accounts/#{event.account.address}"}
-            class="underline text-red-900"
-          >
-            {event.account.address}
-          </.link>
-        <% else %>
-          <span class="text-gray-500">No associated record</span>
-        <% end %>
-      <% end %>
+    <span class={status_color(event.command_queue_item.status)}>
+      {event.command_queue_item.status}
     </span>
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
   <:col :let={event} label="action">{event.event_map.action}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">
-    {format_datetime(event.event_queue_item.processing_completed_at)}
+    {format_datetime(event.command_queue_item.processing_completed_at)}
   </:col>
 </.table>
 

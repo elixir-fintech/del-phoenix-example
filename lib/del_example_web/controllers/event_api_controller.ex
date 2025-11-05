@@ -1,11 +1,11 @@
 defmodule DelExampleWeb.EventApiController do
   use DelExampleWeb, :controller
 
-  import DelExample.DoubleEntryLedgerWeb.Event
+  import DelExample.DoubleEntryLedgerWeb.Command
 
   def show(conn, %{"instance_address" => instance_address, "id" => id}) do
     event = get_event(instance_address, id)
-    render(conn, :show, event: event, related_events: get_related_events(event, :same_type))
+    render(conn, :show, event: event, related_events: [])
   end
 
   def create(conn, event_params) do

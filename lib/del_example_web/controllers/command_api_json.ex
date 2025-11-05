@@ -1,4 +1,4 @@
-defmodule DelExampleWeb.EventApiJSON do
+defmodule DelExampleWeb.CommandApiJSON do
   def show(%{event: event, related_events: related_events}) do
     %{event: event, related_events: related_events}
   end

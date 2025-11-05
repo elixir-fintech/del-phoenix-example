@@ -36,7 +36,7 @@ defmodule DelExampleWeb.Router do
         resources "/transactions", TransactionController, only: [:index, :show]
       end
 
-      resources "/events", EventController, only: [:index, :show]
+      resources "/events", CommandController, only: [:index, :show]
       resources "/journal_events", JournalEventController, only: [:index, :show]
       resources "/transactions", TransactionController, only: [:index, :show]
     end

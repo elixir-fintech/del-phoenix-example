@@ -49,7 +49,7 @@
 <.table
   id="events"
   rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/commands/#{&1}")}
 >
   <:col :let={event} label="Command ID">{event.id}</:col>
   <:col :let={event} label="status">
@@ -67,4 +67,4 @@
     <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>
   </:col>
 </.table>
-<.back navigate={~p"/instances/#{@instance}/events"}>Back to Queue</.back>
+<.back navigate={~p"/instances/#{@instance}/commands"}>Back to Queue</.back>

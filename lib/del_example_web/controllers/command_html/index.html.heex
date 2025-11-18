@@ -26,7 +26,7 @@
 <.table
   id="events"
   rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/events/#{&1}")}
+  row_click={&JS.navigate(~p"/instances/#{@instance}/commands/#{&1}")}
 >
   <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="Status | Transaction ID or Account address">

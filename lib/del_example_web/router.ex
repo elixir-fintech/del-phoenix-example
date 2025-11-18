@@ -36,7 +36,7 @@ defmodule DelExampleWeb.Router do
         resources "/transactions", TransactionController, only: [:index, :show]
       end
 
-      resources "/events", CommandController, only: [:index, :show]
+      resources "/commands", CommandController, only: [:index, :show]
       resources "/journal_events", JournalEventController, only: [:index, :show]
       resources "/transactions", TransactionController, only: [:index, :show]
     end
@@ -46,8 +46,8 @@ defmodule DelExampleWeb.Router do
   scope "/api", DelExampleWeb do
     pipe_through :api
 
-    post "/events", CommandApiController, :create
-    get "/:instance_address/events/:id", CommandApiController, :show
+    post "/commands", CommandApiController, :create
+    get "/:instance_address/commands/:id", CommandApiController, :show
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

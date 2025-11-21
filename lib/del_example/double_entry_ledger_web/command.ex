@@ -4,7 +4,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Command do
   """
 
   alias Ecto.Changeset
-  alias DoubleEntryLedger.Command.{TransactionEventMap, TransactionData, EntryData}
+  alias DoubleEntryLedger.Command.{TransactionCommandMap, TransactionData, EntryData}
   alias DoubleEntryLedger.{Account, Transaction}
   alias DoubleEntryLedger.Stores.{CommandStore, JournalEventStore}
   alias DoubleEntryLedger.Apis.CommandApi
@@ -32,37 +32,37 @@ defmodule DelExample.DoubleEntryLedgerWeb.Command do
     CommandStore.get_by_instance_address_and_id(instance_address, id)
   end
 
-  def get_create_event(:transaction, transaction_id),
+  def get_create_command(:transaction, transaction_id),
     do: JournalEventStore.get_create_transaction_journal_event(transaction_id)
 
-  @spec create_event_no_save_on_error(map()) ::
+  @spec create_command_no_save_on_error(map()) ::
           {:ok, Account.t() | Transaction.t(), String.t()} | {:error, String.t(), Changeset.t()}
-  def create_event_no_save_on_error(event_params) do
+  def create_command_no_save_on_error(event_params) do
     case CommandApi.process_from_params(event_params, on_error: :fail) do
       {:ok, %Transaction{} = trx, event} ->
         {:ok, trx,
-         "#{event.event_map.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
+         "#{event.command_map.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
 
-      {:error, %Changeset{} = event_map_changeset} ->
-        errors = get_all_changeset_errors(event_map_changeset)
+      {:error, %Changeset{} = command_map_changeset} ->
+        errors = get_all_changeset_errors(command_map_changeset)
 
         {:error, "Error processing event. Command was not saved. #{Jason.encode!(errors)}",
-         event_map_changeset}
+         command_map_changeset}
 
       {:error, error} ->
-        {:error, "Unexpected error processing event: #{inspect(error)}", event_map_changeset()}
+        {:error, "Unexpected error processing event: #{inspect(error)}", command_map_changeset()}
     end
   end
 
-  @spec event_map_changeset() :: Ecto.Changeset.t()
-  def event_map_changeset() do
-    %TransactionEventMap{
+  @spec command_map_changeset() :: Ecto.Changeset.t()
+  def command_map_changeset() do
+    %TransactionCommandMap{
       payload: %TransactionData{
         status: :posted,
         entries: [%EntryData{currency: :EUR}, %EntryData{currency: :EUR}]
       }
     }
-    |> TransactionEventMap.changeset(%{})
+    |> TransactionCommandMap.changeset(%{})
   end
 
   def get_all_changeset_errors(changeset) do

@@ -7,15 +7,15 @@
 
 <.list>
   <:item title="ID">{@event.id}</:item>
-  <:item title="Action">{@event.event_map.action}</:item>
-  <:item title="Source">{@event.event_map.source}</:item>
+  <:item title="Action">{@event.command_map.action}</:item>
+  <:item title="Source">{@event.command_map.source}</:item>
   <:item title="Instance ID">
     <.link href={~p"/instances/#{@instance}"} class="underline">
       {@instance.address}
     </.link>
   </:item>
-  <:item title="EventMap">
-    <pre class="text-sm">{Jason.encode!(@event.event_map, pretty: true)}</pre>
+  <:item title="CommandMap">
+    <pre class="text-sm">{Jason.encode!(@event.command_map, pretty: true)}</pre>
   </:item>
   <:item title="Transaction ID">
     <%= if assoc_loaded_and_present?(@event.transaction) do %>
@@ -59,10 +59,10 @@
 >
   <:col :let={event} label="ID">{event.id}</:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
-  <:col :let={event} label="action">{"#{event.event_map.action}"}</:col>
+  <:col :let={event} label="action">{"#{event.command_map.action}"}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-  <:col :let={event} label="event_map">
-    <pre class="text-xs">{Jason.encode!(event.event_map, pretty: true)}</pre>
+  <:col :let={event} label="command_map">
+    <pre class="text-xs">{Jason.encode!(event.command_map, pretty: true)}</pre>
   </:col>
 </.table>
 <.back navigate={~p"/instances/#{@instance}/journal_events"}>Back to Journal Events</.back>

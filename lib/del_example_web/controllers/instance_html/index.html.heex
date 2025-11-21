@@ -1,31 +1,115 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-green-500 text-white p-1 mr-3">Listing Instances</span>
-  </div>
-  <:actions>
-    <.link href={~p"/instances/new"}>
-      <.button class="bg-slate-400 hover:bg-green-500">+ Instance</.button>
-    </.link>
-  </:actions>
-</.header>
-
-<.table id="instances" rows={@instances} row_click={&JS.navigate(~p"/instances/#{&1}")}>
-  <:col :let={instance} label="Name">{instance.address}</:col>
-  <:col :let={instance} label="ID">{instance.id}</:col>
-  <:col :let={instance} label="Description">{instance.description}</:col>
-  <:col :let={instance} label="Inserted At">{format_datetime(instance.inserted_at)}</:col>
-  <:col :let={instance} label="Updated At">{format_datetime(instance.updated_at)}</:col>
-  <:action :let={instance}>
-    <div class="sr-only">
-      <.link navigate={~p"/instances/#{instance}"}>Show</.link>
+<div class="space-y-10">
+  <section class="rounded-3xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-500 p-8 text-white shadow-2xl shadow-emerald-900/30">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-sm uppercase tracking-[0.35em] text-emerald-100/80">Instances</p>
+        <h1 class="mt-3 text-3xl font-semibold tracking-tight lg:text-4xl">Ledger environments overview</h1>
+        <p class="mt-2 max-w-xl text-sm text-emerald-50/90">
+          Quickly browse every instance, inspect their metadata, and jump into details or management actions.
+        </p>
+      </div>
+      <.link href={~p"/instances/new"}>
+        <.button class="rounded-full bg-white px-8 py-3 text-base font-semibold text-emerald-700 shadow-lg shadow-emerald-600/30 transition hover:bg-emerald-50">
+          <.icon name="hero-plus-circle" class="mr-2 h-5 w-5" /> New Instance
+        </.button>
+      </.link>
     </div>
-    <.link navigate={~p"/instances/#{instance}/edit"}>
-      <.icon name="hero-pencil-solid" />
-    </.link>
-  </:action>
-  <:action :let={instance}>
-    <.link href={~p"/instances/#{instance}"} method="delete" data-confirm="Are you sure?">
-      <.icon name="hero-trash-solid" />
-    </.link>
-  </:action>
-</.table>
+
+    <dl class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-2xl border border-white/20 bg-white/10/50 p-4 backdrop-blur">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100/80">Total Instances</dt>
+        <dd class="mt-2 text-3xl font-semibold">{length(@instances)}</dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100/80">Newest Created</dt>
+        <dd class="mt-2 text-lg font-semibold">
+          <%= case Enum.max_by(@instances, & &1.inserted_at, fn -> nil end) do %>
+            <% nil -> %>
+              &mdash;
+            <% latest -> %>
+              {format_datetime(latest.inserted_at)}
+          <% end %>
+        </dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100/80">Last Updated</dt>
+        <dd class="mt-2 text-lg font-semibold">
+          <%= case Enum.max_by(@instances, & &1.updated_at, fn -> nil end) do %>
+            <% nil -> %>
+              &mdash;
+            <% latest -> %>
+              {format_datetime(latest.updated_at)}
+          <% end %>
+        </dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100/80">Active State</dt>
+        <dd class="mt-2 text-sm">
+          Keep entities in sync and monitor their accounts without leaving this view.
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="space-y-6">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 class="text-xl font-semibold text-slate-900">All instances</h2>
+        <p class="text-sm text-slate-500">Tap a row to open the detail page or use the actions to edit and delete.</p>
+      </div>
+    </div>
+
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/60">
+      <%= if Enum.empty?(@instances) do %>
+        <div class="p-10 text-center text-slate-500">
+          <p class="text-base font-semibold">No instances yet.</p>
+          <p class="mt-2 text-sm">Create your first instance to start configuring ledgers.</p>
+        </div>
+      <% else %>
+        <.table
+          id="instances"
+          rows={@instances}
+          row_click={&JS.navigate(~p"/instances/#{&1}")}
+          class="rounded-3xl"
+        >
+          <:col :let={instance} label="Address">
+            <div>
+              <p class="font-semibold text-slate-900">{instance.address}</p>
+              <p class="text-xs text-slate-500">ID: {instance.id}</p>
+            </div>
+          </:col>
+          <:col :let={instance} label="Description">
+            {if instance.description in [nil, ""], do: "--", else: instance.description}
+          </:col>
+          <:col :let={instance} label="Created">{format_datetime(instance.inserted_at)}</:col>
+          <:col :let={instance} label="Updated">{format_datetime(instance.updated_at)}</:col>
+          <:action :let={instance}>
+            <div class="sr-only">
+              <.link navigate={~p"/instances/#{instance}"}>Show</.link>
+            </div>
+            <.link navigate={~p"/instances/#{instance}/edit"} class="text-slate-500 hover:text-slate-900">
+              <.icon name="hero-pencil-square" />
+            </.link>
+          </:action>
+          <:action :let={instance}>
+            <.link
+              href={~p"/instances/#{instance}"}
+              method="delete"
+              data-confirm="Are you sure?"
+              class="text-red-500 hover:text-red-600"
+            >
+              <.icon name="hero-trash-solid" />
+            </.link>
+          </:action>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Need to manage a specific instance? Jump into the detailed view.</p>
+    <.back navigate={~p"/instances/new"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Create new instance
+    </.back>
+  </div>
+</div>

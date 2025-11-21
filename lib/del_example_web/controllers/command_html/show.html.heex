@@ -1,70 +1,117 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-purple-500 text-white p-1 mr-3">Queue Item</span>
-    <span class="mr-3">{@event.id}</span>
+<div class="space-y-8">
+  <section class="rounded-3xl bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 p-8 text-white shadow-2xl shadow-purple-900/40">
+    <p class="text-xs uppercase tracking-[0.35em] text-white/70">Queue item</p>
+    <h1 class="mt-3 text-3xl font-semibold tracking-tight break-all">{@event.id}</h1>
+    <p class="mt-2 text-sm text-white/80">
+      Action {String.upcase(to_string(@event.command_map.action))} from {@event.command_map.source}
+    </p>
+    <div class="mt-6 flex flex-wrap items-center gap-4">
+      <span class={["rounded-full px-4 py-1 text-xs font-semibold uppercase", status_color(@event.command_queue_item.status)]}>
+        {@event.command_queue_item.status}
+      </span>
+      <.link href={~p"/instances/#{@instance}"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+        View instance
+      </.link>
+    </div>
+  </section>
+
+  <section class="grid gap-6 lg:grid-cols-2">
+    <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/60">
+      <h2 class="text-lg font-semibold text-slate-900">Metadata</h2>
+      <dl class="mt-4 space-y-3 text-sm text-slate-600">
+        <div>
+          <dt class="text-xs uppercase tracking-wide text-slate-400">Instance</dt>
+          <dd class="mt-1">
+            <.link href={~p"/instances/#{@instance}"} class="font-semibold text-indigo-600 hover:text-indigo-500">
+              {@instance.address}
+            </.link>
+          </dd>
+        </div>
+        <div class="grid gap-3 md:grid-cols-2">
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">Inserted</dt>
+            <dd class="mt-1">{format_datetime(@event.inserted_at)}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">Updated</dt>
+            <dd class="mt-1">{format_datetime(@event.updated_at)}</dd>
+          </div>
+        </div>
+        <div>
+          <dt class="text-xs uppercase tracking-wide text-slate-400">Processed at</dt>
+          <dd class="mt-1">{format_datetime(@event.command_queue_item.processing_completed_at)}</dd>
+        </div>
+        <div class="grid gap-3 md:grid-cols-3">
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">OCC retry</dt>
+            <dd class="mt-1 font-semibold">{@event.command_queue_item.occ_retry_count}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">Retries</dt>
+            <dd class="mt-1 font-semibold">{@event.command_queue_item.retry_count}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wide text-slate-400">Retry after</dt>
+            <dd class="mt-1">{format_datetime(@event.command_queue_item.next_retry_after)}</dd>
+          </div>
+        </div>
+      </dl>
+    </div>
+    <div class="rounded-3xl border border-slate-200 bg-slate-900 p-6 text-white shadow-lg shadow-slate-900/40">
+      <h2 class="text-lg font-semibold">Command payload</h2>
+      <pre class="mt-4 rounded-2xl bg-black/30 p-4 text-xs text-emerald-200 whitespace-pre-wrap break-words">{Jason.encode!(@event.command_map, pretty: true)}</pre>
+      <div class="mt-4">
+        <p class="text-xs uppercase tracking-wide text-white/70">Errors</p>
+        <%= if @event.command_queue_item.errors == [] do %>
+          <p class="mt-1 text-sm text-emerald-300">No errors</p>
+        <% else %>
+          <pre class="mt-2 rounded-2xl bg-red-500/20 p-4 text-xs text-red-100 whitespace-pre-wrap break-words">
+{Jason.encode!(@event.command_queue_item.errors, pretty: true)}
+          </pre>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900">Related events</h2>
+      <p class="text-sm text-slate-500">Explore neighboring queue items.</p>
+    </div>
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+      <%= if Enum.empty?(@events) do %>
+        <div class="p-10 text-center text-slate-500">No additional events.</div>
+      <% else %>
+        <.table
+          id="events"
+          rows={@events}
+          row_click={&JS.navigate(~p"/instances/#{@instance}/commands/#{&1}")}
+          class="rounded-3xl"
+        >
+          <:col :let={event} label="Command ID">{event.id}</:col>
+          <:col :let={event} label="Status">
+            <span class={status_color(event.command_queue_item.status)}>
+              {event.command_queue_item.status}
+            </span>
+          </:col>
+          <:col :let={event} label="Source">{event_source_format(event)}</:col>
+          <:col :let={event} label="Action">{event.command_map.action}</:col>
+          <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+          <:col :let={event} label="Processed at">
+            {format_datetime(event.command_queue_item.processing_completed_at)}
+          </:col>
+          <:col :let={event} label="Command map">
+            <pre class="text-xs whitespace-pre-wrap break-words">{Jason.encode!(event.command_map, pretty: true)}</pre>
+          </:col>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Return to the queue.</p>
+    <.back navigate={~p"/instances/#{@instance}/commands"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Back to queue
+    </.back>
   </div>
-  <:subtitle>ID: {@event.id}</:subtitle>
-</.header>
-
-<.list>
-  <:item title="ID">{@event.id}</:item>
-  <:item title="Action">{@event.command_map.action}</:item>
-  <:item title="Source">{@event.command_map.source}</:item>
-  <:item title="Instance ID">
-    <.link href={~p"/instances/#{@instance}"} class="underline">
-      {@instance.address}
-    </.link>
-  </:item>
-  <:item title="CommandMap">
-    <pre class="text-sm">{Jason.encode!(@event.command_map, pretty: true)}</pre>
-  </:item>
-  <:item title="Status">
-    <span class={status_color(@event.command_queue_item.status)}>
-      {@event.command_queue_item.status}
-    </span>
-  </:item>
-  <:item title="Processed at">
-    {format_datetime(@event.command_queue_item.processing_completed_at)}
-  </:item>
-  <:item title="Errors">
-    <%= if @event.command_queue_item.errors == [] do %>
-      <span class="text-green-500">No errors</span>
-    <% else %>
-      <pre class="text-xs overflow-auto max-h-96 text-red-500">{Jason.encode!(@event.command_queue_item.errors, pretty: true)}</pre>
-    <% end %>
-  </:item>
-  <:item title="OCC Retry">{@event.command_queue_item.occ_retry_count}</:item>
-  <:item title="Retries">{@event.command_queue_item.retry_count}</:item>
-  <:item title="Retry after">{format_datetime(@event.command_queue_item.next_retry_after)}</:item>
-  <:item title="Created at">{format_datetime(@event.inserted_at)}</:item>
-  <:item title="Updated at">{format_datetime(@event.updated_at)}</:item>
-</.list>
-
-<div class="h-1 bg-slate-200 my-5"></div>
-
-<.header>
-  Related Events
-</.header>
-
-<.table
-  id="events"
-  rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/commands/#{&1}")}
->
-  <:col :let={event} label="Command ID">{event.id}</:col>
-  <:col :let={event} label="status">
-    <span class={status_color(event.command_queue_item.status)}>
-      {event.command_queue_item.status}
-    </span>
-  </:col>
-  <:col :let={event} label="source">{event_source_format(event)}</:col>
-  <:col :let={event} label="action">{"#{event.command_map.action}"}</:col>
-  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-  <:col :let={event} label="Processed at">
-    {format_datetime(event.command_queue_item.processing_completed_at)}
-  </:col>
-  <:col :let={event} label="command_map">
-    <pre class="text-xs">{Jason.encode!(event.command_map, pretty: true)}</pre>
-  </:col>
-</.table>
-<.back navigate={~p"/instances/#{@instance}/commands"}>Back to Queue</.back>
+</div>

@@ -1,67 +1,101 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-slate-800 text-white p-1 mr-3">Transaction</span>
-    <span>{@transaction.id}</span>
+<div class="space-y-8">
+  <section class="rounded-3xl bg-gradient-to-r from-blue-900 via-violet-800 to-indigo-700 p-8 text-white shadow-2xl shadow-blue-900/40">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-white/60">Transaction</p>
+        <h1 class="mt-3 text-3xl font-semibold tracking-tight break-all">{@transaction.id}</h1>
+        <p class="mt-2 text-sm text-white/80">Status: {@transaction.status}</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <.link href={~p"/instances/#{@instance}"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+          View instance
+        </.link>
+        <%= if @transaction.status == :pending do %>
+          <.link navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}>
+            <.button class="rounded-full bg-white px-5 text-blue-700 shadow-sm hover:bg-blue-50">
+              <.icon name="hero-pencil-square" class="mr-2 h-4 w-4" /> Edit pending
+            </.button>
+          </.link>
+        <% end %>
+      </div>
+    </div>
+
+    <dl class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/70">Posted at</dt>
+        <dd class="mt-2 text-sm">{format_datetime(@transaction.posted_at)}</dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/70">Inserted</dt>
+        <dd class="mt-2 text-sm">{format_datetime(@transaction.inserted_at)}</dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/70">Updated</dt>
+        <dd class="mt-2 text-sm">{format_datetime(@transaction.updated_at)}</dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/70">Instance</dt>
+        <dd class="mt-2">
+          <.link href={~p"/instances/#{@instance}"} class="font-semibold text-white hover:text-emerald-200">
+            {@instance.address}
+          </.link>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900">Entries</h2>
+      <p class="text-sm text-slate-500">Each debit or credit composing this transaction.</p>
+    </div>
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+      <%= if Enum.empty?(@transaction.entries) do %>
+        <div class="p-10 text-center text-slate-500">No entries found.</div>
+      <% else %>
+        <.table id="entries" rows={@transaction.entries} class="rounded-3xl">
+          <:col :let={e} label="Account">
+            <.link href={~p"/instances/#{@instance}/accounts/#{e.account}"} class="underline">
+              {e.account.address}
+            </.link>
+          </:col>
+          <:col :let={e} label="Value">{e.value}</:col>
+          <:col :let={e} label="Type">{e.type}</:col>
+          <:col :let={e} label="Inserted At">{format_datetime(e.inserted_at)}</:col>
+          <:col :let={e} label="Updated At">{format_datetime(e.updated_at)}</:col>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900">Events</h2>
+      <p class="text-sm text-slate-500">Related journal events and commands.</p>
+    </div>
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+      <%= if Enum.empty?(@events) do %>
+        <div class="p-10 text-center text-slate-500">No events recorded.</div>
+      <% else %>
+        <.table
+          id="events"
+          rows={@events}
+          row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
+          class="rounded-3xl"
+        >
+          <:col :let={event} label="Command ID">{event.id}</:col>
+          <:col :let={event} label="Source">{event_source_format(event)}</:col>
+          <:col :let={event} label="Action">{event.command_map.action}</:col>
+          <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Head back to the transaction list for {@instance.address}.</p>
+    <.back navigate={~p"/instances/#{@instance}/transactions"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Back to transactions
+    </.back>
   </div>
-  <:actions>
-    <%= if @transaction.status == :pending do %>
-      <.link navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}>
-        <.button class="bg-slate-300 hover:bg-green-500">
-          <.icon name="hero-pencil-solid" />
-        </.button>
-      </.link>
-    <% end %>
-  </:actions>
-</.header>
-
-<.list>
-  <:item title="ID">{@transaction.id}</:item>
-  <:item title="Status">{@transaction.status}</:item>
-  <:item title="Instance id">
-    <.link href={~p"/instances/#{@instance}"} class="underline">
-      {@instance.address}
-    </.link>
-  </:item>
-  <:item title="Posted at">{format_datetime(@transaction.posted_at)}</:item>
-  <:item title="Inserted At">{format_datetime(@transaction.inserted_at)}</:item>
-  <:item title="Updated At">{format_datetime(@transaction.updated_at)}</:item>
-</.list>
-
-<div class="h-1 bg-slate-200 my-5"></div>
-
-<.header>
-  Entries
-</.header>
-
-<.table id="entries" rows={@transaction.entries}>
-  <:col :let={e} label="Account address">
-    <.link href={~p"/instances/#{@instance}/accounts/#{e.account}"} class="underline">
-      {e.account.address}
-    </.link>
-  </:col>
-  <:col :let={e} label="Value">{e.value}</:col>
-  <:col :let={e} label="Type">{e.type}</:col>
-  <:col :let={e} label="Inserted At">{format_datetime(e.inserted_at)}</:col>
-  <:col :let={e} label="Updated At">{format_datetime(e.updated_at)}</:col>
-</.table>
-
-<div class="h-1 bg-slate-200 my-5"></div>
-
-<.header>
-  Events
-</.header>
-
-<.table
-  id="events"
-  rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
->
-  <:col :let={event} label="Command ID">{event.id}</:col>
-  <:col :let={event} label="source">{event_source_format(event)}</:col>
-  <:col :let={event} label="action">{"#{event.command_map.action}"}</:col>
-  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-</.table>
-
-<.back navigate={~p"/instances/#{@instance}/transactions"}>
-  Back to transactions
-</.back>
+</div>

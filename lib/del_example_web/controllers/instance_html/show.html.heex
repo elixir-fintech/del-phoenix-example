@@ -1,96 +1,154 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-green-500 text-white p-1 mr-3">Instance</span>
-    <span>{@instance.address}</span>
+<div class="space-y-10">
+  <section class="rounded-3xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-500 p-6 text-white shadow-2xl shadow-emerald-900/30">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-sm uppercase tracking-widest text-emerald-100/80">Instance</p>
+        <div class="mt-2 flex flex-col gap-2">
+          <h1 class="text-2xl font-semibold tracking-tight lg:text-3xl">{@instance.address}</h1>
+          <p class="text-sm text-emerald-50">{@instance.description || "No description provided"}</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <.link href={~p"/instances/#{@instance}/edit"}>
+          <.button class="rounded-full border border-white/30 bg-white/10 px-5 shadow-none hover:bg-white/20">
+            <.icon name="hero-pencil-square" class="mr-2 h-4 w-4" /> Edit
+          </.button>
+        </.link>
+        <.link href={~p"/instances/#{@instance}/transactions/new"}>
+          <.button class="rounded-full bg-white px-5 font-semibold text-emerald-700 shadow-lg shadow-emerald-500/30 hover:bg-emerald-50">
+            <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> New Transaction
+          </.button>
+        </.link>
+        <.link href={~p"/instances/#{@instance}/transactions"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+          Transactions
+        </.link>
+        <.link href={~p"/instances/#{@instance}/commands"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+          Queue
+        </.link>
+        <.link href={~p"/instances/#{@instance}/journal_events"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+          Journal Events
+        </.link>
+      </div>
+    </div>
+
+    <dl class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100/80">ID</dt>
+        <dd class="mt-2 text-lg font-semibold">{@instance.id}</dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100/80">Created</dt>
+        <dd class="mt-2 text-lg font-semibold">{format_datetime(@instance.inserted_at)}</dd>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100/80">Updated</dt>
+        <dd class="mt-2 text-lg font-semibold">{format_datetime(@instance.updated_at)}</dd>
+      </div>
+      <div class="rounded-2xl border border-emerald-200/40 bg-emerald-500/20 p-4">
+        <dt class="text-xs uppercase tracking-wide text-emerald-100">Accounts</dt>
+        <dd class="mt-2 text-3xl font-semibold">{length(@accounts)}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="space-y-4">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Associated Accounts</h2>
+        <p class="text-sm text-slate-500">Manage and explore accounts connected to this instance.</p>
+      </div>
+      <.link href={~p"/instances/#{@instance}/accounts/new"}>
+        <.button class="rounded-full bg-emerald-600 px-6 text-white shadow-sm shadow-emerald-600/40 hover:bg-emerald-500">
+          <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> Add Account
+        </.button>
+      </.link>
+    </div>
+
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
+      <%= if Enum.empty?(@accounts) do %>
+        <div class="p-10 text-center text-slate-500">
+          <p class="text-base font-medium">No accounts yet.</p>
+          <p class="mt-2 text-sm">Create your first account to begin tracking balances.</p>
+        </div>
+      <% else %>
+        <.table
+          id="accounts"
+          rows={@accounts}
+          row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1.address}")}
+          class="rounded-3xl"
+        >
+          <:col :let={account} label="Name">
+            <div>
+              <p class="font-medium text-slate-900">{account.address}</p>
+              <p class="text-xs uppercase tracking-wide text-slate-400">{account.type}</p>
+            </div>
+          </:col>
+          <:col :let={account} label="Currency">{account.currency}</:col>
+          <:col :let={account} label="Available">
+            <span class="font-medium text-emerald-600">{to_money(account.available, account.currency)}</span>
+          </:col>
+          <:col :let={account} label="Posted">
+            <span class="font-medium text-slate-700">{balance_format(account.posted, account.currency)}</span>
+          </:col>
+          <:col :let={account} label="Pending">
+            <span class="font-medium text-amber-600">{balance_format(account.pending, account.currency)}</span>
+          </:col>
+
+          <:action :let={account}>
+            <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"} class="text-slate-500 hover:text-slate-900">
+              <.icon name="hero-pencil-square" />
+            </.link>
+          </:action>
+          <:action :let={account}>
+            <.link
+              href={~p"/instances/#{@instance}/accounts/#{account}"}
+              method="delete"
+              data-confirm="Are you sure?"
+              class="text-red-500 hover:text-red-600"
+            >
+              <.icon name="hero-trash-solid" />
+            </.link>
+          </:action>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900">Debit/Credit Sums per Currency</h2>
+      <p class="text-sm text-slate-500">Quick snapshot of debits, credits, and balances grouped by currency.</p>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <%= if map_size(@sums) == 0 do %>
+        <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center text-slate-500">
+          No currency activity yet.
+        </div>
+      <% else %>
+        <%= for {currency, totals} <- @sums do %>
+          <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-semibold text-slate-500">Currency</p>
+              <span class="rounded-full bg-slate-900/10 px-3 py-1 text-xs font-bold text-slate-700">{currency}</span>
+            </div>
+            <dl class="mt-4 space-y-2 text-sm text-slate-600">
+              <%= for {label, value} <- totals do %>
+                <div class="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
+                  <dt class="capitalize">{label}</dt>
+                  <dd class="font-semibold text-slate-900">{value}</dd>
+                </div>
+              <% end %>
+            </dl>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="mt-10 flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Return to the complete list of instances.</p>
+    <.back navigate={~p"/instances/"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Back to instances
+    </.back>
   </div>
-  <:actions>
-    <.link href={~p"/instances/#{@instance}/edit"} class="mr-1">
-      <.button class="bg-slate-300 hover:bg-green-500">
-        <.icon name="hero-pencil-solid" />
-      </.button>
-    </.link>
-    <.link href={~p"/instances/#{@instance}/transactions/new"} class="mr-1">
-      <.button class="bg-slate-400 hover:bg-blue-500">+ Trx</.button>
-    </.link>
-    <.link href={~p"/instances/#{@instance}/transactions"} class="mr-1 underline">
-      <span>Trx</span>
-    </.link>
-    |
-    <.link href={~p"/instances/#{@instance}/commands"} class="underline">
-      <span>Queue</span>
-    </.link>
-    |
-    <.link href={~p"/instances/#{@instance}/journal_events"} class="underline">
-      <span>Journal Events</span>
-    </.link>
-  </:actions>
-</.header>
-
-<.list>
-  <:item title="ID">
-    {@instance.id}
-  </:item>
-  <:item title="Address">
-    {@instance.address}
-  </:item>
-  <:item title="Description">
-    {@instance.description}
-  </:item>
-  <:item title="Inserted At">
-    {format_datetime(@instance.inserted_at)}
-  </:item>
-  <:item title="Updated At">
-    {format_datetime(@instance.updated_at)}
-  </:item>
-</.list>
-
-<div class="h-1 bg-slate-200 my-5"></div>
-
-<.header>
-  Associated Accounts
-  <:actions>
-    <.link href={~p"/instances/#{@instance}/accounts/new"}>
-      <.button class="bg-slate-400 hover:bg-red-500">+ Account</.button>
-    </.link>
-  </:actions>
-</.header>
-
-<.table
-  id="accounts"
-  rows={@accounts}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1.address}")}
->
-  <:col :let={account} label="Name">{account.address}</:col>
-  <:col :let={account} label="Type">{account.type}</:col>
-  <:col :let={account} label="Currency">{account.currency}</:col>
-  <:col :let={account} label="Available">{to_money(account.available, account.currency)}</:col>
-  <:col :let={account} label="Posted">{balance_format(account.posted, account.currency)}</:col>
-  <:col :let={account} label="Pending">{balance_format(account.pending, account.currency)}</:col>
-
-  <:action :let={account}>
-    <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}>
-      <.icon name="hero-pencil-solid" />
-    </.link>
-  </:action>
-  <:action :let={account}>
-    <.link
-      href={~p"/instances/#{@instance}/accounts/#{account}"}
-      method="delete"
-      data-confirm="Are you sure?"
-    >
-      <.icon name="hero-trash-solid" />
-    </.link>
-  </:action>
-</.table>
-
-<div class="h-1 bg-slate-200 my-5"></div>
-
-<.header>
-  Debit/Credit Sums per Currency
-</.header>
-
-<div>
-  <pre class="text-xs">{Jason.encode!(@sums, pretty: true)}</pre>
 </div>
-
-<.back navigate={~p"/instances/"}>Back to instances</.back>

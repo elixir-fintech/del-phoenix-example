@@ -1,11 +1,23 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-green-500 text-white p-1 mr-3">Edit Instance</span>
-    <span>{@instance.address}</span>
+<div class="space-y-8">
+  <section class="rounded-3xl bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-500 p-8 text-white shadow-2xl shadow-emerald-900/30">
+    <p class="text-sm uppercase tracking-[0.3em] text-emerald-100/80">Edit Instance</p>
+    <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <h1 class="text-3xl font-semibold tracking-tight">{@instance.address}</h1>
+        <p class="text-sm text-emerald-50/90">ID: {@instance.id}</p>
+      </div>
+      <div class="text-sm text-emerald-50/80">
+        Last updated {format_datetime(@instance.updated_at)}
+      </div>
+    </div>
+  </section>
+
+  <.instance_form changeset={@changeset} action={~p"/instances/#{@instance}"} />
+
+  <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Return to the list of instances.</p>
+    <.back navigate={~p"/instances"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Back to instances
+    </.back>
   </div>
-  <:subtitle>ID: {@instance.id}</:subtitle>
-</.header>
-
-<.instance_form changeset={@changeset} action={~p"/instances/#{@instance}"} />
-
-<.back navigate={~p"/instances"}>Back to instances</.back>
+</div>

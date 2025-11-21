@@ -1,48 +1,66 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-slate-800 text-white p-1 mr-3">Transactions</span>
-    <span class="bg-slate-100 text-red-500 p-1">
-      <.link href={~p"/instances/#{@instance}/accounts/#{@account}"}>
-        {@account.address}
+<div class="space-y-8">
+  <section class="rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 p-8 text-white shadow-2xl shadow-blue-900/40">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-white/70">Account transactions</p>
+        <h1 class="mt-3 text-3xl font-semibold tracking-tight">{@account.address}</h1>
+        <p class="mt-2 text-sm text-white/80">
+          Filtered transaction history scoped to this specific account.
+        </p>
+      </div>
+      <.link href={~p"/instances/#{@instance}/accounts/#{@account}"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+        View account
       </.link>
-    </span>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900">Transactions</h2>
+      <p class="text-sm text-slate-500">Click a row to inspect the transaction details.</p>
+    </div>
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+      <%= if Enum.empty?(@transactions) do %>
+        <div class="p-10 text-center text-slate-500">No transactions for this account.</div>
+      <% else %>
+        <.table
+          id="transactions"
+          rows={@transactions}
+          row_click={&JS.navigate(~p"/instances/#{@instance}/transactions/#{extract_trx(&1)}")}
+          class="rounded-3xl"
+        >
+          <:col :let={{transaction, _, _, _}} label="ID">{transaction.id}</:col>
+          <:col :let={{transaction, _, _, _}} label="Status">
+            <span class={status_color(transaction.status)}>{transaction.status}</span>
+          </:col>
+          <:col :let={{transaction, _, _, _}} label="Inserted at">
+            {format_datetime(transaction.inserted_at)}
+          </:col>
+          <:col :let={{transaction, _, _, _}} label="Posted at">
+            {format_datetime(transaction.posted_at)}
+          </:col>
+          <:col :let={{_, account, _, _}} label="Acc Name">{account.name}</:col>
+          <:col :let={{_, _, entry, _}} label="Currency">{entry.value.currency}</:col>
+          <:col :let={{_, _, entry, _}} label="Amount">{entry.value}</:col>
+          <:col :let={{_, _, entry, _}} label="Type">{entry.type}</:col>
+          <:col :let={{_, _, _, balance_history}} label="Available">
+            {to_money(balance_history.available, @account.currency)}
+          </:col>
+          <:col :let={{_, _, _, balance_history}} label="Posted">
+            {balance_format(balance_history.posted, @account.currency)}
+          </:col>
+          <:col :let={{_, _, _, balance_history}} label="Pending">
+            {balance_format(balance_history.pending, @account.currency)}
+          </:col>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Return to account {@account.address}.</p>
+    <.back navigate={~p"/instances/#{@instance}/accounts/#{@account}"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Back to account
+    </.back>
   </div>
-  <:subtitle>
-    Listing transactions for account
-    <.link href={~p"/instances/#{@instance}/accounts/#{@account}"} class="underline">
-      {@account.id}
-    </.link>
-  </:subtitle>
-</.header>
-
-<.table
-  id="transactions"
-  rows={@transactions}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/transactions/#{extract_trx(&1)}")}
->
-  <:col :let={{transaction, _, _, _}} label="ID">{transaction.id}</:col>
-  <:col :let={{transaction, _, _, _}} label="status">
-    <span class={status_color(transaction.status)}>{transaction.status}</span>
-  </:col>
-  <:col :let={{transaction, _, _, _}} label="Inserted at">
-    {format_datetime(transaction.inserted_at)}
-  </:col>
-  <:col :let={{transaction, _, _, _}} label="Posted at">
-    {format_datetime(transaction.posted_at)}
-  </:col>
-  <:col :let={{_, account, _, _}} label="Acc Name">{account.name}</:col>
-  <:col :let={{_, _, entry, _}} label="Currency">{entry.value.currency}</:col>
-  <:col :let={{_, _, entry, _}} label="Amount">{entry.value}</:col>
-  <:col :let={{_, _, entry, _}} label="type">{entry.type}</:col>
-  <:col :let={{_, _, _, balance_history}} label="available">
-    {to_money(balance_history.available, @account.currency)}
-  </:col>
-  <:col :let={{_, _, _, balance_history}} label="posted">
-    {balance_format(balance_history.posted, @account.currency)}
-  </:col>
-  <:col :let={{_, _, _, balance_history}} label="pending">
-    {balance_format(balance_history.pending, @account.currency)}
-  </:col>
-</.table>
-
-<.back navigate={~p"/instances/#{@instance}/accounts/#{@account}"}>Back to Account</.back>
+</div>

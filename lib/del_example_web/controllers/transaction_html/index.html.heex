@@ -1,32 +1,84 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-slate-800 text-white p-1 mr-3">Transactions</span>
-    <span class="bg-slate-100 text-green-500 p-1">
-      <.link href={~p"/instances/#{@instance}"}>
-        {@instance.address}
+<div class="space-y-8">
+  <section class="rounded-3xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 p-8 text-white shadow-2xl shadow-blue-900/30">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-white/60">Transactions</p>
+        <h1 class="mt-3 text-3xl font-semibold tracking-tight">Activity for {@instance.address}</h1>
+        <p class="mt-2 text-sm text-white/80">
+          Browse every transaction flowing through this instance and inspect their posting status.
+        </p>
+      </div>
+      <.link href={~p"/instances/#{@instance}"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+        View instance
       </.link>
-    </span>
+    </div>
+    <dl class="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/60">Total</dt>
+        <dd class="mt-2 text-3xl font-semibold">{length(@transactions)}</dd>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/60">Pending</dt>
+        <dd class="mt-2 text-xl font-semibold">
+          {Enum.count(@transactions, &(&1.status == :pending))}
+        </dd>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/60">Latest posted</dt>
+        <dd class="mt-2 text-sm">
+          <%= case Enum.max_by(@transactions, &(&1.posted_at || &1.inserted_at), fn -> nil end) do %>
+            <% nil -> %>
+              &mdash;
+            <% trx -> %>
+              {format_datetime(trx.posted_at || trx.inserted_at)}
+          <% end %>
+        </dd>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <dt class="text-xs uppercase tracking-wide text-white/60">Last updated</dt>
+        <dd class="mt-2 text-sm">
+          <%= case Enum.max_by(@transactions, & &1.updated_at, fn -> nil end) do %>
+            <% nil -> %>
+              &mdash;
+            <% trx -> %>
+              {format_datetime(trx.updated_at)}
+          <% end %>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900">Transaction feed</h2>
+      <p class="text-sm text-slate-500">Select a transaction to drill into entries and events.</p>
+    </div>
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+      <%= if Enum.empty?(@transactions) do %>
+        <div class="p-10 text-center text-slate-500">No transactions yet.</div>
+      <% else %>
+        <.table
+          id="transactions"
+          rows={@transactions}
+          row_click={&JS.navigate(~p"/instances/#{@instance}/transactions/#{&1}")}
+          class="rounded-3xl"
+        >
+          <:col :let={transaction} label="ID">{transaction.id}</:col>
+          <:col :let={transaction} label="Status">
+            <span class={status_color(transaction.status)}>{transaction.status}</span>
+          </:col>
+          <:col :let={transaction} label="Posted at">{format_datetime(transaction.posted_at)}</:col>
+          <:col :let={transaction} label="Inserted at">{format_datetime(transaction.inserted_at)}</:col>
+          <:col :let={transaction} label="Updated at">{format_datetime(transaction.updated_at)}</:col>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Return to {@instance.address} overview.</p>
+    <.back navigate={~p"/instances/#{@instance}"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Back to instance
+    </.back>
   </div>
-  <:subtitle>
-    Listing transactions for instance
-    <.link href={~p"/instances/#{@instance}"} class="underline">
-      {@instance.id}
-    </.link>
-  </:subtitle>
-</.header>
-
-<.table
-  id="transactions"
-  rows={@transactions}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/transactions/#{&1}")}
->
-  <:col :let={transaction} label="ID">{transaction.id}</:col>
-  <:col :let={transaction} label="status">
-    <span class={status_color(transaction.status)}>{transaction.status}</span>
-  </:col>
-  <:col :let={transaction} label="Posted at">{format_datetime(transaction.posted_at)}</:col>
-  <:col :let={transaction} label="Inserted at">{format_datetime(transaction.inserted_at)}</:col>
-  <:col :let={transaction} label="Updated at">{format_datetime(transaction.updated_at)}</:col>
-</.table>
-
-<.back navigate={~p"/instances/#{@instance}"}>Back to instance</.back>
+</div>

@@ -1,45 +1,61 @@
-<.header>
-  <div class="flex items-center">
-    <span class="bg-purple-500 text-white p-1 mr-3">Queue</span>
-    <span class="bg-slate-100 text-green-500 p-1 mr-3">
-      <.link href={~p"/instances/#{@instance}"}>
-        {@instance.address}
-      </.link>
-    </span>
+<div class="space-y-8">
+  <section class="rounded-3xl bg-gradient-to-r from-purple-900 via-fuchsia-800 to-rose-700 p-8 text-white shadow-2xl shadow-purple-900/40">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.35em] text-white/70">Command queue</p>
+        <h1 class="mt-3 text-3xl font-semibold tracking-tight">Queue for {@instance.address}</h1>
+        <p class="mt-2 text-sm text-white/80">
+          Monitor processing status and drill into each event driving the ledger.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <.link href={~p"/instances/#{@instance}/transactions/new"}>
+          <.button class="rounded-full bg-white px-5 text-purple-700 shadow-sm hover:bg-purple-50">
+            <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> New transaction
+          </.button>
+        </.link>
+        <.link href={~p"/instances/#{@instance}/transactions"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+          View transactions
+        </.link>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-900">Queued events</h2>
+      <p class="text-sm text-slate-500">Click to inspect processing details and payloads.</p>
+    </div>
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+      <%= if Enum.empty?(@events) do %>
+        <div class="p-10 text-center text-slate-500">The queue is empty.</div>
+      <% else %>
+        <.table
+          id="events"
+          rows={@events}
+          row_click={&JS.navigate(~p"/instances/#{@instance}/commands/#{&1}")}
+          class="rounded-3xl"
+        >
+          <:col :let={event} label="ID">{event.id}</:col>
+          <:col :let={event} label="Status">
+            <span class={status_color(event.command_queue_item.status)}>
+              {event.command_queue_item.status}
+            </span>
+          </:col>
+          <:col :let={event} label="Action & Source">action: {event.command_map.action}, {event_source_format(event)}</:col>
+          <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+          <:col :let={event} label="Processed at">
+            {format_datetime(event.command_queue_item.processing_completed_at)}
+          </:col>
+        </.table>
+      <% end %>
+    </div>
+  </section>
+
+  <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-slate-600">Return to {@instance.address}.</p>
+    <.back navigate={~p"/instances/#{@instance}"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+      Back to instance
+    </.back>
   </div>
-  <:subtitle>
-    Listing Queue for instance
-    <.link href={~p"/instances/#{@instance}"} class="underline">
-      {@instance.id}
-    </.link>
-  </:subtitle>
-  <:actions>
-    <.link href={~p"/instances/#{@instance}/transactions/new"}>
-      <.button class="bg-slate-400 hover:bg-blue-500 mr-1">+ Trx</.button>
-    </.link>
-    <.link href={~p"/instances/#{@instance}/transactions"} class="mr-1 underline">
-      Trx
-    </.link>
-  </:actions>
-</.header>
-
-<.table
-  id="events"
-  rows={@events}
-  row_click={&JS.navigate(~p"/instances/#{@instance}/commands/#{&1}")}
->
-  <:col :let={event} label="ID">{event.id}</:col>
-  <:col :let={event} label="Status | Transaction ID or Account address">
-    <span class={status_color(event.command_queue_item.status)}>
-      {event.command_queue_item.status}
-    </span>
-  </:col>
-  <:col :let={event} label="source">{event_source_format(event)}</:col>
-  <:col :let={event} label="action">{event.command_map.action}</:col>
-  <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-  <:col :let={event} label="Processed at">
-    {format_datetime(event.command_queue_item.processing_completed_at)}
-  </:col>
-</.table>
-
-<.back navigate={~p"/instances/#{@instance}"}>Back to instance</.back>
+</div>

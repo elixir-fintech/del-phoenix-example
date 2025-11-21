@@ -15,12 +15,12 @@ defmodule DelExampleWeb.TransactionEditLive do
       ) do
     instance = get_instance!(instance_address)
 
-    %{transaction: trx } = get_create_event(:transaction, trx_id)
+    %{transaction: trx } = get_create_command(:transaction, trx_id)
 
     trx = Repo.preload(trx, entries: :account)
 
     changeset =
-      TransactionData.update_event_changeset(
+      TransactionData.update_command_changeset(
         %TransactionData{
           status: trx.status,
           entries:
@@ -48,7 +48,7 @@ defmodule DelExampleWeb.TransactionEditLive do
   def handle_event("validate", %{"transaction_data" => params}, socket) do
     changeset =
       %TransactionData{}
-      |> TransactionData.update_event_changeset(params)
+      |> TransactionData.update_command_changeset(params)
 
     {:noreply, assign(socket, changeset: changeset)}
   end

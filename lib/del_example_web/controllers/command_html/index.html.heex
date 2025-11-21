@@ -35,7 +35,7 @@
     </span>
   </:col>
   <:col :let={event} label="source">{event_source_format(event)}</:col>
-  <:col :let={event} label="action">{event.event_map.action}</:col>
+  <:col :let={event} label="action">{event.command_map.action}</:col>
   <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
   <:col :let={event} label="Processed at">
     {format_datetime(event.command_queue_item.processing_completed_at)}

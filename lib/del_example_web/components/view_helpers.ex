@@ -36,19 +36,19 @@ defmodule DelExampleWeb.ViewHelpers do
     )
   end
 
-  def event_source_format(%{event_map: %{source_idempk: source_idempk} = event_map}) do
+  def event_source_format(%{command_map: %{source_idempk: source_idempk} = command_map}) do
     [
-      "src:\u00A0#{event_map.source}",
+      "src:\u00A0#{command_map.source}",
       "source_idempk:\u00A0#{source_idempk}",
-      if event_map.update_idempk do
-        "update_idempk:\u00A0#{event_map.update_idempk}"
+      if command_map.update_idempk do
+        "update_idempk:\u00A0#{command_map.update_idempk}"
       end
     ]
     |> Enum.reject(&(&1 == "" || is_nil(&1)))
     |> Enum.join(", ")
   end
 
-  def event_source_format(%{event_map: %{source: source}}), do: "src: #{source}"
+  def event_source_format(%{command_map: %{source: source}}), do: "src: #{source}"
 
   def assoc_loaded_and_present?(%Ecto.Association.NotLoaded{}), do: false
   def assoc_loaded_and_present?(nil), do: false

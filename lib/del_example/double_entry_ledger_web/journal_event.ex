@@ -39,7 +39,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.JournalEvent do
     case event.account do
       %Account{} = account ->
         Enum.filter(list_events_for_account(account.id), fn
-          e -> e.id != id && e.event_map.action not in @trx_actions
+          e -> e.id != id && e.command_map.action not in @trx_actions
         end)
 
       _ ->
@@ -51,7 +51,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.JournalEvent do
     case event.transaction do
       %Transaction{} = trx ->
         Enum.filter(list_events_for_transaction(trx.id), fn
-          e -> e.id != id && e.event_map.action not in @account_actions
+          e -> e.id != id && e.command_map.action not in @account_actions
         end)
 
       _ ->

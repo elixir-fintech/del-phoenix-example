@@ -1,8 +1,15 @@
 defmodule DelExampleWeb.PageControllerTest do
   use DelExampleWeb.ConnCase
 
+  import DelExample.Fixtures
+
   test "GET /", %{conn: conn} do
+    instance = instance_fixture()
+
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
+    body = html_response(conn, 200)
+
+    assert body =~ "Ledger environments overview"
+    assert body =~ instance.address
   end
 end

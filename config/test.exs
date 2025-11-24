@@ -23,6 +23,16 @@ config :double_entry_ledger, DoubleEntryLedger.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: System.schedulers_online() * 2
 
+config :double_entry_ledger,
+  schema_prefix: "double_entry_ledger",
+  idempotency_secret: "123456677890"
+
+config :double_entry_ledger, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [double_entry_ledger: 10],
+  repo: DoubleEntryLedger.Repo,
+  prefix: "double_entry_ledger"
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :del_example, DelExampleWeb.Endpoint,

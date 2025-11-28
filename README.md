@@ -1,23 +1,31 @@
 # DelExample
 
-THIS IS WORK IN PROGRESS
+This is a sample phoenix application for the DoubleEntryLedger <https://hex.pm/packages/double_entry_ledger>
 
-You need the [Double Entry Ledger](https://github.com/elixir-fintech/double_entry_ledger) to be installed on the same directory level
-and follow the steps in the repositories `README.md` to move the migration files over and create the tables in the DB.
+## Installation
 
-To start your Phoenix server:
+### Install dependencies
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+```bash
+mix deps.get
+```
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+### Copy database migration files
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+```bash
+cp deps/double_entry_ledger/priv/repo/migrations/* priv/repo/migrations/
+```
 
-## Learn more
+### Create and migrate the database
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+```bash
+mix ecto.create && mix ecto.migrate
+```
+
+### Start the phoenix application
+
+```bash
+iex -S mix phx.server
+```
+
+You can now access the application under <http://localhost:4000/>

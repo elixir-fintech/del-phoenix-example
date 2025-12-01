@@ -223,6 +223,7 @@ defmodule DelExampleWeb.CoreComponents do
   attr :type, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
+  attr :color_class, :string, default: "text-white active:text-white/80"
 
   slot :inner_block, required: true
 
@@ -232,7 +233,8 @@ defmodule DelExampleWeb.CoreComponents do
       type={@type}
       class={[
         "phx-submit-loading:opacity-75 rounded-lg py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "text-sm font-semibold leading-6",
+        @color_class,
         @class
       ]}
       {@rest}

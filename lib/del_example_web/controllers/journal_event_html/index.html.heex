@@ -10,7 +10,10 @@
       </div>
       <div class="flex flex-wrap gap-3">
         <.link href={~p"/instances/#{@instance}/transactions/new"}>
-          <.button class="rounded-full bg-white px-5 text-sky-700 shadow-sm hover:bg-sky-50">
+          <.button
+            color_class="text-sky-700 active:text-sky-800"
+            class="rounded-full bg-white px-5 shadow-sm hover:bg-sky-50"
+          >
             <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> New transaction
           </.button>
         </.link>

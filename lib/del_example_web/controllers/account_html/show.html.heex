@@ -15,7 +15,10 @@
           </.button>
         </.link>
         <.link href={~p"/instances/#{@instance}/transactions/new?account_address=#{@account}"}>
-          <.button class="rounded-full bg-white px-5 font-semibold text-rose-700 shadow-lg shadow-white/30 hover:bg-rose-100">
+          <.button
+            color_class="text-rose-700 active:text-rose-800"
+            class="rounded-full bg-white px-5 font-semibold shadow-lg shadow-white/30 hover:bg-rose-100"
+          >
             <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> New Transaction
           </.button>
         </.link>

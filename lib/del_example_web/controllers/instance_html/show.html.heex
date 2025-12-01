@@ -15,7 +15,10 @@
           </.button>
         </.link>
         <.link href={~p"/instances/#{@instance}/transactions/new"}>
-          <.button class="rounded-full bg-white px-5 font-semibold text-emerald-700 shadow-lg shadow-emerald-500/30 hover:bg-emerald-50">
+          <.button
+            color_class="text-emerald-700 active:text-emerald-800"
+            class="rounded-full bg-white px-5 font-semibold shadow-lg shadow-emerald-500/30 hover:bg-emerald-50"
+          >
             <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> New Transaction
           </.button>
         </.link>
@@ -135,7 +138,7 @@
               <%= for {label, value} <- totals do %>
                 <div class="flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
                   <dt class="capitalize">{label}</dt>
-                  <dd class="font-semibold text-slate-900">{value}</dd>
+                  <dd class="font-semibold text-slate-900">{to_money(value || 0, currency)}</dd>
                 </div>
               <% end %>
             </dl>

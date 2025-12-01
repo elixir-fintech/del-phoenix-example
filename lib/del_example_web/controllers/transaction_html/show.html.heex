@@ -12,7 +12,10 @@
         </.link>
         <%= if @transaction.status == :pending do %>
           <.link navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}>
-            <.button class="rounded-full bg-white px-5 text-blue-700 shadow-sm hover:bg-blue-50">
+            <.button
+              color_class="text-blue-700 active:text-blue-800"
+              class="rounded-full bg-white px-5 shadow-sm hover:bg-blue-50"
+            >
               <.icon name="hero-pencil-square" class="mr-2 h-4 w-4" /> Edit pending
             </.button>
           </.link>

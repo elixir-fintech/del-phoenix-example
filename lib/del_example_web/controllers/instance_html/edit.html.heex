@@ -1,27 +1,29 @@
-<div class="space-y-8">
-  <div class="card bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-500 text-white shadow-2xl">
-    <div class="card-body">
-      <p class="text-sm uppercase tracking-[0.3em] text-emerald-100/80">Edit Instance</p>
-      <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h1 class="text-3xl font-semibold tracking-tight">{@instance.address}</h1>
-          <p class="text-sm text-emerald-50/90">ID: {@instance.id}</p>
-        </div>
-        <div class="text-sm text-emerald-50/80">
-          Last updated {format_datetime(@instance.updated_at)}
+<Layouts.app flash={@flash}>
+  <div class="space-y-8">
+    <div class="card bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-500 text-white shadow-2xl">
+      <div class="card-body">
+        <p class="text-sm uppercase tracking-[0.3em] text-emerald-100/80">Edit Instance</p>
+        <div class="mt-4 flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 class="text-3xl font-semibold tracking-tight">{@instance.address}</h1>
+            <p class="text-sm text-emerald-50/90">ID: {@instance.id}</p>
+          </div>
+          <div class="text-sm text-emerald-50/80">
+            Last updated {format_datetime(@instance.updated_at)}
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <.instance_form changeset={@changeset} action={~p"/instances/#{@instance}"} />
+    <.instance_form changeset={@changeset} action={~p"/instances/#{@instance}"} />
 
-  <div class="card bg-base-200">
-    <div class="card-body flex-row items-center justify-between p-4">
-      <p class="text-sm text-base-content/60">Return to the list of instances.</p>
-      <.back navigate={~p"/instances"}>
-        Back to instances
-      </.back>
+    <div class="card bg-base-200">
+      <div class="card-body flex-row items-center justify-between p-4">
+        <p class="text-sm text-base-content/60">Return to the list of instances.</p>
+        <.back navigate={~p"/instances"}>
+          Back to instances
+        </.back>
+      </div>
     </div>
   </div>
-</div>
+</Layouts.app>

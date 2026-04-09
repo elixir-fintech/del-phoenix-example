@@ -60,11 +60,11 @@ defmodule DelExampleWeb.CoreComponents do
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      class="relative z-50 hidden"
+      class="modal"
     >
       <div
         id={"#{@id}-bg"}
-        class="bg-base-300/90 fixed inset-0 transition-opacity"
+        class="modal-backdrop fixed inset-0 transition-opacity"
         aria-hidden="true"
       />
       <div
@@ -82,13 +82,13 @@ defmodule DelExampleWeb.CoreComponents do
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-lg ring-base-content/10 relative hidden bg-base-100 p-14 shadow-lg ring-1 transition"
+              class="modal-box relative hidden w-full max-w-3xl p-14 transition"
             >
               <div class="absolute top-6 right-5">
                 <button
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
-                  class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
+                  class="btn btn-sm btn-circle btn-ghost"
                   aria-label={gettext("close")}
                 >
                   <.icon name="hero-x-mark-solid" class="size-5" />

@@ -9,15 +9,15 @@ defmodule DelExampleWeb.ViewHelpers do
     Calendar.strftime(datetime, "%c")
   end
 
-  def status_color(status) do
+  def status_badge(status) do
     case status do
-      :posted -> "text-green-600 font-bold"
-      :processed -> "text-green-600 font-bold"
-      :pending -> "text-yellow-600"
-      :failed -> "text-red-600 font-bold"
-      :archived -> "text-red-600 font-bold"
-      :dead_letter -> "text-black-600 font-bold"
-      _ -> "text-gray-600"
+      :posted -> "badge badge-success"
+      :processed -> "badge badge-success"
+      :pending -> "badge badge-warning"
+      :failed -> "badge badge-error"
+      :archived -> "badge badge-error"
+      :dead_letter -> "badge badge-neutral"
+      _ -> "badge badge-ghost"
     end
   end
 

@@ -1,26 +1,27 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-base-300 py-3 text-sm">
-    <div class="flex items-center gap-4">
-      <a href="/">
-        <img src={~p"/images/double_entry_ledger_3_symbols.webp"} width="60" />
-      </a>
-      <span class="font-semibold text-base-content" style="font-size: 24px">
+<div class="navbar bg-base-100 border-b border-base-300 px-4 sm:px-6 lg:px-8">
+  <div class="navbar-start">
+    <a href="/" class="flex items-center gap-4">
+      <img src={~p"/images/double_entry_ledger_3_symbols.webp"} width="60" />
+      <span class="text-2xl font-semibold text-base-content">
         Double Entry Ledger Example
       </span>
-    </div>
-    <div class="flex items-center gap-4 font-semibold leading-6 text-base-content">
-      <a href="https://github.com/csommerauer/double_entry_ledger" class="hover:opacity-70">
-        GitHub
-      </a>
-      <a
-        href="https://github.com/csommerauer/double_entry_ledger/blob/main/README.md"
-        class="btn btn-sm btn-soft"
-      >
-        Get Started <span aria-hidden="true">&rarr;</span>
-      </a>
-    </div>
+    </a>
   </div>
-</header>
+  <div class="navbar-end gap-4">
+    <a
+      href="https://github.com/csommerauer/double_entry_ledger"
+      class="link link-hover font-semibold"
+    >
+      GitHub
+    </a>
+    <a
+      href="https://github.com/csommerauer/double_entry_ledger/blob/main/README.md"
+      class="btn btn-sm btn-soft"
+    >
+      Get Started <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+</div>
 <main class="px-4 py-20 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">
     <.flash_group flash={@flash} />

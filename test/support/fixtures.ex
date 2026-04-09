@@ -28,7 +28,7 @@ defmodule DelExample.Fixtures do
       address: "acct#{suffix}",
       currency: :EUR,
       type: :asset,
-      allowed_negative: false
+      negative_limit: 0
     }
 
     attrs =

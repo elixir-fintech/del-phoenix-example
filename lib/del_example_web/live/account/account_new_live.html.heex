@@ -38,10 +38,10 @@
           prompt="Select account currency"
         />
         <.input
-          type="select"
-          field={ad[:allowed_negative]}
-          label="Allow Negative Balance"
-          options={@options[:boolean]}
+          type="number"
+          field={ad[:negative_limit]}
+          label="Negative limit"
+          min="0"
         />
       </div>
 

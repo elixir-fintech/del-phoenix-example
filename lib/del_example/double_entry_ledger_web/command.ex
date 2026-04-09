@@ -12,8 +12,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Command do
   # @account_actions [:create_account, :update_account]
   # @trx_actions [:create_transaction, :update_transaction]
 
-  def create(event_params) do
-    CommandApi.create_from_params(event_params)
+  def create(command_params) do
+    CommandApi.create_from_params(command_params)
   end
 
   def list_events(instance_id) do
@@ -37,20 +37,20 @@ defmodule DelExample.DoubleEntryLedgerWeb.Command do
 
   @spec create_command_no_save_on_error(map()) ::
           {:ok, Account.t() | Transaction.t(), String.t()} | {:error, String.t(), Changeset.t()}
-  def create_command_no_save_on_error(event_params) do
-    case CommandApi.process_from_params(event_params, on_error: :fail) do
-      {:ok, %Transaction{} = trx, event} ->
+  def create_command_no_save_on_error(command_params) do
+    case CommandApi.process_from_params(command_params, on_error: :fail) do
+      {:ok, %Transaction{} = trx, command} ->
         {:ok, trx,
-         "#{event.command_map.action} event with ID #{event.id}) processed transaction with ID #{trx.id}"}
+         "#{command.command_map.action} command with ID #{command.id}) processed transaction with ID #{trx.id}"}
 
       {:error, %Changeset{} = command_map_changeset} ->
         errors = get_all_changeset_errors(command_map_changeset)
 
-        {:error, "Error processing event. Command was not saved. #{Jason.encode!(errors)}",
+        {:error, "Error processing command. Command was not saved. #{Jason.encode!(errors)}",
          command_map_changeset}
 
       {:error, error} ->
-        {:error, "Unexpected error processing event: #{inspect(error)}", command_map_changeset()}
+        {:error, "Unexpected error processing command: #{inspect(error)}", command_map_changeset()}
     end
   end
 

@@ -6,10 +6,16 @@
       Action {String.upcase(to_string(@event.command_map.action))} from {@event.command_map.source}
     </p>
     <div class="mt-6 flex flex-wrap items-center gap-4">
-      <span class={["rounded-full px-4 py-1 text-xs font-semibold uppercase", status_color(@event.command_queue_item.status)]}>
+      <span class={[
+        "rounded-full px-4 py-1 text-xs font-semibold uppercase",
+        status_color(@event.command_queue_item.status)
+      ]}>
         {@event.command_queue_item.status}
       </span>
-      <.link href={~p"/instances/#{@instance}"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+      <.link
+        href={~p"/instances/#{@instance}"}
+        class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
+      >
         View instance
       </.link>
     </div>
@@ -22,7 +28,10 @@
         <div>
           <dt class="text-xs uppercase tracking-wide text-slate-400">Instance</dt>
           <dd class="mt-1">
-            <.link href={~p"/instances/#{@instance}"} class="font-semibold text-indigo-600 hover:text-indigo-500">
+            <.link
+              href={~p"/instances/#{@instance}"}
+              class="font-semibold text-indigo-600 hover:text-indigo-500"
+            >
               {@instance.address}
             </.link>
           </dd>
@@ -39,7 +48,9 @@
         </div>
         <div>
           <dt class="text-xs uppercase tracking-wide text-slate-400">Processed at</dt>
-          <dd class="mt-1">{format_datetime(@event.command_queue_item.processing_completed_at)}</dd>
+          <dd class="mt-1">
+            {format_datetime(@event.command_queue_item.processing_completed_at)}
+          </dd>
         </div>
         <div class="grid gap-3 md:grid-cols-3">
           <div>
@@ -86,7 +97,6 @@
           id="events"
           rows={@events}
           row_click={&JS.navigate(~p"/instances/#{@instance}/commands/#{&1}")}
-          class="rounded-3xl"
         >
           <:col :let={event} label="Command ID">{event.id}</:col>
           <:col :let={event} label="Status">
@@ -110,7 +120,7 @@
 
   <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
     <p class="text-sm text-slate-600">Return to the queue.</p>
-    <.back navigate={~p"/instances/#{@instance}/commands"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+    <.back navigate={~p"/instances/#{@instance}/commands"}>
       Back to queue
     </.back>
   </div>

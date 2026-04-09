@@ -66,7 +66,9 @@ defmodule DelExample.Fixtures do
 
     defaults
     |> Map.merge(attrs)
-    |> then(&TransactionStore.create(instance.address, &1, "fixture-trx-#{suffix}", on_error: :fail))
+    |> then(
+      &TransactionStore.create(instance.address, &1, "fixture-trx-#{suffix}", on_error: :fail)
+    )
   end
 
   def unique_suffix do

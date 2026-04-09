@@ -50,7 +50,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Command do
          command_map_changeset}
 
       {:error, error} ->
-        {:error, "Unexpected error processing command: #{inspect(error)}", command_map_changeset()}
+        {:error, "Unexpected error processing command: #{inspect(error)}",
+         command_map_changeset()}
     end
   end
 

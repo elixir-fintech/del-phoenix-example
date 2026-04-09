@@ -5,30 +5,40 @@
         <p class="text-sm uppercase tracking-widest text-emerald-100/80">Instance</p>
         <div class="mt-2 flex flex-col gap-2">
           <h1 class="text-2xl font-semibold tracking-tight lg:text-3xl">{@instance.address}</h1>
-          <p class="text-sm text-emerald-50">{@instance.description || "No description provided"}</p>
+          <p class="text-sm text-emerald-50">
+            {@instance.description || "No description provided"}
+          </p>
         </div>
       </div>
       <div class="flex flex-wrap gap-3">
-        <.link href={~p"/instances/#{@instance}/edit"}>
-          <.button class="rounded-full border border-white/30 bg-white/10 px-5 shadow-none hover:bg-white/20">
-            <.icon name="hero-pencil-square" class="mr-2 h-4 w-4" /> Edit
-          </.button>
-        </.link>
-        <.link href={~p"/instances/#{@instance}/transactions/new"}>
-          <.button
-            color_class="text-emerald-700 active:text-emerald-800"
-            class="rounded-full bg-white px-5 font-semibold shadow-lg shadow-emerald-500/30 hover:bg-emerald-50"
-          >
-            <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> New Transaction
-          </.button>
-        </.link>
-        <.link href={~p"/instances/#{@instance}/transactions"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+        <.button
+          navigate={~p"/instances/#{@instance}/edit"}
+          class="btn btn-sm btn-ghost border border-white/30"
+        >
+          <.icon name="hero-pencil-square" class="mr-2 size-4" /> Edit
+        </.button>
+        <.button
+          navigate={~p"/instances/#{@instance}/transactions/new"}
+          class="btn btn-sm btn-success"
+        >
+          <.icon name="hero-plus-circle" class="mr-2 size-4" /> New Transaction
+        </.button>
+        <.link
+          href={~p"/instances/#{@instance}/transactions"}
+          class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
+        >
           Transactions
         </.link>
-        <.link href={~p"/instances/#{@instance}/commands"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+        <.link
+          href={~p"/instances/#{@instance}/commands"}
+          class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
+        >
           Queue
         </.link>
-        <.link href={~p"/instances/#{@instance}/journal_events"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+        <.link
+          href={~p"/instances/#{@instance}/journal_events"}
+          class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
+        >
           Journal Events
         </.link>
       </div>
@@ -58,13 +68,13 @@
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h2 class="text-lg font-semibold text-slate-900">Associated Accounts</h2>
-        <p class="text-sm text-slate-500">Manage and explore accounts connected to this instance.</p>
+        <p class="text-sm text-slate-500">
+          Manage and explore accounts connected to this instance.
+        </p>
       </div>
-      <.link href={~p"/instances/#{@instance}/accounts/new"}>
-        <.button class="rounded-full bg-emerald-600 px-6 text-white shadow-sm shadow-emerald-600/40 hover:bg-emerald-500">
-          <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> Add Account
-        </.button>
-      </.link>
+      <.button navigate={~p"/instances/#{@instance}/accounts/new"} class="btn btn-sm btn-success">
+        <.icon name="hero-plus-circle" class="mr-2 size-4" /> Add Account
+      </.button>
     </div>
 
     <div class="rounded-3xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50">
@@ -78,7 +88,6 @@
           id="accounts"
           rows={@accounts}
           row_click={&JS.navigate(~p"/instances/#{@instance}/accounts/#{&1.address}")}
-          class="rounded-3xl"
         >
           <:col :let={account} label="Name">
             <div>
@@ -88,17 +97,26 @@
           </:col>
           <:col :let={account} label="Currency">{account.currency}</:col>
           <:col :let={account} label="Available">
-            <span class="font-medium text-emerald-600">{to_money(account.available, account.currency)}</span>
+            <span class="font-medium text-emerald-600">
+              {to_money(account.available, account.currency)}
+            </span>
           </:col>
           <:col :let={account} label="Posted">
-            <span class="font-medium text-slate-700">{balance_format(account.posted, account.currency)}</span>
+            <span class="font-medium text-slate-700">
+              {balance_format(account.posted, account.currency)}
+            </span>
           </:col>
           <:col :let={account} label="Pending">
-            <span class="font-medium text-amber-600">{balance_format(account.pending, account.currency)}</span>
+            <span class="font-medium text-amber-600">
+              {balance_format(account.pending, account.currency)}
+            </span>
           </:col>
 
           <:action :let={account}>
-            <.link navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"} class="text-slate-500 hover:text-slate-900">
+            <.link
+              navigate={~p"/instances/#{@instance}/accounts/#{account}/edit"}
+              class="text-slate-500 hover:text-slate-900"
+            >
               <.icon name="hero-pencil-square" />
             </.link>
           </:action>
@@ -120,7 +138,9 @@
   <section class="space-y-4">
     <div>
       <h2 class="text-lg font-semibold text-slate-900">Debit/Credit Sums per Currency</h2>
-      <p class="text-sm text-slate-500">Quick snapshot of debits, credits, and balances grouped by currency.</p>
+      <p class="text-sm text-slate-500">
+        Quick snapshot of debits, credits, and balances grouped by currency.
+      </p>
     </div>
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <%= if map_size(@sums) == 0 do %>
@@ -132,7 +152,9 @@
           <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div class="flex items-center justify-between">
               <p class="text-sm font-semibold text-slate-500">Currency</p>
-              <span class="rounded-full bg-slate-900/10 px-3 py-1 text-xs font-bold text-slate-700">{currency}</span>
+              <span class="rounded-full bg-slate-900/10 px-3 py-1 text-xs font-bold text-slate-700">
+                {currency}
+              </span>
             </div>
             <dl class="mt-4 space-y-2 text-sm text-slate-600">
               <%= for {label, value} <- totals do %>
@@ -150,7 +172,7 @@
 
   <div class="mt-10 flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
     <p class="text-sm text-slate-600">Return to the complete list of instances.</p>
-    <.back navigate={~p"/instances/"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+    <.back navigate={~p"/instances/"}>
       Back to instances
     </.back>
   </div>

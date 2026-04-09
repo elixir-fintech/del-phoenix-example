@@ -7,18 +7,19 @@
         <p class="mt-2 text-sm text-white/80">Status: {@transaction.status}</p>
       </div>
       <div class="flex flex-wrap gap-3">
-        <.link href={~p"/instances/#{@instance}"} class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10">
+        <.link
+          href={~p"/instances/#{@instance}"}
+          class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
+        >
           View instance
         </.link>
         <%= if @transaction.status == :pending do %>
-          <.link navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}>
-            <.button
-              color_class="text-blue-700 active:text-blue-800"
-              class="rounded-full bg-white px-5 shadow-sm hover:bg-blue-50"
-            >
-              <.icon name="hero-pencil-square" class="mr-2 h-4 w-4" /> Edit pending
-            </.button>
-          </.link>
+          <.button
+            navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}
+            class="btn btn-primary btn-sm"
+          >
+            <.icon name="hero-pencil-square" class="mr-2 size-4" /> Edit pending
+          </.button>
         <% end %>
       </div>
     </div>
@@ -39,7 +40,10 @@
       <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
         <dt class="text-xs uppercase tracking-wide text-white/70">Instance</dt>
         <dd class="mt-2">
-          <.link href={~p"/instances/#{@instance}"} class="font-semibold text-white hover:text-emerald-200">
+          <.link
+            href={~p"/instances/#{@instance}"}
+            class="font-semibold text-white hover:text-emerald-200"
+          >
             {@instance.address}
           </.link>
         </dd>
@@ -56,7 +60,7 @@
       <%= if Enum.empty?(@transaction.entries) do %>
         <div class="p-10 text-center text-slate-500">No entries found.</div>
       <% else %>
-        <.table id="entries" rows={@transaction.entries} class="rounded-3xl">
+        <.table id="entries" rows={@transaction.entries}>
           <:col :let={e} label="Account">
             <.link href={~p"/instances/#{@instance}/accounts/#{e.account}"} class="underline">
               {e.account.address}
@@ -84,7 +88,6 @@
           id="events"
           rows={@events}
           row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
-          class="rounded-3xl"
         >
           <:col :let={event} label="Command ID">{event.id}</:col>
           <:col :let={event} label="Source">{event_source_format(event)}</:col>
@@ -96,8 +99,10 @@
   </section>
 
   <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
-    <p class="text-sm text-slate-600">Head back to the transaction list for {@instance.address}.</p>
-    <.back navigate={~p"/instances/#{@instance}/transactions"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+    <p class="text-sm text-slate-600">
+      Head back to the transaction list for {@instance.address}.
+    </p>
+    <.back navigate={~p"/instances/#{@instance}/transactions"}>
       Back to transactions
     </.back>
   </div>

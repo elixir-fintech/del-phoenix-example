@@ -17,7 +17,7 @@
           </.button>
         </div>
 
-        <div class="stats stats-vertical lg:stats-horizontal mt-8 bg-white/10 text-white">
+        <div class="stats stats-vertical lg:stats-horizontal mt-8 bg-white/10 text-white overflow-x-auto">
           <div class="stat">
             <div class="stat-title text-emerald-100/80">Total Instances</div>
             <div class="stat-value">{length(@instances)}</div>
@@ -42,12 +42,6 @@
                 <% latest -> %>
                   {format_datetime(latest.updated_at)}
               <% end %>
-            </div>
-          </div>
-          <div class="stat">
-            <div class="stat-title text-emerald-100/80">Active State</div>
-            <div class="stat-desc text-white/80">
-              Keep entities in sync and monitor their accounts without leaving this view.
             </div>
           </div>
         </div>

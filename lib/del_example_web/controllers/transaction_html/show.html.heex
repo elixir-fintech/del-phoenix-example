@@ -1,117 +1,123 @@
-<div class="space-y-8">
-  <div class="card bg-gradient-to-r from-blue-900 via-violet-800 to-indigo-700 text-white shadow-2xl">
-    <div class="card-body">
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p class="text-xs uppercase tracking-[0.35em] text-white/60">Transaction</p>
-          <h1 class="mt-3 text-3xl font-semibold tracking-tight break-all">{@transaction.id}</h1>
-          <p class="mt-2 text-sm text-white/80">Status: {@transaction.status}</p>
-        </div>
-        <div class="flex flex-wrap gap-3">
-          <.link
-            href={~p"/instances/#{@instance}"}
-            class="btn btn-sm btn-ghost border border-white/30"
-          >
-            View instance
-          </.link>
-          <%= if @transaction.status == :pending do %>
-            <.button
-              navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}
-              class="btn btn-primary btn-sm"
+<Layouts.app flash={@flash}>
+  <div class="space-y-8">
+    <div class="card bg-gradient-to-r from-blue-900 via-violet-800 to-indigo-700 text-white shadow-2xl">
+      <div class="card-body">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p class="text-xs uppercase tracking-[0.35em] text-white/60">Transaction</p>
+            <h1 class="mt-3 text-3xl font-semibold tracking-tight break-all">
+              {@transaction.id}
+            </h1>
+            <p class="mt-2 text-sm text-white/80">Status: {@transaction.status}</p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <.link
+              href={~p"/instances/#{@instance}"}
+              class="btn btn-sm btn-ghost border border-white/30"
             >
-              <.icon name="hero-pencil-square" class="mr-2 size-4" /> Edit pending
-            </.button>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="stats stats-vertical lg:stats-horizontal mt-8 bg-white/10 text-white">
-        <div class="stat">
-          <div class="stat-title text-white/70">Posted at</div>
-          <div class="stat-value text-sm">{format_datetime(@transaction.posted_at)}</div>
-        </div>
-        <div class="stat">
-          <div class="stat-title text-white/70">Inserted</div>
-          <div class="stat-value text-sm">{format_datetime(@transaction.inserted_at)}</div>
-        </div>
-        <div class="stat">
-          <div class="stat-title text-white/70">Updated</div>
-          <div class="stat-value text-sm">{format_datetime(@transaction.updated_at)}</div>
-        </div>
-        <div class="stat">
-          <div class="stat-title text-white/70">Instance</div>
-          <div class="stat-value text-sm">
-            <.link href={~p"/instances/#{@instance}"} class="link hover:text-emerald-200">
-              {@instance.address}
+              View instance
             </.link>
+            <%= if @transaction.status == :pending do %>
+              <.button
+                navigate={~p"/instances/#{@instance}/transactions/#{@transaction}/edit"}
+                class="btn btn-primary btn-sm"
+              >
+                <.icon name="hero-pencil-square" class="mr-2 size-4" /> Edit pending
+              </.button>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="stats stats-vertical lg:stats-horizontal mt-8 bg-white/10 text-white">
+          <div class="stat">
+            <div class="stat-title text-white/70">Posted at</div>
+            <div class="stat-value text-sm">{format_datetime(@transaction.posted_at)}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title text-white/70">Inserted</div>
+            <div class="stat-value text-sm">{format_datetime(@transaction.inserted_at)}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title text-white/70">Updated</div>
+            <div class="stat-value text-sm">{format_datetime(@transaction.updated_at)}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-title text-white/70">Instance</div>
+            <div class="stat-value text-sm">
+              <.link href={~p"/instances/#{@instance}"} class="link hover:text-emerald-200">
+                {@instance.address}
+              </.link>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <section class="space-y-4">
-    <div>
-      <h2 class="text-lg font-semibold text-base-content">Entries</h2>
-      <p class="text-sm text-base-content/60">Each debit or credit composing this transaction.</p>
-    </div>
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body p-0">
-        <%= if Enum.empty?(@transaction.entries) do %>
-          <div class="p-10 text-center text-base-content/60">No entries found.</div>
-        <% else %>
-          <.table id="entries" rows={@transaction.entries}>
-            <:col :let={e} label="Account">
-              <.link
-                href={~p"/instances/#{@instance}/accounts/#{e.account}"}
-                class="link link-primary"
-              >
-                {e.account.address}
-              </.link>
-            </:col>
-            <:col :let={e} label="Value">{e.value}</:col>
-            <:col :let={e} label="Type">{e.type}</:col>
-            <:col :let={e} label="Inserted At">{format_datetime(e.inserted_at)}</:col>
-            <:col :let={e} label="Updated At">{format_datetime(e.updated_at)}</:col>
-          </.table>
-        <% end %>
+    <section class="space-y-4">
+      <div>
+        <h2 class="text-lg font-semibold text-base-content">Entries</h2>
+        <p class="text-sm text-base-content/60">
+          Each debit or credit composing this transaction.
+        </p>
+      </div>
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body p-0">
+          <%= if Enum.empty?(@transaction.entries) do %>
+            <div class="p-10 text-center text-base-content/60">No entries found.</div>
+          <% else %>
+            <.table id="entries" rows={@transaction.entries}>
+              <:col :let={e} label="Account">
+                <.link
+                  href={~p"/instances/#{@instance}/accounts/#{e.account}"}
+                  class="link link-primary"
+                >
+                  {e.account.address}
+                </.link>
+              </:col>
+              <:col :let={e} label="Value">{e.value}</:col>
+              <:col :let={e} label="Type">{e.type}</:col>
+              <:col :let={e} label="Inserted At">{format_datetime(e.inserted_at)}</:col>
+              <:col :let={e} label="Updated At">{format_datetime(e.updated_at)}</:col>
+            </.table>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <div>
+        <h2 class="text-lg font-semibold text-base-content">Events</h2>
+        <p class="text-sm text-base-content/60">Related journal events and commands.</p>
+      </div>
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body p-0">
+          <%= if Enum.empty?(@events) do %>
+            <div class="p-10 text-center text-base-content/60">No events recorded.</div>
+          <% else %>
+            <.table
+              id="events"
+              rows={@events}
+              row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
+            >
+              <:col :let={event} label="Command ID">{event.id}</:col>
+              <:col :let={event} label="Source">{event_source_format(event)}</:col>
+              <:col :let={event} label="Action">{event.command_map.action}</:col>
+              <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
+            </.table>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <div class="card bg-base-200">
+      <div class="card-body flex-row items-center justify-between p-4">
+        <p class="text-sm text-base-content/60">
+          Head back to the transaction list for {@instance.address}.
+        </p>
+        <.back navigate={~p"/instances/#{@instance}/transactions"}>
+          Back to transactions
+        </.back>
       </div>
     </div>
-  </section>
-
-  <section class="space-y-4">
-    <div>
-      <h2 class="text-lg font-semibold text-base-content">Events</h2>
-      <p class="text-sm text-base-content/60">Related journal events and commands.</p>
-    </div>
-    <div class="card bg-base-100 shadow-xl">
-      <div class="card-body p-0">
-        <%= if Enum.empty?(@events) do %>
-          <div class="p-10 text-center text-base-content/60">No events recorded.</div>
-        <% else %>
-          <.table
-            id="events"
-            rows={@events}
-            row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
-          >
-            <:col :let={event} label="Command ID">{event.id}</:col>
-            <:col :let={event} label="Source">{event_source_format(event)}</:col>
-            <:col :let={event} label="Action">{event.command_map.action}</:col>
-            <:col :let={event} label="Inserted at">{format_datetime(event.inserted_at)}</:col>
-          </.table>
-        <% end %>
-      </div>
-    </div>
-  </section>
-
-  <div class="card bg-base-200">
-    <div class="card-body flex-row items-center justify-between p-4">
-      <p class="text-sm text-base-content/60">
-        Head back to the transaction list for {@instance.address}.
-      </p>
-      <.back navigate={~p"/instances/#{@instance}/transactions"}>
-        Back to transactions
-      </.back>
-    </div>
   </div>
-</div>
+</Layouts.app>

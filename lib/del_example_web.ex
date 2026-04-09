@@ -39,8 +39,7 @@ defmodule DelExampleWeb do
   def controller do
     quote do
       use Phoenix.Controller,
-        formats: [:html, :json],
-        layouts: [html: DelExampleWeb.Layouts]
+        formats: [:html, :json]
 
       use Gettext, backend: DelExampleWeb.Gettext
 
@@ -52,8 +51,7 @@ defmodule DelExampleWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView,
-        layout: {DelExampleWeb.Layouts, :app}
+      use Phoenix.LiveView
 
       unquote(html_helpers())
     end

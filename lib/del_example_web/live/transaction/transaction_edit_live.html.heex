@@ -1,53 +1,60 @@
-<div class="space-y-8">
-  <div class="card bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-2xl">
-    <div class="card-body">
-      <p class="text-xs uppercase tracking-[0.35em] text-white/80">Update transaction</p>
-      <h1 class="mt-3 text-3xl font-semibold tracking-tight break-all">{@transaction.id}</h1>
-      <p class="mt-2 max-w-2xl text-sm text-white/80">
-        Adjust status or amounts before reprocessing the associated command.
-      </p>
-    </div>
-  </div>
-
-  <div class="card bg-base-100 shadow-xl">
-    <div class="card-body">
-      <.simple_form
-        :let={td}
-        for={@changeset}
-        phx-change="validate"
-        phx-submit="save"
-        class="space-y-8"
-      >
-        <p :if={@changeset.action} class="mt-1.5 flex gap-2 items-center text-sm text-error">
-          <.icon name="hero-exclamation-circle" class="size-5" />
-          Oops, something went wrong! Please check the errors below.
+<Layouts.app flash={@flash}>
+  <div class="space-y-8">
+    <div class="card bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white shadow-2xl">
+      <div class="card-body">
+        <p class="text-xs uppercase tracking-[0.35em] text-white/80">Update transaction</p>
+        <h1 class="mt-3 text-3xl font-semibold tracking-tight break-all">{@transaction.id}</h1>
+        <p class="mt-2 max-w-2xl text-sm text-white/80">
+          Adjust status or amounts before reprocessing the associated command.
         </p>
+      </div>
+    </div>
 
-        <.input type="select" field={td[:status]} label="Status" options={@states} />
+    <div class="card bg-base-100 shadow-xl">
+      <div class="card-body">
+        <.simple_form
+          :let={td}
+          for={@changeset}
+          phx-change="validate"
+          phx-submit="save"
+          class="space-y-8"
+        >
+          <p :if={@changeset.action} class="mt-1.5 flex gap-2 items-center text-sm text-error">
+            <.icon name="hero-exclamation-circle" class="size-5" />
+            Oops, something went wrong! Please check the errors below.
+          </p>
 
-        <.inputs_for :let={entry} field={td[:entries]}>
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <.input type="text" field={entry[:account_address]} label="Account Address" readonly />
-            <.input field={entry[:amount]} label="Amount" />
-            <.input type="text" field={entry[:currency]} label="Currency" readonly />
-          </div>
-        </.inputs_for>
+          <.input type="select" field={td[:status]} label="Status" options={@states} />
 
-        <:actions>
-          <.button class="btn btn-primary">
-            <.icon name="hero-check-circle" class="mr-2 size-5" /> Process Command
-          </.button>
-        </:actions>
-      </.simple_form>
+          <.inputs_for :let={entry} field={td[:entries]}>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <.input
+                type="text"
+                field={entry[:account_address]}
+                label="Account Address"
+                readonly
+              />
+              <.input field={entry[:amount]} label="Amount" />
+              <.input type="text" field={entry[:currency]} label="Currency" readonly />
+            </div>
+          </.inputs_for>
+
+          <:actions>
+            <.button class="btn btn-primary">
+              <.icon name="hero-check-circle" class="mr-2 size-5" /> Process Command
+            </.button>
+          </:actions>
+        </.simple_form>
+      </div>
+    </div>
+
+    <div class="card bg-base-200">
+      <div class="card-body flex-row items-center justify-between p-4">
+        <p class="text-sm text-base-content/60">Return to the instance dashboard.</p>
+        <.back navigate={~p"/instances/#{@instance}"}>
+          Back to instance
+        </.back>
+      </div>
     </div>
   </div>
-
-  <div class="card bg-base-200">
-    <div class="card-body flex-row items-center justify-between p-4">
-      <p class="text-sm text-base-content/60">Return to the instance dashboard.</p>
-      <.back navigate={~p"/instances/#{@instance}"}>
-        Back to instance
-      </.back>
-    </div>
-  </div>
-</div>
+</Layouts.app>

@@ -1,14 +1,53 @@
 defmodule DelExampleWeb.Layouts do
   @moduledoc """
-  This module holds different layouts used by your application.
+  Layout components for the application.
 
-  See the `layouts` directory for all templates available.
-  The "root" layout is a skeleton rendered as part of the
-  application router. The "app" layout is set as the default
-  layout on both `use DelExampleWeb, :controller` and
-  `use DelExampleWeb, :live_view`.
+  The `root` layout is the HTML document shell, rendered via
+  `put_root_layout` in the router pipeline.
+
+  The `app` component provides the application chrome (navbar,
+  flash messages, main content area) and is called explicitly
+  in each template.
   """
   use DelExampleWeb, :html
 
   embed_templates "layouts/*"
+
+  attr :flash, :map, required: true
+  slot :inner_block, required: true
+
+  def app(assigns) do
+    ~H"""
+    <div class="navbar bg-base-100 border-b border-base-300 px-4 sm:px-6 lg:px-8">
+      <div class="navbar-start">
+        <a href="/" class="flex items-center gap-4">
+          <img src={~p"/images/double_entry_ledger_3_symbols.webp"} width="60" />
+          <span class="text-2xl font-semibold text-base-content">
+            Double Entry Ledger Example
+          </span>
+        </a>
+      </div>
+      <div class="navbar-end gap-4">
+        <a
+          href="https://github.com/csommerauer/double_entry_ledger"
+          class="link link-hover font-semibold"
+        >
+          GitHub
+        </a>
+        <a
+          href="https://github.com/csommerauer/double_entry_ledger/blob/main/README.md"
+          class="btn btn-sm btn-soft"
+        >
+          Get Started <span aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+    <main class="px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl">
+        <.flash_group flash={@flash} />
+        {render_slot(@inner_block)}
+      </div>
+    </main>
+    """
+  end
 end

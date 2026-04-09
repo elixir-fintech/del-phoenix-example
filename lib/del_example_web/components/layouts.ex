@@ -43,7 +43,7 @@ defmodule DelExampleWeb.Layouts do
       </div>
     </div>
     <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl">
+      <div class="mx-auto max-w-5xl">
         <.flash_group flash={@flash} />
         {render_slot(@inner_block)}
       </div>

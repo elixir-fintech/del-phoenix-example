@@ -15,9 +15,10 @@
       phx-submit="save"
       class="space-y-8"
     >
-      <.error :if={@changeset.action}>
+      <p :if={@changeset.action} class="mt-1.5 flex gap-2 items-center text-sm text-error">
+        <.icon name="hero-exclamation-circle" class="size-5" />
         Oops, something went wrong! Please check the errors below.
-      </.error>
+      </p>
 
       <.input type="select" field={td[:status]} label="Status" options={@states} />
 
@@ -30,8 +31,8 @@
       </.inputs_for>
 
       <:actions>
-        <.button class="rounded-full bg-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg shadow-blue-600/30 hover:bg-blue-500">
-          <.icon name="hero-check-circle" class="mr-2 h-5 w-5" /> Process Command
+        <.button class="btn btn-primary">
+          <.icon name="hero-check-circle" class="mr-2 size-5" /> Process Command
         </.button>
       </:actions>
     </.simple_form>
@@ -39,7 +40,7 @@
 
   <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
     <p class="text-sm text-slate-600">Return to the instance dashboard.</p>
-    <.back navigate={~p"/instances/#{@instance}"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+    <.back navigate={~p"/instances/#{@instance}"}>
       Back to instance
     </.back>
   </div>

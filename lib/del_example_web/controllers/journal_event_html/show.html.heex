@@ -14,7 +14,10 @@
         <div>
           <dt class="text-xs uppercase tracking-wide text-slate-400">Instance</dt>
           <dd class="mt-1">
-            <.link href={~p"/instances/#{@instance}"} class="font-semibold text-indigo-600 hover:text-indigo-500">
+            <.link
+              href={~p"/instances/#{@instance}"}
+              class="font-semibold text-indigo-600 hover:text-indigo-500"
+            >
               {@instance.address}
             </.link>
           </dd>
@@ -80,7 +83,6 @@
           id="events"
           rows={@events}
           row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
-          class="rounded-3xl"
         >
           <:col :let={event} label="ID">{event.id}</:col>
           <:col :let={event} label="Source">{event_source_format(event)}</:col>
@@ -93,7 +95,7 @@
 
   <div class="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
     <p class="text-sm text-slate-600">Return to the journal stream.</p>
-    <.back navigate={~p"/instances/#{@instance}/journal_events"} class="rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-100">
+    <.back navigate={~p"/instances/#{@instance}/journal_events"}>
       Back to journal events
     </.back>
   </div>

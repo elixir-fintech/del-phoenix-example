@@ -9,19 +9,18 @@
         </p>
       </div>
       <div class="flex flex-wrap gap-3">
-        <.link href={~p"/instances/#{@instance}/accounts/#{@account}/edit"}>
-          <.button class="rounded-full border border-white/30 bg-white/10 px-5 shadow-none hover:bg-white/20">
-            <.icon name="hero-pencil-square" class="mr-2 h-4 w-4" /> Edit
-          </.button>
-        </.link>
-        <.link href={~p"/instances/#{@instance}/transactions/new?account_address=#{@account}"}>
-          <.button
-            color_class="text-rose-700 active:text-rose-800"
-            class="rounded-full bg-white px-5 font-semibold shadow-lg shadow-white/30 hover:bg-rose-100"
-          >
-            <.icon name="hero-plus-circle" class="mr-2 h-4 w-4" /> New Transaction
-          </.button>
-        </.link>
+        <.button
+          navigate={~p"/instances/#{@instance}/accounts/#{@account}/edit"}
+          class="btn btn-sm btn-ghost border border-white/30"
+        >
+          <.icon name="hero-pencil-square" class="mr-2 size-4" /> Edit
+        </.button>
+        <.button
+          navigate={~p"/instances/#{@instance}/transactions/new?account_address=#{@account}"}
+          class="btn btn-sm btn-error"
+        >
+          <.icon name="hero-plus-circle" class="mr-2 size-4" /> New Transaction
+        </.button>
         <.link
           href={~p"/instances/#{@instance}/accounts/#{@account}/transactions"}
           class="rounded-full border border-white/30 px-4 py-2 text-sm hover:bg-white/10"
@@ -46,7 +45,9 @@
       </div>
       <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
         <dt class="text-xs uppercase tracking-wide text-white/80">Available</dt>
-        <dd class="mt-2 text-3xl font-semibold">{to_money(@account.available, @account.currency)}</dd>
+        <dd class="mt-2 text-3xl font-semibold">
+          {to_money(@account.available, @account.currency)}
+        </dd>
       </div>
     </dl>
   </section>
@@ -62,7 +63,10 @@
         <div>
           <dt class="text-xs uppercase tracking-wide text-slate-400">Instance</dt>
           <dd class="mt-1">
-            <.link href={~p"/instances/#{@instance}"} class="font-semibold text-indigo-600 hover:text-indigo-500">
+            <.link
+              href={~p"/instances/#{@instance}"}
+              class="font-semibold text-indigo-600 hover:text-indigo-500"
+            >
               {@instance.address}
             </.link>
           </dd>
@@ -84,11 +88,15 @@
       <div class="mt-4 grid gap-4 md:grid-cols-2">
         <div class="rounded-2xl bg-white/10 p-4">
           <p class="text-xs uppercase tracking-wide text-white/70">Posted</p>
-          <p class="mt-2 text-2xl font-semibold">{balance_format(@account.posted, @account.currency)}</p>
+          <p class="mt-2 text-2xl font-semibold">
+            {balance_format(@account.posted, @account.currency)}
+          </p>
         </div>
         <div class="rounded-2xl bg-white/10 p-4">
           <p class="text-xs uppercase tracking-wide text-white/70">Pending</p>
-          <p class="mt-2 text-2xl font-semibold">{balance_format(@account.pending, @account.currency)}</p>
+          <p class="mt-2 text-2xl font-semibold">
+            {balance_format(@account.pending, @account.currency)}
+          </p>
         </div>
       </div>
     </div>
@@ -103,13 +111,14 @@
     </div>
     <div class="rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
       <%= if Enum.empty?(@events) do %>
-        <div class="p-10 text-center text-slate-500">No journal events recorded for this account.</div>
+        <div class="p-10 text-center text-slate-500">
+          No journal events recorded for this account.
+        </div>
       <% else %>
         <.table
           id="events"
           rows={@events}
           row_click={&JS.navigate(~p"/instances/#{@instance}/journal_events/#{&1}")}
-          class="rounded-3xl"
         >
           <:col :let={event} label="ID">{event.id}</:col>
           <:col :let={event} label="Source">{event_source_format(event)}</:col>
@@ -131,14 +140,17 @@
       <%= if Enum.empty?(@balance_history) do %>
         <div class="p-10 text-center text-slate-500">No history available.</div>
       <% else %>
-        <.table id="balance_history" rows={@balance_history} class="rounded-3xl">
+        <.table id="balance_history" rows={@balance_history}>
           <:col :let={bhe} label="Available">{to_money(bhe.available, @account.currency)}</:col>
           <:col :let={bhe} label="Inserted at">{format_datetime(bhe.inserted_at)}</:col>
           <:col :let={bhe} label="Posted">{balance_format(bhe.posted, @account.currency)}</:col>
           <:col :let={bhe} label="Pending">{balance_format(bhe.pending, @account.currency)}</:col>
           <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
           <:col :let={bhe} label="Trx ID">
-            <.link href={~p"/instances/#{@instance}/transactions/#{bhe.transaction_id}"} class="underline">
+            <.link
+              href={~p"/instances/#{@instance}/transactions/#{bhe.transaction_id}"}
+              class="underline"
+            >
               {bhe.transaction_id}
             </.link>
           </:col>
@@ -152,7 +164,7 @@
       <p class="text-sm font-semibold text-slate-900">Return to instance overview</p>
       <p class="text-sm text-slate-500">Head back to {@instance.address}.</p>
     </div>
-    <.back navigate={~p"/instances/#{@instance}"} class="rounded-full bg-white px-4 py-2 shadow-sm hover:bg-slate-100">
+    <.back navigate={~p"/instances/#{@instance}"}>
       Back to instance
     </.back>
   </div>

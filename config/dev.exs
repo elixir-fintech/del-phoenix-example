@@ -38,7 +38,7 @@ config :double_entry_ledger,
 config :del_example, DelExampleWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {127, 0, 0, 1}, port: 4030],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
@@ -74,10 +74,12 @@ config :del_example, DelExampleWeb.Endpoint,
 # Watch static and templates for browser reloading.
 config :del_example, DelExampleWeb.Endpoint,
   live_reload: [
+    web_console_logger: true,
     patterns: [
-      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/del_example_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"priv/static/(?!uploads/).*\.(js|css|png|jpeg|jpg|gif|svg)$"E,
+      ~r"priv/gettext/.*\.po$"E,
+      ~r"lib/del_example_web/router\.ex$"E,
+      ~r"lib/del_example_web/(controllers|live|components)/.*\.(ex|heex)$"E
     ]
   ]
 
@@ -85,7 +87,7 @@ config :del_example, DelExampleWeb.Endpoint,
 config :del_example, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger, :default_formatter, format: "[$level] $message\n"
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
@@ -95,9 +97,8 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :phoenix_live_view,
-  # Include HEEx debug annotations as HTML comments in rendered markup
   debug_heex_annotations: true,
-  # Enable helpful, but potentially expensive runtime checks
+  debug_attributes: true,
   enable_expensive_runtime_checks: true
 
 # Disable swoosh api client as it is only required for production adapters.

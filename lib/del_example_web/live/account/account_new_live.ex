@@ -23,7 +23,7 @@ defmodule DelExampleWeb.AccountNewLive do
           name: "",
           type: nil,
           currency: :EUR,
-          allowed_negative: false
+          negative_limit: 0
         },
         %{}
       )
@@ -70,8 +70,7 @@ defmodule DelExampleWeb.AccountNewLive do
   defp get_form_options do
     %{
       currencies: @currency_dropdown_options,
-      account_types: Account.account_types(),
-      boolean: [Yes: true, No: false]
+      account_types: Account.account_types()
     }
   end
 end

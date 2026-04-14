@@ -37,6 +37,7 @@ defmodule DelExample.DataCase do
   """
   def setup_sandbox(tags) do
     del_pid = Ecto.Adapters.SQL.Sandbox.start_owner!(DelExample.Repo, shared: not tags[:async])
+
     del_ledger_pid =
       Ecto.Adapters.SQL.Sandbox.start_owner!(DoubleEntryLedger.Repo, shared: not tags[:async])
 

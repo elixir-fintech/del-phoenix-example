@@ -22,7 +22,7 @@ defmodule DelExampleWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :del_example,
-    gzip: false,
+    gzip: not code_reloading?,
     only: DelExampleWeb.static_paths()
 
   if Code.ensure_loaded?(Tidewave) do

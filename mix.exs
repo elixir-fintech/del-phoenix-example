@@ -65,8 +65,7 @@ defmodule DelExample.MixProject do
       {:oban_web, "~> 2.11"},
       {:oban, "~> 2.21"},
       {:tidewave, "~> 0.5.0", only: :dev},
-      {:double_entry_ledger, path: "../double_entry_ledger"}
-      # {:double_entry_ledger, "~> 0.1.0"}
+      {:double_entry_ledger, "~> 0.2.0"}
     ]
   end
 

@@ -28,7 +28,7 @@ defmodule DelExample.Fixtures do
       address: "acct#{suffix}",
       currency: :EUR,
       type: :asset,
-      allowed_negative: false
+      negative_limit: 0
     }
 
     attrs =
@@ -66,7 +66,9 @@ defmodule DelExample.Fixtures do
 
     defaults
     |> Map.merge(attrs)
-    |> then(&TransactionStore.create(instance.address, &1, "fixture-trx-#{suffix}", on_error: :fail))
+    |> then(
+      &TransactionStore.create(instance.address, &1, "fixture-trx-#{suffix}", on_error: :fail)
+    )
   end
 
   def unique_suffix do

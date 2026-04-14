@@ -15,7 +15,7 @@ defmodule DelExampleWeb.TransactionEditLive do
       ) do
     instance = get_instance!(instance_address)
 
-    %{transaction: trx } = get_create_command(:transaction, trx_id)
+    %{transaction: trx} = get_create_command(:transaction, trx_id)
 
     trx = Repo.preload(trx, entries: :account)
 

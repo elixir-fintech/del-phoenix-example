@@ -63,6 +63,7 @@ defmodule DelExample.MixProject do
       {:bandit, "~> 1.5"},
       {:nanoid, "~> 2.1"},
       {:oban_web, "~> 2.11"},
+      {:oban, "~> 2.21"},
       {:tidewave, "~> 0.5.0", only: :dev},
       {:double_entry_ledger, path: "../double_entry_ledger"}
       # {:double_entry_ledger, "~> 0.1.0"}

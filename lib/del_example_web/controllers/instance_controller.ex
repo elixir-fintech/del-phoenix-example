@@ -29,19 +29,14 @@ defmodule DelExampleWeb.InstanceController do
 
   def show(conn, %{"address" => address}) do
     instance = get_instance!(address)
-
-    list =
-      case list_accounts(instance.id) do
-        {:ok, accounts} -> accounts
-        {:error, _} -> []
-      end
+    accounts = list_accounts(instance.id)
 
     sums =
       Map.new(validate_instance(instance), fn %{currency: currency} = item ->
         {currency, Map.drop(item, [:currency])}
       end)
 
-    render(conn, :show, instance: instance, accounts: list, sums: sums)
+    render(conn, :show, instance: instance, accounts: accounts, sums: sums)
   end
 
   def edit(conn, %{"address" => address}) do

@@ -20,6 +20,13 @@ if System.get_env("PHX_SERVER") do
   config :del_example, DelExampleWeb.Endpoint, server: true
 end
 
+if config_env() == :dev do
+  if port = System.get_env("PORT") do
+    config :del_example, DelExampleWeb.Endpoint,
+      http: [port: String.to_integer(port)]
+  end
+end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

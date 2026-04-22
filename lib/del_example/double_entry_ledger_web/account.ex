@@ -6,6 +6,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   # import Ecto.Query, warn: false
 
   alias DoubleEntryLedger.Account
+  alias DoubleEntryLedger.Repo, as: DelRepo
   alias DoubleEntryLedger.Stores.AccountStore
 
   def create(instance_address, params) do
@@ -37,7 +38,10 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
       [%Account{}, ...]
 
   """
-  def list_accounts(instance_id), do: AccountStore.get_all_accounts_by_instance_id(instance_id)
+  def list_accounts(instance_id) do
+    {:ok, {accounts, _meta}} = AccountStore.list_for_instance(instance_id)
+    accounts
+  end
 
   @doc """
   Gets a single account.
@@ -77,7 +81,7 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
 
   """
   def get_balance_history(account_id) do
-    {:ok, balance} = AccountStore.get_balance_history_by_id(account_id)
-    balance
+    {:ok, {balance, _meta}} = AccountStore.list_balance_history(account_id)
+    DelRepo.preload(balance, :entry)
   end
 end

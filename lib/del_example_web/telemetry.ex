@@ -79,6 +79,33 @@ defmodule DelExampleWeb.Telemetry do
       summary("vm.total_run_queue_lengths.total"),
       summary("vm.total_run_queue_lengths.cpu"),
       summary("vm.total_run_queue_lengths.io")
+    ] ++ DoubleEntryLedger.Telemetry.dashboard_metrics() ++ oban_metrics()
+  end
+
+  # Oban's own events, filtered to DEL's named instance. The :name tag
+  # lets the dashboard segment these from any other Oban you run.
+  defp oban_metrics do
+    oban_tag = [
+      tags: [:name, :queue, :worker],
+      tag_values: fn meta ->
+        %{
+          name: meta[:conf] && meta.conf.name,
+          queue: meta[:job] && meta.job.queue,
+          worker: meta[:job] && meta.job.worker
+        }
+      end
+    ]
+
+    [
+      summary(
+        "oban.job.start.system_time",
+        [unit: {:native, :millisecond}] ++ oban_tag
+      ),
+      summary(
+        "oban.job.stop.duration",
+        [unit: {:native, :millisecond}] ++ oban_tag
+      ),
+      counter("oban.job.exception.duration", oban_tag)
     ]
   end
 

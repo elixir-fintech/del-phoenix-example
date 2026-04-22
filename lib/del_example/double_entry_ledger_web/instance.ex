@@ -18,7 +18,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Instance do
 
   """
   def list_instances do
-    InstanceStore.list_all()
+    {:ok, {instances, _meta}} = InstanceStore.list()
+    instances
   end
 
   @doc """

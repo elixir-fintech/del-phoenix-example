@@ -30,8 +30,7 @@ config :double_entry_ledger,
 config :double_entry_ledger, Oban,
   engine: Oban.Engines.Basic,
   queues: [double_entry_ledger: 10],
-  repo: DoubleEntryLedger.Repo,
-  prefix: "double_entry_ledger"
+  repo: DoubleEntryLedger.Repo
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.

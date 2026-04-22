@@ -20,6 +20,12 @@ if System.get_env("PHX_SERVER") do
   config :del_example, DelExampleWeb.Endpoint, server: true
 end
 
+# DoubleEntryLedger's Oban queue.
+config :double_entry_ledger, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [double_entry_ledger: 10],
+  repo: DelExample.Repo
+
 if config_env() == :dev do
   if port = System.get_env("PORT") do
     config :del_example, DelExampleWeb.Endpoint,

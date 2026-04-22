@@ -5,8 +5,8 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
 
   # import Ecto.Query, warn: false
 
+  alias DelExample.Repo
   alias DoubleEntryLedger.Account
-  alias DoubleEntryLedger.Repo, as: DelRepo
   alias DoubleEntryLedger.Stores.AccountStore
 
   def create(instance_address, params) do
@@ -82,6 +82,6 @@ defmodule DelExample.DoubleEntryLedgerWeb.Account do
   """
   def get_balance_history(account_id) do
     {:ok, {balance, _meta}} = AccountStore.list_balance_history(account_id)
-    DelRepo.preload(balance, :entry)
+    Repo.preload(balance, :entry)
   end
 end

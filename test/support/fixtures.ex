@@ -1,7 +1,8 @@
 defmodule DelExample.Fixtures do
   @moduledoc false
 
-  alias DoubleEntryLedger.{Account, Instance, Repo}
+  alias DelExample.Repo
+  alias DoubleEntryLedger.{Account, Instance}
   alias DoubleEntryLedger.Stores.{InstanceStore, TransactionStore}
 
   def instance_fixture(attrs \\ %{}) do

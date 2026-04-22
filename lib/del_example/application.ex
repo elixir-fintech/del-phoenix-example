@@ -7,18 +7,20 @@ defmodule DelExample.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      DelExampleWeb.Telemetry,
-      DelExample.Repo,
-      {DNSCluster, query: Application.get_env(:del_example, :dns_cluster_query) || :ignore},
-      {Phoenix.PubSub, name: DelExample.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: DelExample.Finch},
-      # Start a worker by calling: DelExample.Worker.start_link(arg)
-      # {DelExample.Worker, arg},
-      # Start to serve requests, typically the last entry
-      DelExampleWeb.Endpoint
-    ]
+    children =
+      [
+        DelExampleWeb.Telemetry,
+        DelExample.Repo,
+        {DNSCluster, query: Application.get_env(:del_example, :dns_cluster_query) || :ignore},
+        {Phoenix.PubSub, name: DelExample.PubSub},
+        # Start the Finch HTTP client for sending emails
+        {Finch, name: DelExample.Finch}
+      ] ++
+        DoubleEntryLedger.children() ++
+        [
+          # Start to serve requests, typically the last entry
+          DelExampleWeb.Endpoint
+        ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

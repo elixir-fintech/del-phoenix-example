@@ -11,6 +11,11 @@ config :del_example,
   ecto_repos: [DelExample.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+# Point DoubleEntryLedger at the host app's repo so the library shares one
+# connection pool (and one Ecto sandbox in tests) instead of shipping its
+# own DoubleEntryLedger.Repo.
+config :double_entry_ledger, repo: DelExample.Repo
+
 # Configures the endpoint
 config :del_example, DelExampleWeb.Endpoint,
   url: [host: "localhost"],

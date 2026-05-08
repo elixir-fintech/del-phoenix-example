@@ -4,7 +4,7 @@ defmodule DelExample.MixProject do
   def project do
     [
       app: :del_example,
-      version: "0.3.0",
+      version: "0.4.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -63,10 +63,9 @@ defmodule DelExample.MixProject do
       {:bandit, "~> 1.5"},
       {:nanoid, "~> 2.1"},
       {:oban_web, "~> 2.11"},
-      {:oban, "~> 2.21"},
+      {:oban, "~> 2.19"},
       {:tidewave, "~> 0.5.0", only: :dev},
-      # {:double_entry_ledger, "~> 0.3.0"}
-      {:double_entry_ledger, path: "../double_entry_ledger"}
+      {:double_entry_ledger, "~> 0.4.0"}
     ]
   end
 

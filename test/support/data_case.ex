@@ -36,15 +36,8 @@ defmodule DelExample.DataCase do
   Sets up the sandbox based on the test tags.
   """
   def setup_sandbox(tags) do
-    del_pid = Ecto.Adapters.SQL.Sandbox.start_owner!(DelExample.Repo, shared: not tags[:async])
-
-    del_ledger_pid =
-      Ecto.Adapters.SQL.Sandbox.start_owner!(DoubleEntryLedger.Repo, shared: not tags[:async])
-
-    on_exit(fn ->
-      Ecto.Adapters.SQL.Sandbox.stop_owner(del_pid)
-      Ecto.Adapters.SQL.Sandbox.stop_owner(del_ledger_pid)
-    end)
+    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(DelExample.Repo, shared: not tags[:async])
+    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
   end
 
   @doc """

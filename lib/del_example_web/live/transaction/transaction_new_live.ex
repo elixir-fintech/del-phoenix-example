@@ -56,7 +56,7 @@ defmodule DelExampleWeb.TransactionNewLive do
   def create_assigns(socket, instance, changeset) do
     assign(socket,
       instance: instance,
-      accounts: get_accounts(instance.id),
+      accounts: list_accounts(instance.id),
       options: get_form_options(instance.id),
       changeset: changeset
     )
@@ -160,17 +160,10 @@ defmodule DelExampleWeb.TransactionNewLive do
     end
   end
 
-  defp get_accounts(instance_id) do
-    case list_accounts(instance_id) do
-      {:ok, accounts} -> accounts
-      {:error, _reason} -> []
-    end
-  end
-
   defp get_form_options(instance_id) do
     %{
       accounts:
-        Enum.map(get_accounts(instance_id), fn acc ->
+        Enum.map(list_accounts(instance_id), fn acc ->
           ["#{acc.address}  (#{acc.type})": acc.address]
         end)
         |> List.flatten(),

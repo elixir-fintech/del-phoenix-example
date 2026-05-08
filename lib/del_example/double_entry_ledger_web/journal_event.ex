@@ -14,15 +14,18 @@ defmodule DelExample.DoubleEntryLedgerWeb.JournalEvent do
   end
 
   def list_events(instance_id) do
-    JournalEventStore.list_all_for_instance_id(instance_id, 1, 1000)
+    {:ok, {events, _meta}} = JournalEventStore.list_for_instance(instance_id)
+    events
   end
 
   def list_events_for_account(account_id) do
-    JournalEventStore.list_all_for_account_id(account_id)
+    {:ok, {events, _meta}} = JournalEventStore.list_for_account(account_id)
+    events
   end
 
   def list_events_for_transaction(transaction_id) do
-    JournalEventStore.list_all_for_transaction_id(transaction_id)
+    {:ok, {events, _meta}} = JournalEventStore.list_for_transaction(transaction_id)
+    events
   end
 
   def get_related_events(event), do: get_related_events(event, :all)

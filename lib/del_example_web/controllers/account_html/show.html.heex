@@ -162,10 +162,10 @@
               <:col :let={bhe} label="Entry ID">{bhe.entry_id}</:col>
               <:col :let={bhe} label="Trx ID">
                 <.link
-                  href={~p"/instances/#{@instance}/transactions/#{bhe.transaction_id}"}
+                  href={~p"/instances/#{@instance}/transactions/#{bhe.entry.transaction_id}"}
                   class="link link-primary"
                 >
-                  {bhe.transaction_id}
+                  {bhe.entry.transaction_id}
                 </.link>
               </:col>
             </.table>

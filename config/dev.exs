@@ -10,23 +10,18 @@ config :del_example, DelExample.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :double_entry_ledger, DoubleEntryLedger.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "del_example_dev",
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+config :double_entry_ledger, 
+  idempotency_secret: "dev-secret",
+  start_command_queue: true,
+  max_retries: 5,
+  retry_interval: 200
 
-config :double_entry_ledger, Oban,
-  engine: Oban.Engines.Basic,
-  queues: [double_entry_ledger: 10],
-  repo: DoubleEntryLedger.Repo
-
-config :double_entry_ledger,
-  schema_prefix: "double_entry_ledger",
-  idempotency_secret: "123456677890"
+config :double_entry_ledger, :command_queue,
+  poll_interval: 5_000,
+  max_retries: 5,
+  base_retry_delay: 30,
+  max_retry_delay: 3_600,
+  processor_name: "command_queue"
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

@@ -22,8 +22,7 @@ end
 
 if config_env() == :dev do
   if port = System.get_env("PORT") do
-    config :del_example, DelExampleWeb.Endpoint,
-      http: [port: String.to_integer(port)]
+    config :del_example, DelExampleWeb.Endpoint, http: [port: String.to_integer(port)]
   end
 end
 

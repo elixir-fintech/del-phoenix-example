@@ -1,8 +1,6 @@
 defmodule DelExampleWeb.Router do
   use DelExampleWeb, :router
 
-  import Oban.Web.Router
-
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -18,8 +16,6 @@ defmodule DelExampleWeb.Router do
 
   scope "/", DelExampleWeb do
     pipe_through :browser
-
-    oban_dashboard("/oban", oban_name: DoubleEntryLedger.Oban)
 
     get "/", InstanceController, :index
 

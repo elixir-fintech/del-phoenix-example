@@ -31,7 +31,7 @@ The seed file (`priv/repo/seeds.exs`) queues commands for backend processing:
 - 5 account commands (EUR/USD assets, liability, equity)
 - 14 transaction commands including 3 that intentionally fail (overdraft violations, unbalanced entries)
 
-Commands are processed asynchronously by Oban workers which create accounts, entries, balances, and balance history.
+Commands are processed asynchronously by the DoubleEntryLedger command queue (InstanceMonitor and per-ledger InstanceProcessors) which create accounts, entries, balances, and balance history.
 
 To re-seed on an existing database:
 

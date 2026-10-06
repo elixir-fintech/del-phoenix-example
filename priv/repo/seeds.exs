@@ -3,7 +3,8 @@
 #     mix run priv/repo/seeds.exs
 #
 # The seed creates an instance directly, then queues all account and
-# transaction commands for backend processing. The Oban workers pick
+# transaction commands for backend processing. The command queue
+# (InstanceMonitor and per-ledger InstanceProcessors) picks
 # them up and create accounts, entries, balances, and history.
 
 alias DoubleEntryLedger.Stores.InstanceStore

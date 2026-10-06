@@ -62,10 +62,8 @@ defmodule DelExample.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:nanoid, "~> 2.1"},
-      {:oban_web, "~> 2.11"},
-      {:oban, "~> 2.19"},
       {:tidewave, "~> 0.5.0", only: :dev},
-      {:double_entry_ledger, "~> 0.4.0"}
+      {:double_entry_ledger, "~> 0.6.0"}
     ]
   end
 

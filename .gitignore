@@ -1,3 +1,4 @@
+
 # The directory Mix will write compiled artifacts to.
 /_build/
 
@@ -35,3 +36,4 @@ del_example-*.tar
 npm-debug.log
 /assets/node_modules/
 
+opencode.json
